@@ -1,0 +1,34 @@
+{
+  "modules":[
+  {
+    "module": "alert",
+    "config": {
+      "effect": "None",
+      "alert_effect": "None",
+      "display_time": 3500,
+      "position": "center",
+      "welcome_message": "Welcome to PyMirror"
+    }
+  },
+  {
+    "module": "cron",
+    "config": {
+      "name": "example_cron",
+      "first_delay": 4000,
+      "delay": 2000,
+      "repeat": 3,
+      "event": {
+          "name": "ALERT",
+          "message": "alert is kicked off",
+	  "timeout": 500
+      }
+    }
+  },
+  {
+    "module": "clock",
+    "position": "top_left",
+    "config": {
+    }
+  }
+]
+}
