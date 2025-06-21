@@ -1,10 +1,11 @@
 import os
-import pygame
 
 # Set environment variables for framebuffer
 os.putenv("SDL_AUDIODRIVER", "dummy")
 os.putenv("SDL_FBDEV", "/dev/fb0")
-os.putenv("SDL_VIDEODRIVER", "fbcon")
+os.putenv("SDL_VIDEODRIVER", "fkms")
+
+import pygame
 
 # Initialize pygame
 pygame.init()
