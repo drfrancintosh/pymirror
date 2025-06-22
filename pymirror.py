@@ -7,6 +7,9 @@ from pymirror.pmscreen import PMScreen
 class SafeNamespace(SimpleNamespace):
     def __getattr__(self, name):
         return None
+    def __getitem__(self, name):
+        # Implement __getitem__ to allow [] notation
+        return getattr(self, name, None)
 
 def _snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
@@ -23,7 +26,6 @@ class PyMirror:
 		with open(config_fname, 'r') as file:
 			self.config = _recursive_namespace(json.load(file))
 		self.screen = PMScreen()
-		self.pygame = self.screen.pygame
 		self.screen.set_flush(False)
 		self.modules = []
 		self.new_events = []

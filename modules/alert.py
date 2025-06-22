@@ -8,10 +8,12 @@ class Alert(PMModule):
 		self.set_timeout(config.display_time)
 		self.config = config
 		self.subscribe("ALERT")
+		self.gfx.set_font("", 64)
 
 	def render(self):
 		if self.message:
-			self.screen.text_box(self.gfx, self.message, 0, 0, -1, -1)
+			gfx = self.gfx
+			self.screen.text_box(gfx, self.message, gfx.x0, gfx.y0, gfx.x1, gfx.y1)
 
 	def exec(self):
 		if self.is_timedout():

@@ -6,16 +6,20 @@ class PMModule(ABC):
 	def __init__(self, pm, config):
 		self.pm = pm
 		self.screen = pm.screen
-		self.pygame = pm.pygame
 		self.config = config
 		self.timeout = 0
 		self.subscriptions = []
 		self.position = config.position
 		self.gfx = PMGfx()
-		self.gfx.x0 = 0
-		self.gfx.y0 = 0
-		self.gfx.x1 = self.pm.screen.gfx.width / 3
-		self.gfx.y1 = self.pm.screen.gfx.height / 3
+		if self.position:
+			print(config)
+			dims = pm.config.positions[self.position]
+			print(dims)
+			self.gfx.x0 = self.pm.screen.gfx.width * dims[0]
+			self.gfx.y0 = self.pm.screen.gfx.height * dims[1]
+			self.gfx.x1 = self.pm.screen.gfx.width * dims[2] 
+			self.gfx.y1 = self.pm.screen.gfx.height * dims[3] 
+			print(self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1)
 
 
 	def subscribe(self, name):
