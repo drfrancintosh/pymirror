@@ -27,6 +27,9 @@ sudo apt install git
 - sudo apt-get install fbi fbset
 - sudo usermod -aG video $USER
 
+## installing PIL
+sudo apt install python3-pillow
+
 ## setup config.txt
 - sudo vi /boot/firmware/config.txt
 ```
