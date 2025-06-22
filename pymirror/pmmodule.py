@@ -10,16 +10,19 @@ class PMModule(ABC):
 		self.timeout = 0
 		self.subscriptions = []
 		self.position = config.position
+		self.x_offset = config.x_offset or 0
+		self.y_offset = config.y_offset or 0
 		self.gfx = PMGfx()
+		self.gfx.font_name = config.font
+		self.gfx.font_size = config.font_size
+		if config.font:
+			self.gfx.set_font(config.font, config.font_size)
 		if self.position:
-			print(config)
 			dims = pm.config.positions[self.position]
-			print(dims)
 			self.gfx.x0 = self.pm.screen.gfx.width * dims[0]
 			self.gfx.y0 = self.pm.screen.gfx.height * dims[1]
 			self.gfx.x1 = self.pm.screen.gfx.width * dims[2] 
 			self.gfx.y1 = self.pm.screen.gfx.height * dims[3] 
-			print(self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1)
 
 
 	def subscribe(self, name):

@@ -8,7 +8,6 @@ class Alert(PMModule):
 		self.set_timeout(config.display_time)
 		self.config = config
 		self.subscribe("ALERT")
-		self.gfx.set_font("", 64)
 
 	def render(self):
 		if self.message:

@@ -1,16 +1,24 @@
 {
   "positions": {
 	"top_left": [0.0, 0.0, 0.33, 0.33],
-	"top_center": [0.33, 0.0, 0.66, 0.33],
+	"top_center": [0.33, 0.0, 0.66, 0.10],
 	"top_right": [0.66, 0.0, 1.00, 0.33],
 	"middle_left": [0.0, 0.33, 0.33, 0.66],
-	"middle_center": [0.33, 0.33, 0.66, 0.66],
+	"middle_center": [0.0, 0.15, 1.0, 0.85],
 	"middle_right": [0.66, 0.33, 1.00, 0.66],
 	"bottom_left": [0.0, 0.66, 0.33, 1.00],
-	"bottom_center": [0.33, 0.66, 0.66, 1.00],
+	"bottom_center": [0.33, 0.85, 0.66, 1.00],
 	"bottom_right": [0.66, 0.66, 1.00, 1.00]
   },
   "modules":[
+  {
+    "module": "weather",
+    "config": {
+      "position": "middle_left",
+      "weather_data": {
+	"lat": 37.5037, "lon": -77.6428, "appid": "5f1f34c5f370afe7fb86176bf7811560", "exclude": "minutely,hourly,daily", "units": "imperial", "lang": "english"}
+    }
+  },
   {
     "module": "alert",
     "config": {
@@ -18,7 +26,9 @@
       "alert_effect": "None",
       "display_time": 3500,
       "position": "top_center",
-      "welcome_message": "Welcome to PyMirror"
+      "welcome_message": "Welcome to PyMirror",
+	"font": "Trek",
+	"font_size": 48
     }
   },
   {
@@ -27,7 +37,7 @@
       "name": "example_cron",
       "first_delay": 4000,
       "delay": 2000,
-      "repeat": 3,
+      "repeat": 5,
       "event": {
           "name": "ALERT",
           "message": "alert is kicked off",
@@ -36,9 +46,42 @@
     }
   },
   {
+    "module": "analog_clock",
+    "config": {
+       "position": "middle_center",
+	"font": "Trek",
+	"font_size": 48 
+    }
+  },
+  {
     "module": "clock",
     "config": {
-       "position": "middle_center"
+       "position": "top_left",
+	"x_offset": 0,
+	"y_offset": -100,
+	"font": "7segment",
+	"font_size": 128, 
+	"date_format": "%Y-%m-%d"
+    }
+  },
+  {
+    "module": "clock",
+    "config": {
+       "position": "top_right",
+	"x_offset": 50,
+	"y_offset": -100,
+	"font": "7segment",
+	"font_size": 128, 
+	"date_format": "%H:%M:%S"
+    }
+  },
+  {
+    "module": "clock",
+    "config": {
+       "position": "bottom_center",
+	"font": "Trek",
+	"font_size": 96, 
+	"date_format": "%A"
     }
   }
 ]
