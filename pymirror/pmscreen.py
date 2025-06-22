@@ -19,10 +19,13 @@ class PMGfx:
 		self.text_color = (255, 255, 255)
 		self.text_bg_color = (0, 0, 0)
 		self.line_width = 5
+		self.font_name = None
+		self.font_size = None
 		self.font = ImageFont.load_default()
 		self.antialias = True
 	
-	def set_font(self, font_name, pitch):
+	def set_font(self, font_name, pitch=24):
+		if not pitch: pitch = 24
 		for font_path in FONT_LIST:
 			if font_name in font_path:
 				self.font = ImageFont.truetype(font_path, size=pitch)
@@ -66,6 +69,25 @@ class PMScreen:
 	def line(self, gfx, x0, y0, x1, y1):
 		self.draw.line((x0, y0, x1, y1), fill=gfx.color, width=gfx.line_width)
 		if self._doFlush: self.flush()
+	def ellipse(self, gfx, x0, y0, x1, y1, fill=None):
+		if fill:
+			self.draw.ellipse((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=fill)
+		else:
+			if gfx.bg_color:
+				self.draw.ellipse((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
+			else:
+				self.draw.ellipse((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width)
+		if self._doFlush: self.flush()
+	def circle(self, gfx, x0, y0, r, fill=None):
+		bbox = (x0-r, y0-r, x0+r, y0+r)
+		if fill:
+			self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=fill)
+		else:
+			if gfx.bg_color:
+				self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
+			else:
+				self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width)
+		if self._doFlush: self.flush()
 	def rect(self, gfx, x0, y0, x1, y1, fill=None):
 		if fill:
 			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=fill)
@@ -79,7 +101,7 @@ class PMScreen:
 		self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
 	def text_box(self, gfx, msg, x0, y0, x1=None, y1=None, halign="center", valign="center"):
-		bbox = self.draw.textbbox((0, 0), msg, font=gfx.font)
+		bbox = gfx.font.getbbox(msg)
 		width = bbox[2] - bbox[0]
 		height = bbox[3] - bbox[1]
 		if x1 == None: x1 = x0 + width
