@@ -33,12 +33,16 @@ sudo apt install python3-pillow
 ## setup config.txt
 - sudo vi /boot/firmware/config.txt
 ```
-framebuffer_width=1280
-framebuffer_height=720
+[all]
+framebuffer_width=1920
+framebuffer_height=1080
 framebuffer_depth=32
+hdmi_ignore_edid=1
 hdmi_force_hotplug=1
-hdmi_group=1        # 1 = CEA (TV), 2 = DMT (computer monitor)
-hdmi_mode=16        # 16 = 1080p @ 60Hz (use a suitable mode for your display)
+hdmi_group=2
+hdmi_mode=16
+# Set rotation if needed (0 = no rotation, 1 = 90 degrees, etc.)
+display_rotate=0    # Set rotation if needed (0 = no rotation, 1 = 90 degrees, etc.)
 ```
 
 ## Running
