@@ -7,7 +7,7 @@ from pymirror.utils import snake_to_pascal
 class PyMirror:
 	def __init__(self, config_fname):
 		with open(config_fname, 'r') as file:
-			self.config = SafeNamespace(json.load(file))
+			self.config = SafeNamespace(**json.load(file))
 		self.screen = PMScreen()
 		self.screen.set_flush(False)
 		self.modules = []
