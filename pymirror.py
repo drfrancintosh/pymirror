@@ -27,7 +27,7 @@ class PyMirror:
 			## create an instance of the class (module)
 			## and pass the PyMirror instance and the module config to it
 			## See pymirror.PMMModule for the expected constructor
-			obj = clazz(self, moddef)
+			obj = clazz(self, moddef, moddef.config)
 			## add the module to the list of modules
 			self.modules.append(obj)
 

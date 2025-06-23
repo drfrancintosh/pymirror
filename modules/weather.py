@@ -29,9 +29,9 @@ class OpenWeatherMap:
 
 
 class Weather(PMModule):
-	def __init__(self, pm, config):
-		super().__init__(pm, config)
-		self.weather_data = WeatherData(**config.weather_data.__dict__)
+	def __init__(self, pm, moddef, config):
+		super().__init__(pm, moddef, config)
+		self.weather_data = WeatherData(**moddef.weather_data.__dict__)
 		self.refresh_minutes = 5
 		self.set_timeout(1) # refresh right away
 		self.weather_response = None

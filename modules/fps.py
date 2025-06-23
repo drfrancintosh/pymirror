@@ -2,10 +2,9 @@ from datetime import datetime
 from pymirror.pmmodule import PMModule
 
 class Fps(PMModule):
-	def __init__(self, pm, config):
-		super().__init__(pm, config)
+	def __init__(self, pm, moddef, config):
+		super().__init__(pm, moddef, config)
 		self.last_time = datetime.now()
-
 
 	def render(self):
 		pass

@@ -3,11 +3,11 @@ import time
 from pymirror.pmscreen import PMGfx
 
 class PMModule(ABC):
-	def __init__(self, pm, moddef):
+	def __init__(self, pm, moddef, config):
 		self.pm = pm
 		self.screen = pm.screen
 		self.moddef = moddef
-		self.config = moddef.config if hasattr(moddef, 'config') else {}
+		self.config = config
 		print(moddef.__dict__)
 		self.timeout = 0
 		self.subscriptions = []

@@ -3,8 +3,8 @@ from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMGfx
 
 class Clock(PMModule):
-	def __init__(self, pm, config):
-		super().__init__(pm, config)
+	def __init__(self, pm, moddef, config):
+		super().__init__(pm, moddef, config)
 		if not self.gfx.font_name: self.gfx.font_name = "DejaVuSans"
 		if not self.gfx.font_size: self.gfx.font_size = 32
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)

@@ -2,11 +2,10 @@ import time
 from pymirror.pmmodule import PMModule
 
 class Alert(PMModule):
-	def __init__(self, pm, config):
-		super().__init__(pm, config)
+	def __init__(self, pm, moddef, config):
+		super().__init__(pm, moddef, config)
 		self.message = config.welcome_message
 		self.set_timeout(config.display_time)
-		self.config = config
 		self.subscribe("ALERT")
 
 	def render(self):
