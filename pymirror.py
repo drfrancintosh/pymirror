@@ -16,18 +16,18 @@ class PyMirror:
 		self._load_modules()
 
 	def _load_modules(self):
-		for module in self.config.modules:
+		for module_definition in self.config.modules:
 			## load the module dynamically
-			mod = importlib.import_module("modules."+module.module)
+			mod = importlib.import_module("modules."+module_definition.module)
 			## get the class from inside the module
 			## convert the file name to class name inside the module
 			## by convention the filename is snake_case and the class name is PascalCase
-			clazz_name = snake_to_pascal(module.module)
+			clazz_name = snake_to_pascal(module_definition.module)
 			clazz = getattr(mod, clazz_name)
 			## create an instance of the class (module)
 			## and pass the PyMirror instance and the module config to it
 			## See pymirror.PMMModule for the expected constructor
-			obj = clazz(self, module.config)
+			obj = clazz(self, module_definition)
 			## add the module to the list of modules
 			self.modules.append(obj)
 
