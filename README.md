@@ -7,8 +7,8 @@
 ## Installation
 
 - RPI OS Lite 32-bit
-sudo apt update
-sudo apt install git
+- sudo apt update
+- sudo apt install git
 - add ssh private key to .ssh
 - eval "$(ssh-agent -s)"
 - ssh-add ~/.ssh/id_rsa
