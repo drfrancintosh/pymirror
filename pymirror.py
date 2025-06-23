@@ -1,30 +1,13 @@
 import importlib
-import time
 import json
-from types import SimpleNamespace
 from pymirror.pmscreen import PMScreen
-
-class SafeNamespace(SimpleNamespace):
-    def __getattr__(self, name):
-        return None
-    def __getitem__(self, name):
-        # Implement __getitem__ to allow [] notation
-        return getattr(self, name, None)
-
-def _snake_to_pascal(snake_str):
-    return ''.join(word.capitalize() for word in snake_str.split('_'))
-def _recursive_namespace(d):
-    if isinstance(d, dict):
-        return SafeNamespace(**{k: _recursive_namespace(v) for k, v in d.items()})
-    elif isinstance(d, list):
-        return [_recursive_namespace(i) for i in d]
-    else:
-        return d
+from pymirror.safe_namespace import SafeNamespace
+from pymirror.utils import snake_to_pascal
 
 class PyMirror:
 	def __init__(self, config_fname):
 		with open(config_fname, 'r') as file:
-			self.config = _recursive_namespace(json.load(file))
+			self.config = SafeNamespace(json.load(file))
 		self.screen = PMScreen()
 		self.screen.set_flush(False)
 		self.modules = []
@@ -35,7 +18,7 @@ class PyMirror:
 	def _load_modules(self):
 		for module in self.config.modules:
 			mod = importlib.import_module("modules."+module.module)
-			clazz_name = _snake_to_pascal(module.module)
+			clazz_name = snake_to_pascal(module.module)
 			clazz = getattr(mod, clazz_name)
 			obj = clazz(self, module.config)
 			self.modules.append(obj)
