@@ -21,7 +21,7 @@ class PMGfx:
 		self.line_width = 5
 		self.font_name = None
 		self.font_size = None
-		self.font = ImageFont.load_default()
+		self.font = ImageFont.load_default("arial.ttf", 24)  # Default font if none is set
 		self.antialias = True
 	
 	def set_font(self, font_name, pitch=24):
