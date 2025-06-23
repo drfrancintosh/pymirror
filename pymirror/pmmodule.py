@@ -7,6 +7,7 @@ class PMModule(ABC):
 		self.pm = pm
 		self.screen = pm.screen
 		self.config = config
+		print(config.__dict__)
 		self.timeout = 0
 		self.subscriptions = []
 		self.position = config.position
