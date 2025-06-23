@@ -3,25 +3,26 @@ import time
 from pymirror.pmscreen import PMGfx
 
 class PMModule(ABC):
-	def __init__(self, pm, config):
+	def __init__(self, pm, moddef):
 		self.pm = pm
 		self.screen = pm.screen
-		self.config = config
-		print(config.__dict__)
+		self.moddef = moddef
+		self.config = moddef.config if hasattr(moddef, 'config') else {}
+		print(moddef.__dict__)
 		self.timeout = 0
 		self.subscriptions = []
-		self.position = config.position
-		self.x_offset = config.x_offset or 0
-		self.y_offset = config.y_offset or 0
+		self.position = moddef.position
+		self.x_offset = moddef.x_offset or 0
+		self.y_offset = moddef.y_offset or 0
 		self.gfx = PMGfx() ## default graphics context
-		self.gfx.font_name = config.font
-		self.gfx.font_size = config.font_size
-		if config.font:
-			self.gfx.set_font(config.font, config.font_size)
-		if self.config.position:
-			print(f"Module {self.config.module} position: {self.config.position}")
-			dims = pm.config.positions[self.config.position]
-			print(f"Module {self.config.module} dimensions: {dims}")
+		self.gfx.font_name = moddef.font
+		self.gfx.font_size = moddef.font_size
+		if moddef.font:
+			self.gfx.set_font(moddef.font, moddef.font_size)
+		if self.moddef.position:
+			print(f"Module {self.moddef.module} position: {self.moddef.position}")
+			dims = pm.config.positions[self.moddef.position]
+			print(f"Module {self.moddef.module} dimensions: {dims}")
 			self.gfx.x0 = self.pm.screen.gfx.width * dims[0]
 			self.gfx.y0 = self.pm.screen.gfx.height * dims[1]
 			self.gfx.x1 = self.pm.screen.gfx.width * dims[2] 

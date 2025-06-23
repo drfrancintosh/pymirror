@@ -2,8 +2,8 @@ import time
 from pymirror.pmmodule import PMModule
 
 class Cron(PMModule):
-	def __init__(self, pm, config):
-		super().__init__(pm, config)
+	def __init__(self, pm, module_definition):
+		super().__init__(pm, module_definition)
 		self.name = config.name
 		self.event = config.event
 		self.repeat = config.repeat ## number of times to repeat, -1 = forever
