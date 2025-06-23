@@ -18,7 +18,9 @@ class PMModule(ABC):
 		if config.font:
 			self.gfx.set_font(config.font, config.font_size)
 		if self.config.position:
+			print(f"Module {self.config.name} position: {self.config.position}")
 			dims = pm.config.positions[self.config.position]
+			print(f"Module {self.config.name} dimensions: {dims}")
 			self.gfx.x0 = self.pm.screen.gfx.width * dims[0]
 			self.gfx.y0 = self.pm.screen.gfx.height * dims[1]
 			self.gfx.x1 = self.pm.screen.gfx.width * dims[2] 
