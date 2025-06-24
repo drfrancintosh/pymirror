@@ -7,17 +7,20 @@ class Clock(PMModule):
 		super().__init__(pm, moddef, config)
 		self.date_format = "%I:%M:%S %p"
 		if config.date_format: self.date_format = config.date_format
-
+		self.last_time = None
+		self.curr_time = datetime.now().strftime(self.date_format)
+	
 	def render(self):
-		now = datetime.now()
-		date_str = now.strftime(self.date_format)
 		gfx = self.gfx
-		self.screen.text_box(gfx, date_str,
+		self.screen.text_box(gfx, self.curr_time,
 			gfx.x0 + self.x_offset, gfx.y0 + self.y_offset,
 			gfx.x1 + self.x_offset, gfx.y1 + self.y_offset)
 
 	def exec(self):
+		self.curr_time = datetime.now().strftime(self.date_format)
+		if self.last_time == self.curr_time: return
 		self.render()
+		self.last_time = self.curr_time
 
 	def onEvent(self, event):
 		pass
