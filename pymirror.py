@@ -65,13 +65,13 @@ class PyMirror:
 			## add the module to the list of modules
 			self.modules.append(obj)
 
-	def add_event(self, event):
-		self.new_events.append(event)
-
-	def send_events(self, module):
+	def _send_events(self, module):
 		for event in self.events:
 			if module.is_subscribed(event.name):
 				module.onEvent(event)
+
+	def add_event(self, event):
+		self.new_events.append(event)
 
 	def run(self):
 		self.screen.clear()
@@ -80,7 +80,7 @@ class PyMirror:
 			self.new_events = []
 			do_flush = 0
 			for module in self.modules:
-				self.send_events(module)
+				self._send_events(module)
 				do_flush += module.exec() # exec() returns 1 if it rendered something
 				if self.config.debug:
 					gfx = self.screen.gfx

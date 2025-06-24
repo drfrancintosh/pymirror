@@ -7,6 +7,8 @@ from types import SimpleNamespace
 from dataclasses import dataclass, fields
 from pymirror.pmmodule import PMModule
 import copy
+from events.alert import AlertEvent
+
 
 @dataclass
 class WeatherData:
@@ -63,6 +65,14 @@ class Weather(PMModule):
 			self.weather_response = self.weather_api.fetch(self.weather_data)
 			print(json.dumps(self.weather_response, indent=2))
 			self.set_timeout(self.refresh_minutes * 60 * 1000)
+			if self.weather_response.get("alerts"):
+				alerts = self.weather_response["alerts"]
+				if alerts:
+					event = AlertEvent()
+					event.name = "Weather Alert"
+					event.message = f"{alerts[0]['description']}"
+					event.timeout = 1 * 60 * 1000
+					self.pm.add_event("ALERT", alert_msg, 10000)
 		return self.render()
 
 	def onEvent(self, event):
