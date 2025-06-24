@@ -117,7 +117,7 @@
       "config": {
         "hour_hand": "#ff0000",
         "minute_hand": "#00ff00",
-        "second_hand": null
+        "second_hand": "#0000ff"
       }
     },
     {
