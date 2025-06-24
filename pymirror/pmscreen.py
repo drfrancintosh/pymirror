@@ -79,12 +79,17 @@ class PMScreen:
 		if y1 == None: y1 = y0 + height
 		if x1 < 0: x1 += self.gfx.width
 		if y1 < 0: y1 += self.gfx.height
+
 		if halign == "left": x0 = x0
-		if halign == "center": x0 += (x1 - x0 - width) / 2
-		if halign == "right": x0 = x1 - width
+		elif halign == "center": x0 += (x1 - x0 - width) / 2
+		elif halign == "right": x0 = x1 - width
+		else: print(f"Invalid halign '{halign}' in text_box, using 'center' instead.")
+
 		if valign == "top": y0 = y0
-		if valign == "center": y0 += (y1 - y0 - height) / 2
-		if valign == "bottom": y0 = y1 - height
+		elif valign == "center": y0 += (y1 - y0 - height) / 2
+		elif valign == "bottom": y0 = y1 - height
+		else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
+		
 		if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
 		self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
