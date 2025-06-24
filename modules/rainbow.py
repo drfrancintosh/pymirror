@@ -5,7 +5,8 @@ from pymirror.pmscreen import PMGfx
 class Rainbow(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
-	
+		self.first_time = True
+
 	def render(self):
 		gfx = self.gfx
 		x = gfx.x0
@@ -15,22 +16,15 @@ class Rainbow(PMModule):
 		red = 0
 		green = 0
 		blue = 0
-		for w in range(width):
-			for h in range(height):
-				gfx.color = (red % 256, green % 256, blue % 256)
-				self.screen.rect(gfx, x + w, y + h, x + w + 1, y + h + 1, fill=gfx.color)
-				red += 1
-				if red >= 256:
-					red = 0
-					green += 1
-				if green >= 256:
-					green = 0
-					blue += 1
-				if blue >= 256:
-					blue = 0
+		for r in range(256):
+			gfx.color = (r, 0, 0)  # Red to black
+			self.screen.line(gfx, x + r, y, x + r, y + height)
 
 	def exec(self):
-		self.render()
+		if self.first_time:
+			self.first_time = False
+			self.render()
+			return
 
 	def onEvent(self, event):
 		pass
