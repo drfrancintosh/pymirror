@@ -49,9 +49,9 @@ class Weather(PMModule):
 		# text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
 		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y)
 		text_box(gfx, "Weather", valign="top")
-		text_box(gfx, f"{w.temp}{degrees} F", halign="left", y0=y + gfx.font_size/2)
-		text_box(gfx, f"{w.humidity} mb", halign="left", y0=y + gfx.font_size/2 * 2)
-		text_box(gfx, f"{w.feels_like}{degrees} F", halign="left", y0=y + gfx.font_size/2 * 3)
+		text(gfx, f"{w.temp}{degrees} F", x, y + gfx.font_size/2)
+		text(gfx, f"{w.humidity} mb", x, y + gfx.font_size/2 * 2)
+		text(gfx, f"{w.feels_like}{degrees} F", x, y + gfx.font_size/2 * 3)
 		self.weather_response = None  # Clear response after rendering
 		return 1
 
