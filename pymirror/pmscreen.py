@@ -10,8 +10,8 @@ def _image_to_rgb565(img):
     img_array = np.array(img, dtype=np.uint16)  # Convert to uint16 for correct shifting
 
     # Perform the conversion to RGB565 for all pixels at once
-    rgb565_array = ((img_array[..., 0]) << 11) | \
-                   ((img_array[..., 1]) << 5) | \
+    rgb565_array = ((img_array[..., 0])) | \
+                   ((img_array[..., 1])) | \
                    (img_array[..., 2])
 
     # Convert the numpy array to bytes (little-endian)
