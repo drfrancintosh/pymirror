@@ -102,12 +102,14 @@
       "text_color": "(255,255,0)",
       "text_bg_color": "(0,0,0)",
       "config": {
-        "lat": "37.50598",
-        "lon": "-77.64916",
-        "appid": "d0127c5a160a58e37651a83ff69922bf",
-        "exclude": "minutely,hourly",
-        "units": "imperial",
-        "lang": "english",
+        "weather_data": {
+          "lat": "37.50598",
+          "lon": "-77.64916",
+          "appid": "d0127c5a160a58e37651a83ff69922bf",
+          "exclude": "minutely,hourly",
+          "units": "imperial",
+          "lang": "english",]
+        },
         "body_color": "#c0c000"
       }
     },
