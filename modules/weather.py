@@ -42,7 +42,6 @@ class Weather(PMModule):
 		gfx = self.gfx
 		x = gfx.x0
 		y = gfx.y0
-		print(self.weather_response)
 		w = SimpleNamespace(**self.weather_response["current"])
 		text = self.screen.text
 		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y) 

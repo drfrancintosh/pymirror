@@ -24,7 +24,6 @@ class PMGfx:
     
     def _read_fonts(self):
         if self.__class__._fontlist: return # already read fonts
-        print("Reading system fonts...")
         self.__class__._fontlist = []
         with open("./fontlist.txt", "r") as f:
             fonts = f.read().splitlines()

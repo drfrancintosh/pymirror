@@ -13,7 +13,6 @@ class PMModule(ABC):
 		self.screen = pm.screen
 		self.moddef = moddef
 		self.config = config
-		print(moddef.__dict__)
 		self.timeout = 0
 		self.subscriptions = []
 		self.position = moddef.position
@@ -24,9 +23,7 @@ class PMModule(ABC):
 		self.gfx.font_size = moddef.font_size or 64
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
 		if self.moddef.position:
-			print(f"Module {self.moddef.module} position: {self.moddef.position}")
 			dims = pm.config.positions[self.moddef.position]
-			print(f"Module {self.moddef.module} dimensions: {dims}")
 			## this is the bounding box for the module
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
 			## these are in percentages of the screen size
