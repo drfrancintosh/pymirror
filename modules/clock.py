@@ -6,6 +6,7 @@ def _increment_color(color, increment, max_value):
 	color += increment
 	if color < 0: return 0
 	if color >= max_value: return max_value - 1
+	return color
 
 def _increment_tuple(color, increment):
 	"""Increment the RGB color by a given value."""
