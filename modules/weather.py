@@ -53,9 +53,9 @@ class Weather(PMModule):
 		gfx.text_color = (0,0,0)
 		x += gfx.font_size * 2  # Offset for the text
 		y += gfx.font_size / 2  # Offset for the text
-		text(gfx, f"{w.temp}{degrees}", x, y + gfx.font_size)
-		text(gfx, f"{w.humidity} mb", x, y + gfx.font_size * 2)
-		text(gfx, f"{w.feels_like}{degrees}", x, y + gfx.font_size * 3)
+		text_box(gfx, f"{w.temp}{degrees}", x, y + gfx.font_size)
+		text_box(gfx, f"{w.humidity} mb", x, y + gfx.font_size * 2)
+		text_box(gfx, f"{w.feels_like}{degrees}", x, y + gfx.font_size * 3)
 		self.weather_response = None  # Clear response after rendering
 		return 1
 
