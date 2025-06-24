@@ -38,28 +38,19 @@ class AnalogClock(PMModule):
 		self.last_second = -1
 		self.first_time = True
 
-	def render_clock_face(self):
+	def render_clock_face(self, dx=0, dy=0, r=0):
 		"""Render the clock face with hour markers."""
 		gfx = self.gfx
-		dx = (gfx.x1 - gfx.x0) / 2
-		dy = (gfx.y1 - gfx.y0) / 2
-		if dx < dy:
-			r = dx
-		else:
-			r = dy
 		gfx.text_color = (192, 192, 192)
 		hr = 1
+		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
 		for posn in _compute_clock_positions(gfx.x0 + dx, gfx.y0 + dy, r - self.gfx.font_size):
 			self.screen.text_box(gfx, str(hr), posn[0], posn[1], posn[0], posn[1], valign="bottom")
 			hr += 1
 		gfx.color = (192, 192, 192)
 		gfx.line_width = 3
-		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r )
 
 	def render(self):
-		if self.first_time:
-			self.render_clock_face()
-			self.first_time = False
 		now = datetime.now()
 		gfx = self.gfx
 		dx = (gfx.x1 - gfx.x0)/2
@@ -68,11 +59,7 @@ class AnalogClock(PMModule):
 			r = dx
 		else:
 			r = dy
-		# hr = 1
-		# gfx.text_color = (192, 192, 192)
-		# for posn in _compute_clock_positions(gfx.x0+dx, gfx.y0+dy, r-self.gfx.font_size):
-		# 	self.screen.text_box(gfx, str(hr), posn[0], posn[1], posn[0], posn[1], valign="bottom")
-		# 	hr += 1
+		self.render_clock_face(dx, dy, r)
 		gfx.color = (192, 192, 192)
 		gfx.line_width = 3
 		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r )

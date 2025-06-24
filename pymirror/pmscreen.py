@@ -1,6 +1,5 @@
 import time
-from PIL import Image, ImageDraw, ImageFont
-import numpy as np
+from PIL import Image, ImageDraw
 from pymirror.pmgfx import PMGfx
 
 def _image_to_rgb565(img):
@@ -64,19 +63,21 @@ class PMScreen:
             else:
                 self.draw.ellipse((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width)
         if self._doFlush: self.flush()
-    def circle(self, gfx, x0, y0, r, fill=None):
+    def circle(self, gfx, x0, y0, r, fill="__use_bg_color__"):
         bbox = (x0-r, y0-r, x0+r, y0+r)
-        if fill:
+        if fill == "__use_bg_color__":
+            # Use the gfx.background color
+            self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
+        elif fill:
+            # Use the specified fill color
             self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width, fill=_color(fill))
         else:
-            if gfx.bg_color:
-                self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
-            else:
-                self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width)
+            # No fill, just draw the outline
+            self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width)
         if self._doFlush: self.flush()
     def rect(self, gfx, x0, y0, x1, y1, fill="__use_bg_color__"):
         if fill == "__use_bg_color__":
-            # Use the background color if specified
+            # Use the gfx.background color if specified
             self.draw.rectangle((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
         elif fill:
             # Use the specified fill color
