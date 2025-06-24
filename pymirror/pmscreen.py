@@ -87,7 +87,7 @@ class PMScreen:
 		(x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
 		print(f"Text bounding box: ({x_min}, {y_min}, {x_max}, {y_max})")
 		width = x_max - x_min
-		height = y_max - y_min
+		height = y_max
 
 		## if x0, y0 not specified, use the gfx.x0, y0
 		## if they are specified, then they are absolute coordinates
