@@ -30,6 +30,13 @@ class AnalogClock(PMModule):
 		super().__init__(pm, moddef, config)
 		self.gfx.bg_color = None # clear background
 		self.render_clock_face()
+		self.hour = 0
+		self.minute = 0
+		self.second = 0
+		self.last_hour = -1
+		self.last_minute = -1
+		self.last_second = -1
+		self.first_time = True
 
 	def render_clock_face(self):
 		"""Render the clock face with hour markers."""
@@ -47,6 +54,9 @@ class AnalogClock(PMModule):
 			hr += 1
 
 	def render(self):
+		if self.first_time:
+			self.render_clock_face()
+			self.first_time = False
 		# now = datetime.now()
 		# gfx = self.gfx
 		# dx = (gfx.x1 - gfx.x0)/2
