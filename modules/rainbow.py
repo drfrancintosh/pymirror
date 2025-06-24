@@ -13,12 +13,18 @@ class Rainbow(PMModule):
 		y = gfx.y0
 		width = int(gfx.x1 - gfx.x0)
 		height = int(gfx.y1 - gfx.y0)
-		red = 0
-		green = 0
-		blue = 0
 		for r in range(256):
 			gfx.color = (r, 0, 0)  # Red to black
-			self.screen.line(gfx, x + r, y, x + r, y + height)
+			self.screen.line(gfx, x, y, x, y + height)
+			x += 1
+		for g in range(256):
+			gfx.color = (0, g, 0)  # Green to black
+			self.screen.line(gfx, x, y, x, y + height)
+			x += 1
+		for b in range(256):
+			gfx.color = (0, 0, b)  # Blue to black
+			self.screen.line(gfx, x, y, x, y + height)
+			x += 1
 
 	def exec(self):
 		if self.first_time:
