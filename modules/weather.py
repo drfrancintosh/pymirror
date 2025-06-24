@@ -63,7 +63,7 @@ class Weather(PMModule):
 	def exec(self):
 		if self.is_timedout():
 			self.weather_response = self.weather_api.fetch(self.weather_data)
-			print(json.dumps(self.weather_response, indent=2))
+			# print(json.dumps(self.weather_response, indent=2))
 			self.set_timeout(self.refresh_minutes * 60 * 1000)
 			if self.weather_response.get("alerts"):
 				alerts = self.weather_response["alerts"]
