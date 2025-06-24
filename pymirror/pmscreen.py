@@ -59,15 +59,16 @@ class PMScreen:
 			else:
 				self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width)
 		if self._doFlush: self.flush()
-	def rect(self, gfx, x0, y0, x1, y1, fill=None):
-		if fill:
+	def rect(self, gfx, x0, y0, x1, y1, fill="__use_bg_color__"):
+		if fill == "__use_bg_color__":
+			# Use the background color if specified
+			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
+		elif fill:
+			# Use the specified fill color
 			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=fill)
 		else:
-			if gfx.bg_color:
-				## if bg_color is set, then we fill the rectangle with that color
-				self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
-			else:
-				self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width)
+			# No fill, just draw the outline
+			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def text(self, gfx,  msg, x0, y0):
 		bbox = gfx.font.getbbox(msg)
