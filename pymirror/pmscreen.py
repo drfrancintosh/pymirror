@@ -61,15 +61,12 @@ class PMScreen:
 		if self._doFlush: self.flush()
 	def rect(self, gfx, x0, y0, x1, y1, fill=None):
 		if fill:
-			print(f"Drawing rectangle with fill: {fill}")
 			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=fill)
 		else:
 			if gfx.bg_color:
-				print(f"Drawing rectangle with outline {gfx.color} and bg_color: {gfx.bg_color}")
 				## if bg_color is set, then we fill the rectangle with that color
 				self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
 			else:
-				print(f"Drawing rectangle with outline color: {gfx.color}")
 				self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def text(self, gfx,  msg, x0, y0):
@@ -112,7 +109,6 @@ class PMScreen:
 		elif valign == "bottom": text_y0 = y1 - height
 		else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
-		print(f"Drawing text box at ({x0}, {y0}, {x1}, {y1}) with text at ({text_x0}, {text_y0}) and width {width}, height {height}")
 		if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
 		self.draw.text((text_x0, text_y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
