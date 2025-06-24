@@ -4,6 +4,8 @@ from PIL import Image, ImageDraw, ImageFont
 FONT_LIST=[font_name.split(":")[0] for font_name in subprocess.check_output(["fc-list"], text=True).split("\n")]
 
 class PMGfx:
+    fontlist = None
+
     def __init__(self):
         self.x0 = 0
         self.y0 = 0
@@ -21,6 +23,13 @@ class PMGfx:
         self.font = None 
         self.antialias = True
     
+    def _read_fonts(self):
+        """Read the system fonts and return a list of font names."""
+        try:
+            return [font_name.split(":")[0] for font_name in subprocess.check_output(["fc-list"], text=True).split("\n") if font_name.strip()]
+        except subprocess.CalledProcessError as e:
+            print(f"Error reading system fonts: {e}")
+            return []
     def set_font(self, font_name, pitch=64):
         if not pitch: pitch = 64
         for font_path in FONT_LIST:
