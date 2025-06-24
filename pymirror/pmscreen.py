@@ -113,8 +113,6 @@ class PMScreen:
     def text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
         ## get text bounding box
         (x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
-        if "Extreme" in msg:
-            print(f"text_box: {msg} {x_min}, {y_min}, {x_max}, {y_max}")
         width = x_max - x_min
         height = y_max
 
