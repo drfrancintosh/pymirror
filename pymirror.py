@@ -31,6 +31,8 @@ class PyMirror:
 				## if moddef is a string, it is the name of a module config file
 				## load the module definition from the file
 				## the file should be in JSON format
+				import os
+				print(os.getcwd())
 				with open(moddef, 'r') as file:
 					moddef = SafeNamespace(**json.load(file))
 
@@ -48,7 +50,7 @@ class PyMirror:
 			## and pass the PyMirror instance and the module config to it
 			## See pymirror.PMMModule for the expected constructor
 			obj = clazz(self, moddef, moddef.config)
-			
+
 			## add the module to the list of modules
 			self.modules.append(obj)
 
