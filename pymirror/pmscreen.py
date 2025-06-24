@@ -20,10 +20,12 @@ def _image_to_rgb565(img):
     return raw
 
 def _color(t):
-    if t is None: return None
-    r, g, b = t
-    x = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
-    return x
+	if t is None: return None
+	r, g, b = t
+	x = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
+	# Ensure x is a 16-bit value
+	x &= 0xFFFF	
+	return x
 
 class PMScreen:
     def __init__(self):
