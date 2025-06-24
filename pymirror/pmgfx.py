@@ -53,6 +53,7 @@ class PMGfx:
         with open("./fontlist.txt", "r") as f:
             fonts = f.read().splitlines()
             for font_path in fonts:
+                print(f"Found font: {font_path}")
                 # split line at # discard the rest
                 font_path = font_path.split("#")[0].strip()
                 if not font_path: continue # skip empty lines
