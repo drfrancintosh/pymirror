@@ -13,7 +13,7 @@ class Rainbow(PMModule):
 		width = gfx.x1 - gfx.x0
 		height = gfx.y1 - gfx.y0
 		color = 0
-		max = x * y
+		max = int(x * y)
 		for i in range(max):
 			gfx.color = (color % 256, (color * 2) % 256, (color * 3) % 256)
 			gfx.fill_rect(x + (i % width), y + (i // width), 1, 1)
