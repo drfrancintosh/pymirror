@@ -6,6 +6,7 @@ import json
 from types import SimpleNamespace
 from dataclasses import dataclass, fields
 from pymirror.pmmodule import PMModule
+import copy
 
 @dataclass
 class WeatherData:
@@ -39,8 +40,8 @@ class Weather(PMModule):
 
 	def render(self):
 		if not self.weather_response: return 0
+		gfx = copy.copy(self.gfx)
 		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
-		gfx = self.gfx
 		x = gfx.x0
 		y = gfx.y0
 		w = SimpleNamespace(**self.weather_response["current"])
@@ -49,9 +50,10 @@ class Weather(PMModule):
 		# text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
 		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y)
 		text_box(gfx, "Weather", valign="top")
-		text(gfx, f"{w.temp}{degrees} F", x, y + gfx.font_size/2)
-		text(gfx, f"{w.humidity} mb", x, y + gfx.font_size/2 * 2)
-		text(gfx, f"{w.feels_like}{degrees} F", x, y + gfx.font_size/2 * 3)
+		gfx.text_color = (0,0,0)
+		text(gfx, f"{w.temp}{degrees}", x, y + gfx.font_size)
+		text(gfx, f"{w.humidity} mb", x, y + gfx.font_size * 2)
+		text(gfx, f"{w.feels_like}{degrees}", x, y + gfx.font_size * 3)
 		self.weather_response = None  # Clear response after rendering
 		return 1
 
