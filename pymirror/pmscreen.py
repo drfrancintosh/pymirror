@@ -28,6 +28,8 @@ def _color(t):
 	if (r < 0 or r > 31) or (g < 0 or g > 63) or (b < 0 or b > 31):
 		raise ValueError(f"Invalid RGB values: {t}. Expected 0 <= R <= 255, 0 <= G <= 255, 0 <= B <= 255.")
 	x = (r << 11) | (g << 5) | b  # Combine into RGB565 format
+    # convert to little-endian
+	x = ((x & 0xFF) << 8) | ((x >> 8) & 0xFF)
 	print(f"Converting color {t} to RGB565: {x:#06x}")
 	# Ensure x is a 16-bit value
 	x &= 0xFFFF	
