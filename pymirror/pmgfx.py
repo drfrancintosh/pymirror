@@ -16,8 +16,8 @@ class PMGfx:
         self.font_size = None
         self.font = None 
         self.antialias = True
-        self.set_font("DejaVuSerif", 64)  # default font
         self._read_fonts()
+        self.set_font("DejaVuSerif", 64)  # default font
 
     @property
     def color(self):
