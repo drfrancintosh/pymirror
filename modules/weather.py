@@ -44,8 +44,10 @@ class Weather(PMModule):
 		y = gfx.y0
 		w = SimpleNamespace(**self.weather_response["current"])
 		text = self.screen.text
-		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y) 
-		text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F", x, y) 
+		text_box = self.screen.text_box
+		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y)
+		text_box(gfx, "Weather", valign="top")
+		text_box(gfx, f"{w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F", x, y + 20)
 		self.weather_response = None  # Clear response after rendering
 		return 1
 

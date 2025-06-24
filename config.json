@@ -90,6 +90,8 @@
       "configDeepMerge": "unused",
       "animateIn": false,
       "animateOut": false,
+      "color": "(255,255,0)",
+      "bg_color": "#808080",
       "config": {
         "lat": "37.50598",
         "lon": "-77.64916",
