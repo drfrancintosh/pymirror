@@ -27,16 +27,28 @@ class PyMirror:
 	def _load_modules(self):
 		for moddef in self.config.modules:
 			## load the module dynamically
+			if type(moddef) is str:
+				## if moddef is a string, it is the name of a module config file
+				## load the module definition from the file
+				## the file should be in JSON format
+				with open(moddef, 'r') as file:
+					moddef = SafeNamespace(**json.load(file))
+
+			## import the module using its name
+			## all modules should be in the "modules" directory
 			mod = importlib.import_module("modules."+moddef.module)
+		
 			## get the class from inside the module
 			## convert the file name to class name inside the module
 			## by convention the filename is snake_case and the class name is PascalCase
 			clazz_name = snake_to_pascal(moddef.module)
 			clazz = getattr(mod, clazz_name)
+
 			## create an instance of the class (module)
 			## and pass the PyMirror instance and the module config to it
 			## See pymirror.PMMModule for the expected constructor
 			obj = clazz(self, moddef, moddef.config)
+			
 			## add the module to the list of modules
 			self.modules.append(obj)
 
