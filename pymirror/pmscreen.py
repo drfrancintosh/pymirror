@@ -61,11 +61,15 @@ class PMScreen:
 		if self._doFlush: self.flush()
 	def rect(self, gfx, x0, y0, x1, y1, fill=None):
 		if fill:
+			print(f"Drawing rectangle with fill: {fill}")
 			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=fill)
 		else:
 			if gfx.bg_color:
+				print(f"Drawing rectangle with outline {gfx.color} and bg_color: {gfx.bg_color}")
+				## if bg_color is set, then we fill the rectangle with that color
 				self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
 			else:
+				print(f"Drawing rectangle with outline color: {gfx.color}")
 				self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def text(self, gfx,  msg, x0, y0):
