@@ -1,6 +1,20 @@
 from abc import ABC, abstractmethod
 import time
 from pymirror.pmscreen import PMGfx
+from dataclasses import dataclass
+
+@dataclass
+class PMModuleDef(ABC):
+	position: str
+	x_offset: int
+	y_offset: int
+	color: str
+	bg_color: str
+	text_color: str
+	text_bg_color: str
+	font: str
+	font_size: int
+	subscriptions: list[str] = None
 
 class PMModule(ABC):
 	def __init__(self, pm, moddef, config):
@@ -11,7 +25,7 @@ class PMModule(ABC):
 		##     and config is the module "child" instance configuration
 		self.pm = pm
 		self.screen = pm.screen
-		self.moddef = moddef
+		self.moddef = PMModuleDef(**moddef)
 		self.config = config
 		self.timeout = 0
 		self.subscriptions = []
@@ -40,8 +54,11 @@ class PMModule(ABC):
 			self.gfx.y1 = self.pm.screen.gfx.height * dims[3] 
 
 
-	def subscribe(self, event_name):
-		self.subscriptions.append(event_name)
+	def subscribe(self, event_names):
+		if isinstance(event_names, str):
+			event_names = [event_names]
+		for event_name in event_names:
+			self.subscriptions.append(event_name)
 
 	def is_subscribed(self, event_name):
 		return event_name in self.subscriptions
@@ -58,14 +75,29 @@ class PMModule(ABC):
 			self.set_timeout(0) ## disable timer
 			return True
 
+	def clear_region(self) -> None:
+		""" Clear the module's region on the screen. """
+		gfx = self.gfx
+		self.screen.rect(gfx, gfx.x0, gfx.y0, gfx.x1, gfx.y1, fill=gfx.bg_color)
+
 	@abstractmethod
 	def render(self, force: bool = False) -> bool:
+		""" Render the module on the screen.
+		returns True if the screen was updated, and needs a flush() call.
+		If force is True, the module should always render, even if nothing changed.
+		"""
 		pass
 
 	@abstractmethod
 	def exec(self) -> bool:
+		""" Execute the module logic.
+		returns True if the module state changed, and needs a render() call.
+		"""
 		pass
 
 	@abstractmethod
 	def onEvent(self, event) -> None:
+		"""
+		Handle an event for the module.
+		"""
 		pass

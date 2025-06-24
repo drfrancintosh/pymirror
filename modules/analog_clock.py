@@ -53,7 +53,7 @@ class AnalogClock(PMModule):
 			hr += 1
 		gfx.line_width = 3
 
-	def render(self):
+	def render(self, force: bool = False) -> bool:
 		save_color = self.gfx.color
 		dirty = 0
 		now = datetime.now()

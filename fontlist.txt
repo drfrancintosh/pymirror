@@ -1,8 +1,8 @@
+./fonts/DejaVuSerif.ttf
 ./fonts/7segment.ttf
 ./fonts/TNG_Credits.ttf
 ./fonts/TNG_Title.ttf
 ./fonts/TOS_Title.ttf
-./fonts/DejaVuSerif.ttf
 /usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf: DejaVu Serif:style=Bold
 /usr/share/fonts/opentype/urw-base35/URWBookman-LightItalic.otf: URW Bookman:style=Light Italic
 /usr/share/fonts/opentype/urw-base35/URWBookman-Light.otf: URW Bookman:style=Light

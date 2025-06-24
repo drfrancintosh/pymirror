@@ -1,199 +1,24 @@
 {
   "debug": false,
-  "font": "DejaVuSans.ttf",
-  "font_size": 64,
-  "color": "(255,255,255)",
-  "bg_color": "#000000",
-  "text_color": "(255,255,255)",
-  "text_bg_color": null,
+  "screen": {
+    "font": "DejaVuSans.ttf",
+    "font_size": 64,
+    "color": "(255,255,255)",
+    "bg_color": "#000000",
+    "text_color": "(255,255,255)",
+    "text_bg_color": null,
+  }
   "positions": {
-    "top_left": [
-      0.0,
-      0.0,
-      0.33,
-      0.33
-    ],
-    "top_center": [
-      0.33,
-      0.0,
-      0.66,
-      0.10
-    ],
-    "top_right": [
-      0.66,
-      0.0,
-      1.00,
-      0.33
-    ],
-    "middle_left": [
-      0.0,
-      0.33,
-      0.33,
-      0.66
-    ],
-    "middle_center": [
-      0.33,
-      0.15,
-      0.66,
-      0.85
-    ],
-    "middle_right": [
-      0.66,
-      0.33,
-      1.00,
-      0.66
-    ],
-    "bottom_left": [
-      0.0,
-      0.66,
-      0.33,
-      1.00
-    ],
-    "bottom_center": [
-      0.33,
-      0.85,
-      0.66,
-      1.00
-    ],
-    "bottom_right": [
-      0.66,
-      0.66,
-      1.00,
-      1.00
-    ]
+    "top_left": "0.0,0.0,0.33,0.33",
+    "top_center": "0.33,0.0,0.66,0.10",
+    "top_right": "0.66,0.0,1.00,0.33",
+    "middle_left": "0.0,0.33,0.33,0.66",
+    "middle_center": "0.33,0.15,0.66,0.85",
+    "middle_right": "0.66,0.33,1.00,0.66",
+    "bottom_left": "0.0,0.66,0.33,1.00",
+    "bottom_center": "0.33,0.85,0.66,1.00",
+    "bottom_right": "0.66,0.66,1.00,1.00"
   },
   "modules": [
-    {
-      "module": "rainbow",
-      "position": "bottom_left",
-      "config": {}
-    },
-    {
-      "module": "fps",
-      "position": "bottom_right",
-      "classes": "unused",
-      "header": "FPS",
-      "hiddenOnStartup": false,
-      "disabled": false,
-      "configDeepMerge": "unused",
-      "animateIn": false,
-      "animateOut": false,
-      "color": "(255,255,0)",
-      "bg_color": "(0,0,0)",
-      "text_color": "(255,255,0)",
-      "text_bg_color": "(0,0,0)",
-      "config": {
-        "valign": "bottom",
-        "halign": "right"
-      }
-    },
-    {
-      "module": "weather",
-      "position": "middle_left",
-      "classes": "unused",
-      "header": "Weather",
-      "hiddenOnStartup": false,
-      "disabled": false,
-      "configDeepMerge": "unused",
-      "animateIn": false,
-      "animateOut": false,
-      "color": "(255,255,0)",
-      "bg_color": "(0,0,0)",
-      "text_color": "(255,255,0)",
-      "text_bg_color": "(0,0,0)",
-      "config": {
-        "weather_data": {
-          "lat": "37.50598",
-          "lon": "-77.64916",
-          "appid": "d0127c5a160a58e37651a83ff69922bf",
-          "exclude": "minutely,hourly",
-          "units": "imperial",
-          "lang": "english"
-        },
-        "body_color": "#c0c000"
-      }
-    },
-    {
-      "module": "alert",
-      "position": "middle_right",
-      "font": "TOS_Title.ttf",
-      "font_size": 32,
-      "color": "(0,0,0)",
-      "bg_color": "(0,0,0)",
-      "text_color": "(255,255,0)",
-      "text_bg_color": "(0,0,0)",
-      "config": {
-        "effect": "None",
-        "alert_effect": "None",
-        "display_time": 3500,
-        "position": "center",
-        "welcome_message": "Welcome to PyMirror",
-        "heading": {
-          "text": "ALERT",
-          "font": "TNG_Credits.ttf",
-          "font_size": 48,
-          "text_color": "(255,255,0)",
-          "text_bg_color": "(255,0,0)"
-        }
-      }
-    },
-    {
-      "module": "cron",
-      "disabled": true,
-      "position": "middle_right",
-      "config": {
-        "name": "example_cron",
-        "first_delay": 4000,
-        "delay": 2000,
-        "repeat": 5,
-        "event": {
-          "name": "ALERT",
-          "message": "alert is kicked off",
-          "timeout": 500
-        }
-      }
-    },
-    {
-      "module": "analog_clock",
-      "position": "middle_center",
-      "font": "TOS_Title.ttf",
-      "font_size": 48,
-      "config": {
-        "hour_hand": "#ff0000",
-        "minute_hand": "#00ff00",
-        "second_hand": "#2020ff"
-      }
-    },
-    {
-      "module": "clock",
-      "position": "top_left",
-      "x_offset": 0,
-      "y_offset": -100,
-      "font": "7segment.ttf",
-      "font_size": 128,
-      "config": {
-        "date_format": "%Y-%m-%d"
-      }
-    },
-    {
-      "module": "clock",
-      "position": "top_right",
-      "x_offset": 50,
-      "y_offset": -100,
-      "font": "7segment.ttf",
-      "font_size": 128,
-      "config": {
-        "date_format": "%H:%M:%S"
-      }
-    },
-    {
-      "module": "clock",
-      "position": "bottom_center",
-      "font": "TOS_Title.ttf",
-      "font_size": 96,
-      "config": {
-        "date_format": "%A"
-      }
-    }
+    "configs/weather_alert.json"
   ]
-}

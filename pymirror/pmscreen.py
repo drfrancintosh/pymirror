@@ -2,35 +2,6 @@ import time
 from PIL import Image, ImageDraw
 from pymirror.pmgfx import PMGfx
 
-def _color(t):
-    # Convert a color tuple (R, G, B) to RGB565 format
-    # this is mangled because the PIL Image is a 32-bit signed integer array
-    # and we send every other byte to the framebuffer
-    # so every pixel (tuple) is converted to a 16-bit RGB565 value
-    # split across the odd bytes of a 32-bit integer
-    try:
-        if t is None: return None
-        if isinstance(t, str):
-            if t.startswith("#"):
-                # Convert hex color to RGB tuple
-                t = t.lstrip("#")
-                t = tuple(int(t[i:i+2], 16) for i in (0, 2, 4))
-            elif t.startswith("(") and t.endswith(")"):
-                # Convert rgb() string to RGB tuple
-                t = t[1:-1].split(',')
-                t = [int(x.strip()) for x in t]
-                if len(t) < 3:
-                    raise ValueError(f"Invalid rgb() format, expected (R, G, B).")
-            return _color(tuple(t))  # Recursively convert to tuple if it's a string
-        r, g, b = t
-        r = (r >> 3) & 0x1F  # Convert to 5 bits
-        g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
-        g1 = (g >> 5) & 0x07  # Convert to upper 3 bits
-        b = (b >> 3) & 0x1F  # Convert to 5 bits
-        x = r << 19 | (g1 << 16 | g0 << 5 | b)
-        return x
-    except Exception as e:
-        raise ValueError(f"Invalid color format {t}, expected RGB tuple or hex string.") from e
 class PMScreen:
     def __init__(self):
         self.img = Image.new("I", (1920, 1080), 0)
@@ -38,80 +9,79 @@ class PMScreen:
         self.gfx = PMGfx()
         self.gfx.width, self.gfx.height = self.img.size
         self.gfx.x1, self.gfx.y1 = (self.gfx.width-1, self.gfx.height-1)
-        self.set_flush(False)
+        self.set_flush(False) ## do not flush by default
         self.clear()
 
-    def set_flush(self, doFlush):
+    def set_flush(self, doFlush: bool) -> None:
         self._doFlush = doFlush
-    def delay(self, ms):
+
+    def delay(self, ms: int) -> None:
         time.sleep(ms / 1000)
         if self._doFlush: self.flush()
-    def clear(self):
-        self.draw.rectangle((self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1), _color(self.gfx.bg_color))
+
+    def clear(self) -> None:
+        self.draw.rectangle(self.gfx.rect, self.gfx.bg_color)
         if self._doFlush: self.flush()
-    def line(self, gfx, x0, y0, x1, y1):
-        self.draw.line((x0, y0, x1, y1), fill=_color(gfx.color), width=gfx.line_width)
+
+    def line(self, gfx: PMGfx, rect: tuple):
+        self.draw.line(rect, fill=gfx.color, width=gfx.line_width)
         if self._doFlush: self.flush()
-    def ellipse(self, gfx, x0, y0, x1, y1, fill=None):
+
+    def ellipse(self, gfx: PMGfx, rect: tuple, fill=None):
         if fill:
-            self.draw.ellipse((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(fill))
+            self.draw.ellipse(rect, outline=gfx.color, width=gfx.line_width, fill=fill)
         else:
             if gfx.bg_color:
-                self.draw.ellipse((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
+                self.draw.ellipse(rect, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
             else:
-                self.draw.ellipse((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width)
+                self.draw.ellipse(rect, outline=gfx.color, width=gfx.line_width)
         if self._doFlush: self.flush()
-    def circle(self, gfx, x0, y0, r, fill="__use_bg_color__"):
+
+    def circle(self, gfx: PMGfx, x0: int, y0: int, r: int, fill="__use_bg_color__"):
         bbox = (x0-r, y0-r, x0+r, y0+r)
         if fill == "__use_bg_color__":
             # Use the gfx.background color
-            self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
+            self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
         elif fill:
             # Use the specified fill color
-            self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width, fill=_color(fill))
+            self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=fill)
         else:
             # No fill, just draw the outline
-            self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width)
+            self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width)
         if self._doFlush: self.flush()
-    def rect(self, gfx, x0, y0, x1, y1, fill="__use_bg_color__"):
+
+    def rect(self, gfx: PMGfx, rect: tuple, fill="__use_bg_color__"):
         if fill == "__use_bg_color__":
             # Use the gfx.background color if specified
-            self.draw.rectangle((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
+            self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
         elif fill:
             # Use the specified fill color
-            self.draw.rectangle((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(fill))
+            self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width, fill=fill)
         else:
             # No fill, just draw the outline
-            self.draw.rectangle((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width)
+            self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width)
         if self._doFlush: self.flush()
-    def text(self, gfx,  msg, x0, y0):
+
+    def text(self, gfx: PMGfx, msg: str, x0: int, y0: int) -> None:
         (x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
         width = x_max - x_min
         height = y_max
         # Draw background rectangle
         if gfx.text_bg_color:
-            self.draw.rectangle((x0, y0, x0 + width, y0 + height), fill=_color(gfx.text_bg_color))
+            self.draw.rectangle((x0, y0, x0 + width, y0 + height), fill=gfx.text_bg_color)
         # Draw text
-        self.draw.text((x0, y0), msg, fill=_color(gfx.text_color), font=gfx.font)
+        self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
         if self._doFlush: self.flush()
-    def text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
+
+    def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
         ## get text bounding box
         (x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
         width = x_max - x_min
         height = y_max
 
-        ## if x0, y0 not specified, use the gfx.x0, y0
-        ## if they are specified, then they are absolute coordinates
-        if x0 == None: x0 = gfx.x0
-        if y0 == None: y0 = gfx.y0
-
+        x0, y0, x1, y1 = rect
         text_x0 = x0
         text_y0 = y0
-
-        ## if x1, y1 not specified, use the gfx.x1, y1
-        ## if they are specified, then they are absolute coordinates
-        if x1 == None: x1 = gfx.x1
-        if y1 == None: y1 = gfx.y1
 
         if halign == "center": text_x0 = x0 + (x1 - x0 - width) / 2
         elif halign == "left": text_x0 = x0
@@ -123,8 +93,8 @@ class PMScreen:
         elif valign == "bottom": text_y0 = y1 - height
         else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
-        if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=_color(gfx.text_bg_color))
-        self.draw.text((text_x0, text_y0 - y_min), msg, fill=_color(gfx.text_color), font=gfx.font)
+        if gfx.text_bg_color: self.draw.rectangle(rect, fill=gfx.text_bg_color)
+        self.draw.text((text_x0, text_y0 - y_min), msg, fill=gfx.text_color, font=gfx.font)
         if self._doFlush: self.flush()
 
     def flush(self):
