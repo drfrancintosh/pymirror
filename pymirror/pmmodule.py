@@ -19,11 +19,11 @@ class PMModule(ABC):
 		self.x_offset = moddef.x_offset or 0
 		self.y_offset = moddef.y_offset or 0
 		self.gfx = PMGfx() ## default graphics context
-		self.gfx.color = self.screen.gfx.color or moddef.color
-		self.gfx.bg_color = self.screen.gfx.bg_color or moddef.bg_color
-		self.gfx.text_color = self.screen.gfx.text_color or moddef.text_color
-		self.gfx.text_bg_color = self.screen.gfx.text_bg_color or moddef.text_bg_color
-		self.gfx.font_name = moddef.font or "DejaVuSans.ttf"
+		self.gfx.color = moddef.color or self.screen.gfx.color
+		self.gfx.bg_color = moddef.bg_color or self.screen.gfx.bg_color
+		self.gfx.text_color = moddef.text_color or self.screen.gfx.text_color
+		self.gfx.text_bg_color = moddef.text_bg_color or self.screen.gfx.text_bg_color
+		self.gfx.font_name = moddef.font or self.screen.gfx.font_name or "DejaVuSans.ttf"
 		self.gfx.font_size = moddef.font_size or 64
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
 		if self.moddef.position:
