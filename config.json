@@ -105,7 +105,7 @@
     },
     {
       "module": "alert",
-      "position": "top_center",
+      "position": "middle_right",
       "font": "TOS_Title.ttf",
       "font_size": 48,
       "config": {

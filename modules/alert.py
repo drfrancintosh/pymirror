@@ -30,6 +30,7 @@ class Alert(PMModule):
 		return self.render()
 
 	def onAlertEvent(self, event):
+		print(f"Alert received: {event.message}")
 		self.message = event.message
 		self.set_timeout(event.timeout)
 	
