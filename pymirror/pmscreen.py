@@ -19,6 +19,7 @@ def _image_to_rgb565(img):
     return raw
 
 def _color(t):
+	if t is None: return None
 	r, g, b = t
 	return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
 
