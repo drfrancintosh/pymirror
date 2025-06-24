@@ -15,19 +15,19 @@ def _color(arr):
 			elif len(arr) == 8:
 				return tuple(int(arr[i:i+2], 16) for i in (0, 2, 4))
 			else:
-				raise ValueError("Invalid hex color format, expected #RRGGBB or #RRGGBBAA.")
-		elif arr.startswith("rgb(") and arr.endswith(")"):
+				raise ValueError(F"Invalid hex color format {arr}, expected #RRGGBB or #RRGGBBAA.")
+		elif arr.startswith("(") and arr.endswith(")"):
 			# Convert rgb() string to RGB tuple
 			arr = arr[4:-1].split(',')
 			arr = [int(x.strip()) for x in arr]
 			if len(arr) < 3 or len(arr) > 4:
-				raise ValueError("Invalid rgb() format, expected rgb(R, G, B) or rgba(R, G, B, A).")
+				raise ValueError(F"Invalid rgb() format, expected rgb(R, G, B) or rgba(R, G, B, A).")
 	if len(arr) == 3:
 		return tuple(arr)  # RGB tuple
 	elif len(arr) == 4:
 		return tuple(arr[:3])  # RGBA tuple, ignore alpha
 	else:
-		raise ValueError("Invalid color format, expected RGB or RGBA tuple.")
+		raise ValueError(f"Invalid color format, {arr} expected RGB or RGBA tuple.")
 
 class PyMirror:
 	def __init__(self, config_fname):
