@@ -19,14 +19,14 @@ class Alert(PMModule):
 	def render(self):
 			gfx = self.gfx
 			gfx.text_bg_color = gfx.bg_color # Set background color for text
-			self.screen.text_box(gfx, self.message or "", gfx.x0, gfx.y0, gfx.x1, gfx.y1)
-			self.last_message = self.message
+			self.screen.text_box(gfx, self.message or "", gfx.x0, gfx.y0, gfx.x1, gfx.y1, valign="top")
+			# self.last_message = self.message
 			return 1
 
 
 	def exec(self):
-		if self.is_timedout(): self.message = None
-		if self.message == self.last_message: return 0
+		# if self.is_timedout(): self.message = None
+		# if self.message == self.last_message: return 0
 		return self.render()
 
 	def onAlertEvent(self, event):
