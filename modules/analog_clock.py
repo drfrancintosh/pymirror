@@ -55,7 +55,7 @@ class AnalogClock(PMModule):
 
 	def render(self):
 		save_color = self.gfx.color
-		dirty = 0
+		dirty = 1
 		now = datetime.now()
 		gfx = self.gfx
 		dx = (gfx.x1 - gfx.x0)/2
@@ -64,7 +64,8 @@ class AnalogClock(PMModule):
 		else: r = dy
 
 
-		if (self.hour_hand and self.last_hour != now.hour) or \
+		if dirty or \
+		   (self.hour_hand and self.last_hour != now.hour) or \
 		   (self.minute_hand and self.last_minute != now.minute) or \
 		   (self.second_hand and self.last_second != now.second):
 				self._render_clock_face(dx, dy, r)
