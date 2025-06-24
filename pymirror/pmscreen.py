@@ -3,8 +3,8 @@ from PIL import Image, ImageDraw
 from pymirror.pmgfx import PMGfx, tocolor
 
 class PMScreen:
-    def __init__(self):
-        self.img = Image.new("I", (1920, 1080), 0)
+    def __init__(self, width: int = 1920, height: int = 1080):
+        self.img = Image.new("I", (width, height), 0)
         self.draw = ImageDraw.Draw(self.img)
         self.gfx = PMGfx()
         self.gfx.width, self.gfx.height = self.img.size
@@ -24,6 +24,7 @@ class PMScreen:
         if self._doFlush: self.flush()
 
     def line(self, gfx: PMGfx, rect: tuple):
+        print(f"Drawing line with rect: {rect} and color: {gfx.color}")
         self.draw.line(rect, fill=gfx.color, width=gfx.line_width)
         if self._doFlush: self.flush()
 
@@ -107,7 +108,7 @@ class PMScreen:
         if self._doFlush: self.flush()
 
 def main():
-    pms = PMScreen()
+    pms = PMScreen(1920, 1080)
     pms.gfx.color = (0, 0, 255)
     pms.clear()
     pms.line(pms.gfx, pms.gfx.rect)
