@@ -123,7 +123,7 @@ class PMScreen:
         raw = _image_to_rgb565(self.img)
         # Write to framebuffer
         with open("/dev/fb0", "wb") as f:
-            f.write(raw)
+            f.write(raw[::2])  # Write every second byte for RGB565 format
 
     def quit(self):
         if self._doFlush: self.flush()
