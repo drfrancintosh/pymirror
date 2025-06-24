@@ -4,15 +4,40 @@ from pymirror.pmscreen import PMScreen
 from pymirror.safe_namespace import SafeNamespace
 from pymirror.utils import snake_to_pascal
 
+def _color(arr):
+	if arr is None: return None
+	if isinstance(arr, str):
+		if arr.startswith("#"):
+			# Convert hex color to RGB tuple
+			arr = arr.lstrip("#")
+			if len(arr) == 6:
+				return tuple(int(arr[i:i+2], 16) for i in (0, 2, 4))
+			elif len(arr) == 8:
+				return tuple(int(arr[i:i+2], 16) for i in (0, 2, 4))
+			else:
+				raise ValueError("Invalid hex color format, expected #RRGGBB or #RRGGBBAA.")
+		elif arr.startswith("rgb(") and arr.endswith(")"):
+			# Convert rgb() string to RGB tuple
+			arr = arr[4:-1].split(',')
+			arr = [int(x.strip()) for x in arr]
+			if len(arr) < 3 or len(arr) > 4:
+				raise ValueError("Invalid rgb() format, expected rgb(R, G, B) or rgba(R, G, B, A).")
+	if len(arr) == 3:
+		return tuple(arr)  # RGB tuple
+	elif len(arr) == 4:
+		return tuple(arr[:3])  # RGBA tuple, ignore alpha
+	else:
+		raise ValueError("Invalid color format, expected RGB or RGBA tuple.")
+
 class PyMirror:
 	def __init__(self, config_fname):
 		with open(config_fname, 'r') as file:
 			self.config = SafeNamespace(**json.load(file))
 		self.screen = PMScreen()
-		self.screen.gfx.color = self.config.color or (255, 255, 255)  # default color
-		self.screen.gfx.bg_color = self.config.bg_color or (0, 0, 0)
-		self.screen.gfx.text_color = self.config.text_color or self.screen.gfx.color
-		self.screen.gfx.text_bg_color = None or self.config.text_bg_color
+		self.screen.gfx.color = _color(self.config.color) or (255, 255, 255)  # default color
+		self.screen.gfx.bg_color = _color(self.config.bg_color) or (0, 0, 0)
+		self.screen.gfx.text_color = _color(self.config.text_color) or _color(self.screen.gfx.color)
+		self.screen.gfx.text_bg_color = _color(self.config.text_bg_color)
 		self.screen.gfx.line_width = self.config.line_width or 5
 		self.screen.set_flush(False)
 		self.modules = []
