@@ -71,7 +71,7 @@
     },
     {
       "module": "fps",
-      "position": "bottom_right",
+      "position": "top_left",
       "classes": "unused",
       "header": "FPS",
       "hiddenOnStartup": false,
@@ -96,6 +96,7 @@
     },
     {
       "module": "cron",
+      "position": "middle_right",
       "config": {
         "name": "example_cron",
         "first_delay": 4000,
@@ -117,7 +118,7 @@
     },
     {
       "module": "clock",
-      "position": "top_left",
+      "position": "bottom_right",
       "x_offset": 0,
       "y_offset": -100,
       "font": "7segment.ttf",
