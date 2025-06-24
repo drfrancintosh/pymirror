@@ -68,20 +68,19 @@
       "configDeepMerge": "unused",
       "animateIn": false,
       "animateOut": false,
-      "config": {
-      }
+      "config": {}
     },
     {
       "module": "alert",
       "position": "top_center",
+      "font": "Trek",
+      "font_size": 48,
       "config": {
         "effect": "None",
         "alert_effect": "None",
         "display_time": 3500,
         "position": "center",
         "welcome_message": "Welcome to PyMirror",
-        "font": "Trek",
-        "font_size": 48
       }
     },
     {
@@ -100,20 +99,19 @@
     },
     {
       "module": "analog_clock",
-      "config": {
-        "position": "middle_center",
-        "font": "Trek",
-        "font_size": 48
-      }
+      "position": "middle_center",
+      "font": "Trek",
+      "font_size": 48,
+      "config": {}
     },
     {
       "module": "clock",
+      "position": "top_left",
+      "x_offset": 0,
+      "y_offset": -100,
+      "font": "7segment",
+      "font_size": 128,
       "config": {
-        "position": "top_left",
-        "x_offset": 0,
-        "y_offset": -100,
-        "font": "7segment",
-        "font_size": 128,
         "date_format": "%Y-%m-%d"
       }
     },

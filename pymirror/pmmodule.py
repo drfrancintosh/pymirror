@@ -4,6 +4,11 @@ from pymirror.pmscreen import PMGfx
 
 class PMModule(ABC):
 	def __init__(self, pm, moddef, config):
+		## Initialize the module based on moddef
+		## NOTE: config is often moddef.config, but not always
+		## NOTE: we only init the module on moddef, not on config
+		##	   this is because moddef is the generic module definition, 
+		##     and config is the module "child" instance configuration
 		self.pm = pm
 		self.screen = pm.screen
 		self.moddef = moddef
@@ -18,12 +23,16 @@ class PMModule(ABC):
 		self.gfx.font_name = moddef.font or "DejaVuSans.ttf"
 		self.gfx.font_size = moddef.font_size or 64
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
-		if moddef.font:
-			self.gfx.set_font(moddef.font, moddef.font_size)
 		if self.moddef.position:
 			print(f"Module {self.moddef.module} position: {self.moddef.position}")
 			dims = pm.config.positions[self.moddef.position]
 			print(f"Module {self.moddef.module} dimensions: {dims}")
+			## this is the bounding box for the module
+			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
+			## these are in percentages of the screen size
+			## so we need to multiply by the screen size to get the actual pixel values
+			## NOTE: self.x_offset and self.y_offset are used by the render() method
+			## 		 to offset the text position within the bounding box
 			self.gfx.x0 = self.pm.screen.gfx.width * dims[0]
 			self.gfx.y0 = self.pm.screen.gfx.height * dims[1]
 			self.gfx.x1 = self.pm.screen.gfx.width * dims[2] 

@@ -4,7 +4,7 @@ from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMGfx
 import math
 
-def compute_clock_positions(x0, y0, r):
+def _compute_clock_positions(x0, y0, r):
     """Compute the 12 positions around a clock face given center (x0, y0) and radius r."""
     positions = []
     for hour in range(12):
@@ -20,7 +20,7 @@ def compute_clock_positions(x0, y0, r):
     
     return positions
 
-def compute_hand_posn(x0, y0, r, value, divisor, offset):
+def _compute_hand_posn(x0, y0, r, value, divisor, offset):
 	value += offset 
 	angle = 2 * math.pi * value / divisor 
 	return (x0 + r * math.cos(angle), y0 + r * math.sin(angle))
@@ -28,15 +28,10 @@ def compute_hand_posn(x0, y0, r, value, divisor, offset):
 class AnalogClock(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
-		if not self.gfx.font_name: self.gfx.font_name = "DejaVuSans"
-		if not self.gfx.font_size: self.gfx.font_size = 32
-		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
-		self.gfx.bg_color = None
-
+		self.gfx.bg_color = None # clear background
 
 	def render(self):
 		now = datetime.now()
-		formatted = now.strftime("%I:%M:%S %p")
 		gfx = self.gfx
 		dx = (gfx.x1 - gfx.x0)/2
 		dy = (gfx.y1 - gfx.y0)/2
@@ -46,23 +41,23 @@ class AnalogClock(PMModule):
 			r = dy
 		hr = 1
 		gfx.text_color = (192, 192, 192)
-		for posn in compute_clock_positions(gfx.x0+dx, gfx.y0+dy, r-self.gfx.font_size):
+		for posn in _compute_clock_positions(gfx.x0+dx, gfx.y0+dy, r-self.gfx.font_size):
 			self.screen.text_box(gfx, str(hr), posn[0], posn[1], posn[0], posn[1], valign="bottom")
 			hr += 1
 		gfx.color = (192, 192, 192)
 		gfx.line_width = 3
 		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r )
 
-		hr_posn = compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*0.5, now.hour + now.minute/60 + now.second/3600, 12.0, -3.0)
+		hr_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*0.5, now.hour + now.minute/60 + now.second/3600, 12.0, -3.0)
 		gfx.line_width = 10
 		self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, hr_posn[0], hr_posn[1])
 
-		min_posn = compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*0.66, now.minute + now.second/60, 60.0, -15.0)
+		min_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*0.66, now.minute + now.second/60, 60.0, -15.0)
 		gfx.line_width = 5 
 		gfx.color = (0, 64, 128)
 		self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, min_posn[0], min_posn[1])
 
-		sec_posn = compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r, now.second, 60.0, -15.0)
+		sec_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r, now.second, 60.0, -15.0)
 		gfx.line_width = 1
 		gfx.color = (128, 128, 0)
 		self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, sec_posn[0], sec_posn[1])
