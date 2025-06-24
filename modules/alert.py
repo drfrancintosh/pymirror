@@ -1,4 +1,5 @@
 import time
+import copy
 from pymirror.pmmodule import PMModule
 from pymirror.pmevent import PMEvent
 from dataclasses import dataclass
@@ -19,8 +20,10 @@ class Alert(PMModule):
 		self.subscribe("ALERT")
 
 	def render(self):
+			gfx = copy.copy(self.gfx)
+			gfx.set_font(self.config.font, self.config.font_size * 1.25)
+			self.screen.text_box(gfx, self.heading, gfx.x0, gfx.y0, gfx.x1, gfx.y0 + gfx.font_size * 1.25, halign="center", valign="top")
 			gfx = self.gfx
-			self.screen.text_box(gfx, self.heading, gfx.x0, gfx.y0, gfx.x1, gfx.y0 + gfx.font_size, halign="center", valign="top")
 			self.screen.text_box(gfx, self.message, gfx.x0, gfx.y0 + gfx.font_size, gfx.x1, gfx.y1, halign="left", valign="top")
 			self.last_message = self.message
 			return 1
