@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 @dataclass
 class AlertEvent(PMEvent):
+	heading: str
 	message: str
 	timeout: int
 
@@ -12,13 +13,15 @@ class Alert(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.last_message = None
+		self.heading = "ALERT"
 		self.message = config.welcome_message
 		self.set_timeout(config.display_time)
 		self.subscribe("ALERT")
 
 	def render(self):
 			gfx = self.gfx
-			self.screen.text_box(gfx, self.message, gfx.x0, gfx.y0, gfx.x1, gfx.y1, halign="left", valign="top")
+			self.screen.text_box(gfx, self.heading, gfx.x0, gfx.y0, gfx.x1, gfx.y0 + gfx.font_size, halign="centered", valign="top")
+			self.screen.text_box(gfx, self.message, gfx.x0, gfx.y0 + gfx.font_size, gfx.x1, gfx.y1, halign="left", valign="top")
 			self.last_message = self.message
 			return 1
 
@@ -30,6 +33,7 @@ class Alert(PMModule):
 
 	def onAlertEvent(self, event):
 		print(f"Alert received: {event.message}")
+		self.heading = event.heading
 		self.message = event.message
 		self.set_timeout(event.timeout)
 	
