@@ -25,7 +25,9 @@ def _color(t):
     r = (r >> 3) & 0x1F  # Convert to 5 bits
     g = (g >> 2) & 0x3F  # Convert to 6 bits
     b = (b >> 3) & 0x1F  # Convert to 5 bits
-    x = r << 5
+    if r < 0 or r > 31 or g < 0 or g > 63 or b < 0 or b > 31:
+        raise ValueError(f"Invalid color value: {t}, expected RGB tuple with R in [0,31], G in [0,63], B in [0,31].")
+    x = r
     return x
 
 class PMScreen:
