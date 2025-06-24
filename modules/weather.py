@@ -39,21 +39,26 @@ class Weather(PMModule):
 
 	def render(self):
 		if not self.weather_response: return 0
+		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
 		gfx = self.gfx
 		x = gfx.x0
 		y = gfx.y0
 		w = SimpleNamespace(**self.weather_response["current"])
 		text = self.screen.text
 		text_box = self.screen.text_box
+		# text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
 		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y)
 		text_box(gfx, "Weather", valign="top")
-		text_box(gfx, f"{w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F", x, y + 20)
+		text_box(gfx, f"{w.temp}{degrees} F", halign="left", y0=y + gfx.font_size)
+		text_box(gfx, f"{w.humidity} mb", halign="left", y0=y + gfx.font_size * 2)
+		text_box(gfx, f"{w.feels_like}{degrees} F", halign="left", y0=y + gfx.font_size * 3)
 		self.weather_response = None  # Clear response after rendering
 		return 1
 
 	def exec(self):
 		if self.is_timedout():
 			self.weather_response = self.weather_api.fetch(self.weather_data)
+			print(json.dumps(self.weather_response, indent=2))
 			self.set_timeout(self.refresh_minutes * 60 * 1000)
 		return self.render()
 
