@@ -118,14 +118,23 @@
       "position": "middle_right",
       "font": "TOS_Title.ttf",
       "font_size": 32,
+      "color": "(192,192,0)",
       "bg_color": "(0,0,0)",
+      "text_color": "(192,192,0)",
       "text_bg_color": "(0,0,0)",
       "config": {
         "effect": "None",
         "alert_effect": "None",
         "display_time": 3500,
         "position": "center",
-        "welcome_message": "Welcome to PyMirror"
+        "welcome_message": "Welcome to PyMirror",
+        "heading": {
+          "text": "ALERT",
+          "font": "TNG_Credits.ttf",
+          "font_size": 48,
+          "text_color": "(192,192,0)",
+          "text_bg_color": "(255,0,0)"
+        }
       }
     },
     {
