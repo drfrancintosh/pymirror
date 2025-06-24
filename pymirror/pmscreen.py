@@ -21,7 +21,9 @@ def _image_to_rgb565(img):
 def _color(t):
     if t is None: return None
     r, g, b = t
-    return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
+    x = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
+    print("type(x), t, r, g, b, x:", type(x), t, r, g, b, x)
+    return x
 
 class PMScreen:
     def __init__(self):
