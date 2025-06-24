@@ -40,18 +40,18 @@ class PMModule(ABC):
 			self.gfx.y1 = self.pm.screen.gfx.height * dims[3] 
 
 
-	def subscribe(self, name):
-		self.subscriptions.append(name)
+	def subscribe(self, event_name):
+		self.subscriptions.append(event_name)
 
-	def is_subscribed(self, name):
-		return name in self.subscriptions
+	def is_subscribed(self, event_name):
+		return event_name in self.subscriptions
 
 	def set_timeout(self, ms):
-		if not ms: ms = ms
+		if not ms: self.timeout = 0 ## disable timer
 		else: self.timeout = time.time() + ms / 1000
 
 	def is_timedout(self):
-		if not self.timeout: return True # disabled timer always returns timedout==true
+		if not self.timeout: return False # disabled timer always returns False
 		if time.time() < self.timeout:
 			return False ## we're not timed out yet
 		else:
@@ -59,13 +59,13 @@ class PMModule(ABC):
 			return True
 
 	@abstractmethod
-	def render(self):
+	def render(self, force: bool = False) -> bool:
 		pass
 
 	@abstractmethod
-	def exec(self):
+	def exec(self) -> bool:
 		pass
 
 	@abstractmethod
-	def onEvent(self, event):
+	def onEvent(self, event) -> None:
 		pass

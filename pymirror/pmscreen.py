@@ -2,22 +2,6 @@ import time
 from PIL import Image, ImageDraw
 from pymirror.pmgfx import PMGfx
 
-def _image_to_rgb565(img):
-    """Convert a Pillow RGB image to raw RGB565 bytes using numpy"""
-    # Convert image to RGB (ensure no alpha channel) and then to numpy array
-    # img = img.convert("RGB")  # Make sure the image is in RGB mode
-    # img_array = np.array(img, dtype=np.uint16)  # Convert to uint16 for correct shifting
-    # return img_array
-    raw = img.tobytes("raw")
-    # Perform the conversion to RGB565 for all pixels at once
-    # rgb565_array = ((img_array[..., 0] >> 3) << 11) | \
-    #                ((img_array[..., 1] >> 2) << 5) | \
-    #                (img_array[..., 2] >> 3)
-
-    # Convert the numpy array to bytes (little-endian)
-    # raw = rgb565_array.astype(np.uint16).tobytes()
-    return raw
-
 def _color(t):
     # Convert a color tuple (R, G, B) to RGB565 format
     # this is mangled because the PIL Image is a 32-bit signed integer array

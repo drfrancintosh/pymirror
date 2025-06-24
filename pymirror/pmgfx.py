@@ -15,7 +15,7 @@ class PMGfx:
         self.bg_color = None # default is transparent
         self.text_color = (255, 255, 255)
         self.text_bg_color = None # default is transparent
-        self.line_width = 5
+        self.line_width = 1
         self.font_name = None
         self.font_size = None
         self.font = None 
@@ -36,19 +36,13 @@ class PMGfx:
                 if not font_path: continue # skip empty lines
                 self.__class__._fontlist.append(font_path)
 
-    def set_font(self, font_name, pitch=64):
+    def set_font(self, font_name: str, pitch: int = 64) -> bool:
         if not pitch: pitch = 64
         for font_path in self.__class__._fontlist:
             if font_name in font_path:
                 self.font = ImageFont.truetype(font_path, size=pitch)
-                ## NOTE: we don't set the self.font_name and self.font_size here
-                ##       because we want to keep the original font name and size
-                # self.font_name = font_name
-                # self.font_size = pitch
-                return True
+                self.font_name = font_name
+                self.font_size = pitch
+                return True # successfully set the font
         print(f"Font '{font_name}' not found in system fonts. font unchanged.")
         return False
-
-    def reset_font(self):
-        ## useful for resetting the font to the default
-        return self.set_font(self.font_name, self.font_size)

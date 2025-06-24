@@ -19,12 +19,12 @@ class Alert(PMModule):
 		self.set_timeout(config.display_time)
 		self.subscribe("ALERT")
 
-	def render(self):
+	def render(self, force=False) -> bool:
 			if not self.message:
 				gfx = self.gfx
 				self.screen.rect(gfx, gfx.x0, gfx.y0, gfx.x1, gfx.y1, fill=gfx.bg_color)
 				self.last_message = None
-				return 1
+				return True
 			gfx2 = copy.copy(self.gfx)
 			gfx2.font_name = self.config.heading.font
 			gfx2.font_size = self.config.heading.font_size

@@ -73,6 +73,21 @@ class PyMirror:
 	def add_event(self, event):
 		self.new_events.append(event)
 
+	def _debug(self, module):
+		gfx = self.screen.gfx
+		print(f"Module {module.moddef.module} executed.")
+		self.screen.rect(gfx, module.gfx.x0, module.gfx.y0, module.gfx.x1, module.gfx.y1, fill=False)
+		gfx.set_font(gfx.font_name, 24)
+		self.screen.text(gfx, f"{module.moddef.module}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
+		gfx.reset_font()
+
+	def full_render(self):
+		self.screen.clear()
+		for module in self.modules:
+			if module.moddef.disabled: continue
+			module.render(self.screen, force=True)
+			if self.config.debug: self._debug(module)
+
 	def run(self):
 		self.screen.clear()
 		while True:
@@ -82,14 +97,10 @@ class PyMirror:
 			for module in self.modules:
 				if module.moddef.disabled: continue
 				self._send_events(module)
-				do_flush += module.exec() # exec() returns 1 if it rendered something
-				if self.config.debug:
-					gfx = self.screen.gfx
-					print(f"Module {module.moddef.module} executed.")
-					self.screen.rect(gfx, module.gfx.x0, module.gfx.y0, module.gfx.x1, module.gfx.y1, fill=False)
-					gfx.set_font(gfx.font_name, 24)
-					self.screen.text(gfx, f"{module.moddef.module}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
-					gfx.reset_font()
+				do_update = module.exec() # exec() returns 1 render update is needed
+				if do_update:
+					do_flust += module.render(self.screen, force=False) # render() returns 1 if flush is needed
+				if self.config.debug: self._debug(module)
 			if do_flush:
 				self.screen.flush()
 

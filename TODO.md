@@ -1,0 +1,29 @@
+# TODO List
+
+1. update gfx object so "set_font(font_name, font_size)" is 'permanent'
+    - currently it only sets the gfx.font, but not gfx.font_name, gfx.font_size
+    - likewise remove reset_font()
+    - originally the idea was set_font() would temporarily set the font and reset_font() would restore it
+    - but with gfx = copy.copy(self.gfx) we can manipulate the gfx obj and font and not worry about resetting
+
+2. refresh the entire display based upon some event
+    - this means clearing the display and forcing all objects to re-render
+
+3. exec() should return True if a render() is needed and False otherwise
+
+4. render() should be called only if exec() returns True
+
+5. render()
+    - render(force=True) implies a full re-rendering (clear the old, redraw the new)
+    - render(force=False) implies a minimal repaint of only what has updated since the last render
+    - it is up to the module to determine what needs updating
+
+6. Hot Reload of config.json
+    - if config.json is updated then dispose of old modules and reload
+
+
+7. Some sort of full refresh. PyMirror would clear the screen and all render methods would be called with "force=True"
+
+8. Convert all forms of color to 32-bit integer for use in PIL "I" mode
+
+9. Handle Portrait mode
