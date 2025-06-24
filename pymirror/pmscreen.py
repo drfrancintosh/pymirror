@@ -1,6 +1,6 @@
 import time
 from PIL import Image, ImageDraw
-from pymirror.pmgfx import PMGfx
+from pymirror.pmgfx import PMGfx, tocolor
 
 class PMScreen:
     def __init__(self):
@@ -29,7 +29,7 @@ class PMScreen:
 
     def ellipse(self, gfx: PMGfx, rect: tuple, fill=None):
         if fill:
-            self.draw.ellipse(rect, outline=gfx.color, width=gfx.line_width, fill=fill)
+            self.draw.ellipse(rect, outline=gfx.color, width=gfx.line_width, fill=tocolor(fill))
         else:
             if gfx.bg_color:
                 self.draw.ellipse(rect, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
@@ -44,7 +44,7 @@ class PMScreen:
             self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
         elif fill:
             # Use the specified fill color
-            self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=fill)
+            self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=tocolor(fill))
         else:
             # No fill, just draw the outline
             self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width)
@@ -56,7 +56,7 @@ class PMScreen:
             self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
         elif fill:
             # Use the specified fill color
-            self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width, fill=fill)
+            self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width, fill=tocolor(fill))
         else:
             # No fill, just draw the outline
             self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width)
@@ -113,10 +113,10 @@ def main():
     pms.line(pms.gfx, pms.gfx.rect)
     pms.gfx.color = (255, 0, 0)
     pms.gfx.bg_color = (0, 250, 0)
-    pms.rect(pms.gfx, 50, 50, 200, 250) # red with green inside
+    pms.rect(pms.gfx, (50, 50, 200, 250)) # red with green inside
     pms.gfx.bg_color = None
-    pms.rect(pms.gfx, 100, 100, 250, 300) # red with clear inside
-    pms.rect(pms.gfx, 150, 150, 300, 350, fill=(250, 0, 250)) # red with purple inside
+    pms.rect(pms.gfx, (100, 100, 250, 300)) # red with clear inside
+    pms.rect(pms.gfx, (150, 150, 300, 350), fill=(250, 0, 250)) # red with purple inside
     pms.gfx.text_color = 0xFFFF00  # yello text
     pms.gfx.set_font("NimbusSansNarrow-Oblique", 48)
     pms.text(pms.gfx, "Hello World!", 50,60)

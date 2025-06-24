@@ -24,28 +24,28 @@ class PMGfx:
         return self._color
     @color.setter
     def color(self, value):
-        self._color = _color_to_int(value)
+        self._color = tocolor(value)
 
     @property
     def bg_color(self):
         return self._bg_color
     @bg_color.setter
     def bg_color(self, value):
-        self._bg_color = _color_to_int(value)
+        self._bg_color = tocolor(value)
 
     @property
     def text_color(self):
         return self._text_color
     @text_color.setter
     def text_color(self, value):
-        self._text_color = _color_to_int(value)
+        self._text_color = tocolor(value)
 
     @property
     def text_bg_color(self):
         return self._text_bg_color
     @text_bg_color.setter
     def text_bg_color(self, value):
-        self._text_bg_color = _color_to_int(value)
+        self._text_bg_color = tocolor(value)
 
     def _read_fonts(self) -> None:
         if self.__class__._fontlist: return # already read fonts
@@ -72,7 +72,7 @@ class PMGfx:
         print(f"Font '{font_name}' not found in system fonts. font unchanged.")
         return False
     
-def _color_to_int(t):
+def tocolor(t):
     # Convert a color tuple (R, G, B) to RGB565 format
     # this is mangled because the PIL Image is a 32-bit signed integer array
     # and we send every other byte to the framebuffer
