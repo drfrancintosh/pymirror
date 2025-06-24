@@ -12,12 +12,22 @@ class Rainbow(PMModule):
 		y = gfx.y0
 		width = gfx.x1 - gfx.x0
 		height = gfx.y1 - gfx.y0
-		color = 0
-		max = int(x * y)
-		for i in range(max):
-			gfx.color = (color % 256, (color * 2) % 256, (color * 3) % 256)
-			gfx.fill_rect(x + (i % width), y + (i // width), 1, 1)
-			color += 1
+		red = 0
+		green = 0
+		blue = 0
+		for w in range(width):
+			for h in range(height):
+				gfx.color = (red % 256, green % 256, blue % 256)
+				self.screen.rect(gfx, x + w, y + h, 5, 5, fill=gfx.color)
+				red += 1
+				if red >= 256:
+					red = 0
+					green += 1
+				if green >= 256:
+					green = 0
+					blue += 1
+				if blue >= 256:
+					blue = 0
 
 	def exec(self):
 		self.render()
