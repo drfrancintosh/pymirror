@@ -18,7 +18,7 @@ class Rainbow(PMModule):
 		for w in range(width):
 			for h in range(height):
 				gfx.color = (red % 256, green % 256, blue % 256)
-				self.screen.rect(gfx, x + w, y + h, 5, 5, fill=gfx.color)
+				self.screen.rect(gfx, x + w, y + h, x + w + 1, y + h + 1, fill=gfx.color)
 				red += 1
 				if red >= 256:
 					red = 0
