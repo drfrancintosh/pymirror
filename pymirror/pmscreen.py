@@ -142,7 +142,7 @@ class PMScreen:
         else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
         if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=_color(gfx.text_bg_color))
-        self.draw.text((text_x0, text_y0), msg, fill=_color(gfx.text_color), font=gfx.font)
+        self.draw.text((text_x0, text_y0 - y_min), msg, fill=_color(gfx.text_color), font=gfx.font)
         if self._doFlush: self.flush()
 
     def flush(self):
