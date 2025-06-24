@@ -29,8 +29,8 @@ class AnalogClock(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.second_hand = config.second_hand
-		self.minute_hand = config.minute_hand or (self.gfx.color)
-		self.hour_hand = config.hour_hand or self.gfx.color
+		self.minute_hand = config.minute_hand
+		self.hour_hand = config.hour_hand
 		self._render_clock_face()
 		self.hour = 0
 		self.minute = 0
