@@ -55,7 +55,7 @@ class AnalogClock(PMModule):
 
 	def render(self):
 		save_color = self.gfx.color
-		dirty = 1
+		dirty = 0
 		now = datetime.now()
 		gfx = self.gfx
 		dx = (gfx.x1 - gfx.x0)/2
