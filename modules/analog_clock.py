@@ -31,7 +31,7 @@ class AnalogClock(PMModule):
 		self.second_hand = config.second_hand
 		self.minute_hand = config.minute_hand or (self.gfx.color)
 		self.hour_hand = config.hour_hand or self.gfx.color
-		self.render_clock_face()
+		self._render_clock_face()
 		self.hour = 0
 		self.minute = 0
 		self.second = 0
@@ -39,8 +39,11 @@ class AnalogClock(PMModule):
 		self.last_minute = -1
 		self.last_second = -1
 		self.first_time = True
+		self.hour_length = 0.5
+		self.minute_length = 0.66
+		self.second_length = 0.75
 
-	def render_clock_face(self, dx=0, dy=0, r=0):
+	def _render_clock_face(self, dx=0, dy=0, r=0):
 		"""Render the clock face with hour markers."""
 		gfx = self.gfx
 		hr = 1
@@ -60,13 +63,15 @@ class AnalogClock(PMModule):
 		if dx < dy: r = dx
 		else: r = dy
 
-		if self.first_time:
-			self.first_time = False
-			self.render_clock_face(dx, dy, r)
-			dirty = 1
 
-		if self.hour_hand and self.last_hour != now.hour:
-			hr_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*0.5, now.hour + now.minute/60 + now.second/3600, 12.0, -3.0)
+		if (self.hour_hand and self.last_hour != now.hour) or \
+		   (self.minute_hand and self.last_minute != now.minute) or \
+		   (self.second_hand and self.last_second != now.second):
+				self._render_clock_face(dx, dy, r)
+				dirty = 1
+
+		if (self.hour_hand and self.last_hour != now.hour):
+			hr_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*self.hour_length, now.hour + now.minute/60 + now.second/3600, 12.0, -3.0)
 			gfx.line_width = 10
 			gfx.color = self.hour_hand
 			self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, hr_posn[0], hr_posn[1])
@@ -74,7 +79,7 @@ class AnalogClock(PMModule):
 			dirty = 1
 
 		if self.minute_hand and self.last_minute != now.minute:
-			min_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*0.66, now.minute + now.second/60, 60.0, -15.0)
+			min_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*self.minute_length, now.minute + now.second/60, 60.0, -15.0)
 			gfx.line_width = 5
 			gfx.color = self.minute_hand
 			self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, min_posn[0], min_posn[1])
@@ -82,12 +87,13 @@ class AnalogClock(PMModule):
 			dirty = 1
 
 		if self.second_hand and self.last_second != now.second:
-			sec_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r, now.second, 60.0, -15.0)
+			sec_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*self.second_length, now.second, 60.0, -15.0)
 			gfx.line_width = 1
 			gfx.color = self.second_hand
 			self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, sec_posn[0], sec_posn[1])
 			self.last_second = now.second
 			dirty = 1
+
 		self.gfx.color = save_color
 		return dirty
 
