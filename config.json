@@ -66,7 +66,8 @@
   "modules": [
     {
       "module": "rainbow",
-      "position": "bottom_left"
+      "position": "bottom_left",
+      "config": {}
     },
     {
       "module": "fps",
