@@ -78,7 +78,10 @@
       "configDeepMerge": "unused",
       "animateIn": false,
       "animateOut": false,
-      "config": {}
+      "config": {
+        "valign": "bottom",
+        "halign": "right"
+      }
     },
     {
       "module": "weather",
