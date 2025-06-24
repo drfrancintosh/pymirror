@@ -109,7 +109,7 @@ class PMScreen:
 def main():
     pms = PMScreen()
     pms.gfx.color = (0, 0, 255)
-    ps.clear()
+    pms.clear()
     # pms.line(pms.gfx, pms.gfx.rect)
     # pms.gfx.color = (255, 0, 0)
     # pms.gfx.bg_color = (0, 250, 0)
