@@ -28,7 +28,9 @@ def _compute_hand_posn(x0, y0, r, value, divisor, offset):
 class AnalogClock(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
-		self.gfx.bg_color = None # clear background
+		self.second_hand = config.second_hand
+		self.minute_hand = config.minute_hand or (self.gfx.color)
+		self.hour_hand = config.hour_hand or self.gfx.color
 		self.render_clock_face()
 		self.hour = 0
 		self.minute = 0
@@ -41,13 +43,11 @@ class AnalogClock(PMModule):
 	def render_clock_face(self, dx=0, dy=0, r=0):
 		"""Render the clock face with hour markers."""
 		gfx = self.gfx
-		gfx.text_color = (192, 192, 192)
 		hr = 1
 		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
 		for posn in _compute_clock_positions(gfx.x0 + dx, gfx.y0 + dy, r - self.gfx.font_size):
 			self.screen.text_box(gfx, str(hr), posn[0], posn[1], posn[0], posn[1], valign="bottom")
 			hr += 1
-		gfx.color = (192, 192, 192)
 		gfx.line_width = 3
 
 	def render(self):
@@ -55,28 +55,25 @@ class AnalogClock(PMModule):
 		gfx = self.gfx
 		dx = (gfx.x1 - gfx.x0)/2
 		dy = (gfx.y1 - gfx.y0)/2
-		if dx < dy:
-			r = dx
-		else:
-			r = dy
+		if dx < dy: r = dx
+		else: r = dy
 		self.render_clock_face(dx, dy, r)
-		gfx.color = (192, 192, 192)
-		gfx.line_width = 3
-		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r )
 
 		hr_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*0.5, now.hour + now.minute/60 + now.second/3600, 12.0, -3.0)
 		gfx.line_width = 10
+		gfx.color = self.hour_hand
 		self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, hr_posn[0], hr_posn[1])
 
 		min_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*0.66, now.minute + now.second/60, 60.0, -15.0)
-		gfx.line_width = 5 
-		gfx.color = (0, 64, 128)
+		gfx.line_width = 5
+		gfx.color = self.minute_hand
 		self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, min_posn[0], min_posn[1])
 
-		sec_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r, now.second, 60.0, -15.0)
-		gfx.line_width = 1
-		gfx.color = (128, 128, 0)
-		self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, sec_posn[0], sec_posn[1])
+		if self.second_hand:
+			sec_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r, now.second, 60.0, -15.0)
+			gfx.line_width = 1
+			gfx.color = self.second_hand
+			self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, sec_posn[0], sec_posn[1])
 		return 1
 
 	def exec(self):
