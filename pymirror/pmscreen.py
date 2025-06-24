@@ -25,7 +25,7 @@ def _color(t):
     r = (r >> 3) & 0x1F  # Convert to 5 bits
     g = (g >> 2) & 0x3F  # Convert to 6 bits
     b = (b >> 3) & 0x1F  # Convert to 5 bits
-    x = 0xf8 | 0xf800
+    x = r 
     return x
 
 class PMScreen:
