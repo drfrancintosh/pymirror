@@ -51,6 +51,8 @@ class Weather(PMModule):
 		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y)
 		text_box(gfx, "Weather", valign="top")
 		gfx.text_color = (0,0,0)
+		x += gfx.font_size * 2  # Offset for the text
+		y += gfx.font_size / 2  # Offset for the text
 		text(gfx, f"{w.temp}{degrees}", x, y + gfx.font_size)
 		text(gfx, f"{w.humidity} mb", x, y + gfx.font_size * 2)
 		text(gfx, f"{w.feels_like}{degrees}", x, y + gfx.font_size * 3)
