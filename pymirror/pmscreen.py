@@ -25,6 +25,7 @@ def _color(t):
     # so every pixel (tuple) is converted to a 16-bit RGB565 value
     # split across the odd bytes of a 32-bit integer
     if t is None: return None
+    print(f"Converting color {t} to RGB565")
     r, g, b = t
     r = (r >> 3) & 0x1F  # Convert to 5 bits
     g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
