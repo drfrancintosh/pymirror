@@ -18,10 +18,13 @@ def _image_to_rgb565(img):
     raw = rgb565_array.astype(np.uint16).tobytes()
     return raw
 
+def _color(t):
+	r, g, b = t
+	return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
 
 class PMScreen:
 	def __init__(self):
-		self.img = Image.new("I", (1920, 1080), (0, 0, 0))
+		self.img = Image.new("I", (1920, 1080), 0)
 		self.draw = ImageDraw.Draw(self.img)
 		self.gfx = PMGfx()
 		self.gfx.width, self.gfx.height = self.img.size
@@ -38,37 +41,37 @@ class PMScreen:
 		self.draw.rectangle((self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1), self.gfx.bg_color)
 		if self._doFlush: self.flush()
 	def line(self, gfx, x0, y0, x1, y1):
-		self.draw.line((x0, y0, x1, y1), fill=gfx.color, width=gfx.line_width)
+		self.draw.line((x0, y0, x1, y1), fill=_color(gfx.color), width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def ellipse(self, gfx, x0, y0, x1, y1, fill=None):
 		if fill:
 			self.draw.ellipse((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=fill)
 		else:
 			if gfx.bg_color:
-				self.draw.ellipse((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
+				self.draw.ellipse((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
 			else:
-				self.draw.ellipse((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width)
+				self.draw.ellipse((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def circle(self, gfx, x0, y0, r, fill=None):
 		bbox = (x0-r, y0-r, x0+r, y0+r)
 		if fill:
-			self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=fill)
+			self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width, fill=_color(fill))
 		else:
 			if gfx.bg_color:
-				self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
+				self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
 			else:
-				self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width)
+				self.draw.ellipse(bbox, outline=_color(gfx.color), width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def rect(self, gfx, x0, y0, x1, y1, fill="__use_bg_color__"):
 		if fill == "__use_bg_color__":
 			# Use the background color if specified
-			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
+			self.draw.rectangle((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
 		elif fill:
 			# Use the specified fill color
-			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=fill)
+			self.draw.rectangle((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(fill))
 		else:
 			# No fill, just draw the outline
-			self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width)
+			self.draw.rectangle((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def text(self, gfx,  msg, x0, y0):
 		(x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
@@ -76,9 +79,9 @@ class PMScreen:
 		height = y_max
 		# Draw background rectangle
 		if gfx.text_bg_color:
-			self.draw.rectangle((x0, y0, x0 + width, y0 + height), fill=gfx.text_bg_color)
+			self.draw.rectangle((x0, y0, x0 + width, y0 + height), fill=_color(gfx.text_bg_color))
 		# Draw text
-		self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
+		self.draw.text((x0, y0), msg, fill=_color(gfx.text_color), font=gfx.font)
 		if self._doFlush: self.flush()
 	def text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
 		## get text bounding box
@@ -109,8 +112,8 @@ class PMScreen:
 		elif valign == "bottom": text_y0 = y1 - height
 		else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
-		if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
-		self.draw.text((text_x0, text_y0), msg, fill=gfx.text_color, font=gfx.font)
+		if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=_color(gfx.text_bg_color))
+		self.draw.text((text_x0, text_y0), msg, fill=_color(gfx.text_color), font=gfx.font)
 		if self._doFlush: self.flush()
 
 	def flush(self):
