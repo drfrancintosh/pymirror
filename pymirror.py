@@ -34,7 +34,7 @@ class PyMirror:
 				print("Loading module definition from %s\n", moddef)
 				with open(moddef, 'r') as file:
 					moddef = SafeNamespace(**json.load(file))
-
+			print(moddef)
 			## import the module using its name
 			## all modules should be in the "modules" directory
 			mod = importlib.import_module("modules."+moddef.module)
