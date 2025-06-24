@@ -82,7 +82,7 @@
     },
     {
       "module": "weather",
-      "position": "left_center",
+      "position": "middle_left",
       "classes": "unused",
       "header": "Weather",
       "hiddenOnStartup": false,
