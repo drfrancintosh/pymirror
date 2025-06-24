@@ -21,7 +21,7 @@ def _image_to_rgb565(img):
 
 class PMScreen:
 	def __init__(self):
-		self.img = Image.new("RGB", (1920, 1080), (0, 0, 0))
+		self.img = Image.new("I", (1920, 1080), (0, 0, 0))
 		self.draw = ImageDraw.Draw(self.img)
 		self.gfx = PMGfx()
 		self.gfx.width, self.gfx.height = self.img.size
