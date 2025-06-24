@@ -84,9 +84,10 @@ class PMScreen:
 		if self._doFlush: self.flush()
 	def text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
 		## get text bounding box
-		bbox = gfx.font.getbbox(msg)
-		width = bbox[2] - bbox[0]
-		height = bbox[3] - bbox[1]
+		(x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
+		print(f"Text bounding box: ({x_min}, {y_min}, {x_max}, {y_max})")
+		width = x_max - x_min
+		height = y_max - y_min
 
 		## if x0, y0 not specified, use the gfx.x0, y0
 		## if they are specified, then they are absolute coordinates
