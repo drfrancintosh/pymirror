@@ -9,6 +9,11 @@ class PyMirror:
 		with open(config_fname, 'r') as file:
 			self.config = SafeNamespace(**json.load(file))
 		self.screen = PMScreen()
+		self.screen.gfx.color = self.config.color or (255, 255, 255)  # default color
+		self.screen.gfx.bg_color = self.config.bg_color or (0, 0, 0)
+		self.screen.gfx.text_color = self.config.text_color or self.screen.gfx.color
+		self.screen.gfx.text_bg_color = None or self.config.text_bg_color
+		self.screen.gfx.line_width = self.config.line_width or 5
 		self.screen.set_flush(False)
 		self.modules = []
 		self.new_events = []

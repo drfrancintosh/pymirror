@@ -12,9 +12,9 @@ class PMGfx:
         self.width = 1920
         self.height = 1080
         self.color = (255, 255, 255)
-        self.bg_color = (0, 0, 0)
+        self.bg_color = None # default is transparent
         self.text_color = (255, 255, 255)
-        self.text_bg_color = (0, 0, 0)
+        self.text_bg_color = None # default is transparent
         self.line_width = 5
         self.font_name = None
         self.font_size = None
