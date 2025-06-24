@@ -10,17 +10,15 @@ class Alert(PMModule):
 		self.subscribe("ALERT")
 
 	def render(self):
-		if self.message != self.last_message:
 			gfx = self.gfx
-			print(f"Alert: {self.message}, last: {self.last_message}")
 			gfx.text_bg_color = gfx.bg_color # Set background color for text
 			self.screen.text_box(gfx, self.message or "", gfx.x0, gfx.y0, gfx.x1, gfx.y1)
 			self.last_message = self.message
 
 
 	def exec(self):
-		if self.is_timedout():
-			self.message = None
+		if self.is_timedout(): self.message = None
+		if self.message == self.last_message: return
 		self.render()
 
 	def onAlertEvent(self, event):
