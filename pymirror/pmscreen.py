@@ -1,7 +1,7 @@
 import time
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-
+from pymirror.pmgfx import PMGfx
 
 def _image_to_rgb565(img):
     """Convert a Pillow RGB image to raw RGB565 bytes using numpy"""
