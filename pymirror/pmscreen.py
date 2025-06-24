@@ -38,14 +38,14 @@ class PMScreen:
 		time.sleep(ms / 1000)
 		if self._doFlush: self.flush()
 	def clear(self):
-		self.draw.rectangle((self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1), self.gfx.bg_color)
+		self.draw.rectangle((self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1), _color(self.gfx.bg_color))
 		if self._doFlush: self.flush()
 	def line(self, gfx, x0, y0, x1, y1):
 		self.draw.line((x0, y0, x1, y1), fill=_color(gfx.color), width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def ellipse(self, gfx, x0, y0, x1, y1, fill=None):
 		if fill:
-			self.draw.ellipse((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width, fill=fill)
+			self.draw.ellipse((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(fill))
 		else:
 			if gfx.bg_color:
 				self.draw.ellipse((x0, y0, x1, y1), outline=_color(gfx.color), width=gfx.line_width, fill=_color(gfx.bg_color))
