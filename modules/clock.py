@@ -2,6 +2,10 @@ from datetime import datetime
 from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMGfx
 
+def _increment_color(color, increment):
+	"""Increment the RGB color by a given value."""
+	return tuple(min(255, max(0, c + increment)) for c in color)
+
 class Clock(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
@@ -13,6 +17,7 @@ class Clock(PMModule):
 	def render(self):
 		gfx = self.gfx
 		gfx.text_bg_color = gfx.bg_color
+		gfx.text_color = _increment_color(gfx.text_color, 1)
 		self.screen.text_box(gfx, self.curr_time,
 			gfx.x0 + self.x_offset, gfx.y0 + self.y_offset,
 			gfx.x1 + self.x_offset, gfx.y1 + self.y_offset)
