@@ -52,6 +52,9 @@ class AnalogClock(PMModule):
 		for posn in _compute_clock_positions(gfx.x0 + dx, gfx.y0 + dy, r - self.gfx.font_size):
 			self.screen.text_box(gfx, str(hr), posn[0], posn[1], posn[0], posn[1], valign="bottom")
 			hr += 1
+		gfx.color = (192, 192, 192)
+		gfx.line_width = 3
+		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r )
 
 	def render(self):
 		if self.first_time:
