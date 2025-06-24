@@ -65,6 +65,10 @@
   },
   "modules": [
     {
+      "module": "rainbow",
+      "position": "bottom_left"
+    },
+    {
       "module": "fps",
       "position": "bottom_right",
       "classes": "unused",
