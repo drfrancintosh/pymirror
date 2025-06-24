@@ -39,6 +39,10 @@ class PyMirror:
 		self.screen.gfx.text_color = _color(self.config.text_color) or _color(self.screen.gfx.color)
 		self.screen.gfx.text_bg_color = _color(self.config.text_bg_color)
 		self.screen.gfx.line_width = self.config.line_width or 5
+		self.screen.gfx.font_name = self.config.font or "DejaVuSans.ttf"
+		self.screen.gfx.font_size = self.config.font_size or 64
+		self.screen.gfx.set_font(self.screen.gfx.font_name, self.screen.gfx.font_size)
+
 		self.screen.set_flush(False)
 		self.modules = []
 		self.new_events = []
