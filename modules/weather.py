@@ -68,7 +68,7 @@ class Weather(PMModule):
 			if self.weather_response.get("alerts"):
 				alerts = self.weather_response["alerts"]
 				if alerts:
-					event = AlertEvent("WEATHER ALERT", f"{alerts[0]['description']}", 1 * 60 * 1000)
+					event = AlertEvent("ALERT", f"{alerts[0]['description']}", 1 * 60 * 1000)
 					self.pm.add_event(event)
 		return self.render()
 
