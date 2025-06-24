@@ -21,7 +21,7 @@ class Alert(PMModule):
 
 	def render(self):
 			gfx = copy.copy(self.gfx)
-			gfx.set_font(self.config.font, self.config.font_size * 1.25)
+			gfx.set_font(self.gfx.font, self.gfx.font_size * 1.25)
 			self.screen.text_box(gfx, self.heading, gfx.x0, gfx.y0, gfx.x1, gfx.y0 + gfx.font_size * 1.25, halign="center", valign="top")
 			gfx = self.gfx
 			self.screen.text_box(gfx, self.message, gfx.x0, gfx.y0 + gfx.font_size, gfx.x1, gfx.y1, halign="left", valign="top")
