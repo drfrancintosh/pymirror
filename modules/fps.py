@@ -10,6 +10,7 @@ class Fps(PMModule):
 		pass
 
 	def exec(self):
+		self.gfx.text_bg_color = (192, 192, 192)  # Set background color for text
 		now = datetime.now()
 		delta = now - self.last_time
 		self.last_time = now
