@@ -84,8 +84,6 @@ class PyMirror:
 					gfx.set_font(gfx.font_name, 24)
 					self.screen.text(gfx, f"{module.moddef.module}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
 					gfx.reset_font()
-			# Flush the screen if configured to do so
-			if self.screen._doFlush:
 			self.screen.flush()
 
 def main():
