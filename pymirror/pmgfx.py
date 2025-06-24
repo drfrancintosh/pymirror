@@ -23,9 +23,9 @@ class PMGfx:
         self._read_fonts()
     
     def _read_fonts(self):
-        if self._fontlist: return # already read fonts
+        if self.__class__._fontlist: return # already read fonts
         print("Reading system fonts...")
-        self._fontlist = []
+        self.__class__._fontlist = []
         with open("./fontlist.txt", "r") as f:
             fonts = f.read().splitlines()
             for font_path in fonts:
@@ -35,11 +35,11 @@ class PMGfx:
                 # split after the : # discard the rest
                 font_path = font_path.split(":")[0].strip()
                 if not font_path: continue # skip empty lines
-                self._fontlist.append(font_path)
+                self.__class__._fontlist.append(font_path)
 
     def set_font(self, font_name, pitch=64):
         if not pitch: pitch = 64
-        for font_path in self._fontlist:
+        for font_path in self.__class__._fontlist:
             if font_name in font_path:
                 self.font = ImageFont.truetype(font_path, size=pitch)
                 ## NOTE: we don't set the self.font_name and self.font_size here
