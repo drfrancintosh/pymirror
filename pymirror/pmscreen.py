@@ -20,20 +20,13 @@ def _image_to_rgb565(img):
     return raw
 
 def _color(t):
-	if t is None: return None
-	r, g, b = t
-	r = (r >> 3) & 0x1F  # Convert to 5 bits
-	g = (g >> 2) & 0x3F  # Convert to 6 bits
-	b = (b >> 3) & 0x1F  # Convert to 5 bits
-	if (r < 0 or r > 31) or (g < 0 or g > 63) or (b < 0 or b > 31):
-		raise ValueError(f"Invalid RGB values: {t}. Expected 0 <= R <= 255, 0 <= G <= 255, 0 <= B <= 255.")
-	x = (r << 11) | (g << 5) | b  # Combine into RGB565 format
-    # convert to little-endian
-	x = ((x & 0xFF) << 8) | ((x >> 8) & 0xFF)
-	print(f"Converting color {t} to RGB565: {x:#06x}")
-	# Ensure x is a 16-bit value
-	x &= 0xFFFF	
-	return x
+    if t is None: return None
+    r, g, b = t
+    r = (r >> 3) & 0x1F  # Convert to 5 bits
+    g = (g >> 2) & 0x3F  # Convert to 6 bits
+    b = (b >> 3) & 0x1F  # Convert to 5 bits
+    x = (r << 11) 
+    return x
 
 class PMScreen:
     def __init__(self):
