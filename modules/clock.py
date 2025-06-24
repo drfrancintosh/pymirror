@@ -22,7 +22,7 @@ class Clock(PMModule):
 	def render(self):
 		gfx = self.gfx
 		gfx.text_bg_color = gfx.bg_color
-		gfx.text_color = _increment_color(gfx.text_color, -10)
+		gfx.text_color = _increment_tuple(gfx.text_color, -10)
 		print(f"Clock rendering time: {self.curr_time}, color: {gfx.text_color}")
 		self.screen.text_box(gfx, self.curr_time,
 			gfx.x0 + self.x_offset, gfx.y0 + self.y_offset,
