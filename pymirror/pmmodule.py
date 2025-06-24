@@ -16,7 +16,7 @@ class PMModule(ABC):
 		self.y_offset = moddef.y_offset or 0
 		self.gfx = PMGfx() ## default graphics context
 		self.gfx.font_name = moddef.font or "DejaVuSans.ttf"
-		self.gfx.font_size = moddef.font_size or 32
+		self.gfx.font_size = moddef.font_size or 64
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
 		if moddef.font:
 			self.gfx.set_font(moddef.font, moddef.font_size)
