@@ -21,11 +21,11 @@ class Alert(PMModule):
 
 	def render(self):
 			gfx2 = copy.copy(self.gfx)
-			# gfx2.font_size = int(self.gfx.font_size * 1.25)
+			gfx2.font_size = int(self.gfx.font_size * 1.25)
 			gfx2.reset_font()
 			print(f"gfx2.text_bg_color: {gfx2.text_bg_color}, gfx2.bg_color: {gfx2.bg_color}")
 			gfx2.text_bg_color = (255,0,0)
-			self.screen.text_box(gfx2, self.heading, gfx2.x0, gfx2.y0, gfx2.x1, gfx2.y0, halign="center", valign="top")
+			self.screen.text_box(gfx2, self.heading, gfx2.x0, gfx2.y0, gfx2.x1, gfx2.y1, halign="center", valign="top")
 			gfx = self.gfx
 			self.screen.text_box(gfx, self.message, gfx.x0, gfx.y0 + gfx2.font_size, gfx.x1, gfx.y1, halign="left", valign="top")
 			self.last_message = self.message
