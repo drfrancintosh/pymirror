@@ -80,6 +80,7 @@ class PyMirror:
 			self.new_events = []
 			do_flush = 0
 			for module in self.modules:
+				if module.moddef.disabled: continue
 				self._send_events(module)
 				do_flush += module.exec() # exec() returns 1 if it rendered something
 				if self.config.debug:

@@ -74,7 +74,7 @@
       "classes": "unused",
       "header": "FPS",
       "hiddenOnStartup": false,
-      "dissabled": false,
+      "disabled": false,
       "configDeepMerge": "unused",
       "animateIn": false,
       "animateOut": false,
@@ -86,7 +86,7 @@
       "classes": "unused",
       "header": "Weather",
       "hiddenOnStartup": false,
-      "dissabled": false,
+      "disabled": false,
       "configDeepMerge": "unused",
       "animateIn": false,
       "animateOut": false,
@@ -118,6 +118,7 @@
     },
     {
       "module": "cron",
+      "disabled": true,
       "position": "middle_right",
       "config": {
         "name": "example_cron",
