@@ -31,7 +31,8 @@ class Rainbow(PMModule):
 		if self.first_time:
 			self.first_time = False
 			self.render()
-			return
+			return 1
+		return 0
 
 	def onEvent(self, event):
 		pass

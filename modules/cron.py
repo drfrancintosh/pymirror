@@ -20,6 +20,7 @@ class Cron(PMModule):
 			self.pm.add_event(self.event)
 			if self.repeat > 0: self.repeat -= 1
 			self.set_timeout(self.delay) # note: self.repeat < 0 repeats forever
+		return 0
 
 	def onEvent(self, event):
 		pass

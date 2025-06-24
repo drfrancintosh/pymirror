@@ -60,6 +60,8 @@ class AnalogClock(PMModule):
 		if self.first_time:
 			self.render_clock_face()
 			self.first_time = False
+			return 1
+		return 0
 		# now = datetime.now()
 		# gfx = self.gfx
 		# dx = (gfx.x1 - gfx.x0)/2
@@ -93,7 +95,7 @@ class AnalogClock(PMModule):
 		pass
 
 	def exec(self):
-		self.render()
+		return self.render()
 
 	def onEvent(self, event):
 		pass

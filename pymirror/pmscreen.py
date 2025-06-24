@@ -20,6 +20,11 @@ def _image_to_rgb565(img):
     return raw
 
 def _color(t):
+    # Convert a color tuple (R, G, B) to RGB565 format
+    # this is mangled because the PIL Image is a 32-bit signed integer array
+    # and we send every other byte to the framebuffer
+    # so every pixel (tuple) is converted to a 16-bit RGB565 value
+    # split across the odd bytes of a 32-bit integer
     if t is None: return None
     r, g, b = t
     r = (r >> 3) & 0x1F  # Convert to 5 bits
@@ -124,7 +129,7 @@ class PMScreen:
         if self._doFlush: self.flush()
 
     def flush(self):
-        raw = _image_to_rgb565(self.img)
+        raw = self.img.tobytes("raw")
         # Write to framebuffer
         with open("/dev/fb0", "wb") as f:
             f.write(raw[0::2])  # Write every second byte for RGB565 format

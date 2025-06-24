@@ -38,7 +38,7 @@ class Weather(PMModule):
 		self.weather_api = OpenWeatherMap()
 
 	def render(self):
-		if not self.weather_response: return
+		if not self.weather_response: return 0
 		gfx = self.gfx
 		x = gfx.x0
 		y = gfx.y0
@@ -46,13 +46,15 @@ class Weather(PMModule):
 		text = self.screen.text
 		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y) 
 		text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F", x, y) 
+		self.weather_response = None  # Clear response after rendering
+		return 1
 
 	def exec(self):
 		if self.is_timedout():
 			self.weather_response = self.weather_api.fetch(self.weather_data)
 			self.set_timeout(self.refresh_minutes * 60 * 1000)
-		self.render()
-		
+		return self.render()
+
 	def onEvent(self, event):
 		pass			
 			

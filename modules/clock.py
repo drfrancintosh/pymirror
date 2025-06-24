@@ -16,12 +16,14 @@ class Clock(PMModule):
 		self.screen.text_box(gfx, self.curr_time,
 			gfx.x0 + self.x_offset, gfx.y0 + self.y_offset,
 			gfx.x1 + self.x_offset, gfx.y1 + self.y_offset)
+		return 1
 
 	def exec(self):
 		self.curr_time = datetime.now().strftime(self.date_format)
-		if self.last_time == self.curr_time: return
+		if self.last_time == self.curr_time: return 0
 		self.render()
 		self.last_time = self.curr_time
+		return 1
 
 	def onEvent(self, event):
 		pass

@@ -14,12 +14,13 @@ class Alert(PMModule):
 			gfx.text_bg_color = gfx.bg_color # Set background color for text
 			self.screen.text_box(gfx, self.message or "", gfx.x0, gfx.y0, gfx.x1, gfx.y1)
 			self.last_message = self.message
+			return 1
 
 
 	def exec(self):
 		if self.is_timedout(): self.message = None
-		if self.message == self.last_message: return
-		self.render()
+		if self.message == self.last_message: return 0
+		return self.render()
 
 	def onAlertEvent(self, event):
 		self.message = event.message

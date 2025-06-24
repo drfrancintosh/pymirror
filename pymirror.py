@@ -78,9 +78,10 @@ class PyMirror:
 		while True:
 			self.events = self.new_events # dispose of old events, process new events
 			self.new_events = []
+			do_flush = 0
 			for module in self.modules:
 				self.send_events(module)
-				module.exec()
+				do_flush += module.exec() # exec() returns 1 if it rendered something
 				if self.config.debug:
 					gfx = self.screen.gfx
 					print(f"Module {module.moddef.module} executed.")
@@ -88,7 +89,8 @@ class PyMirror:
 					gfx.set_font(gfx.font_name, 24)
 					self.screen.text(gfx, f"{module.moddef.module}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
 					gfx.reset_font()
-			self.screen.flush()
+			if do_flush:
+				self.screen.flush()
 
 def main():
 	pm = PyMirror("config.json")
