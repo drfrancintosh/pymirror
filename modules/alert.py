@@ -22,7 +22,7 @@ class Alert(PMModule):
 	def render(self):
 			if not self.message:
 				gfx = self.gfx
-				self.screen.rect(gfx, gfx.x0, gfx.y0, gfx.x1, gfx.y1, fill=gfx2.bg_color)
+				self.screen.rect(gfx, gfx.x0, gfx.y0, gfx.x1, gfx.y1, fill=gfx.bg_color)
 				self.last_message = None
 				return 1
 			gfx2 = copy.copy(self.gfx)
