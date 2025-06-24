@@ -10,7 +10,6 @@ class Fps(PMModule):
 		pass
 
 	def exec(self):
-		self.gfx.text_bg_color = (192, 192, 192)  # Set background color for text
 		self.gfx.font_size = 32
 		self.gfx.reset_font()
 		now = datetime.now()
