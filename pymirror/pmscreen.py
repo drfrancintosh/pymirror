@@ -22,7 +22,6 @@ def _color(t):
     if t is None: return None
     r, g, b = t
     x = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
-    print("type(x), t, r, g, b, x:", type(x), t, r, g, b, x)
     return x
 
 class PMScreen:
