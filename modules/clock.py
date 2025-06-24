@@ -4,7 +4,7 @@ from pymirror.pmscreen import PMGfx
 
 def _increment_color(color, increment):
 	"""Increment the RGB color by a given value."""
-	return tuple((c+1) % 256 for c in color)
+	return tuple((c-1) % 256 for c in color)
 
 class Clock(PMModule):
 	def __init__(self, pm, moddef, config):
