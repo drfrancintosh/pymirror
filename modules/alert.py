@@ -21,7 +21,7 @@ class Alert(PMModule):
 
 	def render(self):
 			gfx2 = copy.copy(self.gfx)
-			gfx2.font_size = int(self.gfx.font_size * 1.25)
+			# gfx2.font_size = int(self.gfx.font_size * 1.25)
 			gfx2.reset_font()
 			print(f"gfx2.text_bg_color: {gfx2.text_bg_color}, gfx2.bg_color: {gfx2.bg_color}")
 			gfx2.text_bg_color = (255,0,0)
