@@ -110,16 +110,16 @@ def main():
     pms = PMScreen()
     pms.gfx.color = (0, 0, 255)
     pms.clear()
-    # pms.line(pms.gfx, pms.gfx.rect)
-    # pms.gfx.color = (255, 0, 0)
-    # pms.gfx.bg_color = (0, 250, 0)
-    # pms.rect(pms.gfx, 50, 50, 200, 250) # red with green inside
-    # pms.gfx.bg_color = None
-    # pms.rect(pms.gfx, 100, 100, 250, 300) # red with clear inside
-    # pms.rect(pms.gfx, 150, 150, 300, 350, fill=(250, 0, 250)) # red with purple inside
-    # pms.gfx.text_color = 0xFFFF00  # yello text
-    # pms.gfx.set_font("NimbusSansNarrow-Oblique", 48)
-    # pms.text(pms.gfx, "Hello World!", 50,60)
+    pms.line(pms.gfx, pms.gfx.rect)
+    pms.gfx.color = (255, 0, 0)
+    pms.gfx.bg_color = (0, 250, 0)
+    pms.rect(pms.gfx, 50, 50, 200, 250) # red with green inside
+    pms.gfx.bg_color = None
+    pms.rect(pms.gfx, 100, 100, 250, 300) # red with clear inside
+    pms.rect(pms.gfx, 150, 150, 300, 350, fill=(250, 0, 250)) # red with purple inside
+    pms.gfx.text_color = 0xFFFF00  # yello text
+    pms.gfx.set_font("NimbusSansNarrow-Oblique", 48)
+    pms.text(pms.gfx, "Hello World!", 50,60)
     pms.flush()
     pms.quit()
 
