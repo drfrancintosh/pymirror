@@ -1,5 +1,12 @@
 import time
 from pymirror.pmmodule import PMModule
+from pymirror.pmevent import PMEvent
+from dataclasses import dataclass
+
+@dataclass
+class AlertEvent(PMEvent):
+	message: str
+	timeout: int
 
 class Alert(PMModule):
 	def __init__(self, pm, moddef, config):

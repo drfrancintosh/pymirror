@@ -3,11 +3,11 @@
 
 import requests
 import json
-from types import SimpleNamespace
-from dataclasses import dataclass, fields
-from pymirror.pmmodule import PMModule
 import copy
-from events.alert import AlertEvent
+from types import SimpleNamespace
+from dataclasses import dataclass
+from pymirror.pmmodule import PMModule
+from modules.alert import AlertEvent
 
 
 @dataclass
@@ -68,11 +68,8 @@ class Weather(PMModule):
 			if self.weather_response.get("alerts"):
 				alerts = self.weather_response["alerts"]
 				if alerts:
-					event = AlertEvent()
-					event.name = "Weather Alert"
-					event.message = f"{alerts[0]['description']}"
-					event.timeout = 1 * 60 * 1000
-					self.pm.add_event("ALERT", alert_msg, 10000)
+					event = AlertEvent("WEATHER ALERT", f"{alerts[0]['description']}", 1 * 60 * 1000)
+					self.pm.add_event(event)
 		return self.render()
 
 	def onEvent(self, event):
