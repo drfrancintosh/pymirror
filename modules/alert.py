@@ -21,7 +21,6 @@ class Alert(PMModule):
 	def exec(self):
 		if self.is_timedout():
 			self.message = None
-		else:
 			self.render()
 
 	def onAlertEvent(self, event):
