@@ -7,7 +7,7 @@
     "bg_color": "#000000",
     "text_color": "(255,255,255)",
     "text_bg_color": null,
-  }
+  },
   "positions": {
     "top_left": "0.0,0.0,0.33,0.33",
     "top_center": "0.33,0.0,0.66,0.10",
@@ -22,3 +22,4 @@
   "modules": [
     "configs/weather_alert.json"
   ]
+}
