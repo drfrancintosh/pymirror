@@ -91,8 +91,8 @@ class PMScreen:
 		if x0 == None: x0 = gfx.x0
 		if y0 == None: y0 = gfx.y0
 
-		text_x = x0
-		text_y = y0
+		text_x0 = x0
+		text_y0 = y0
 
 		## if x1, y1 not specified, use the gfx.x1, y1
 		## if they are specified, then they are absolute coordinates
@@ -109,7 +109,7 @@ class PMScreen:
 		elif valign == "bottom": text_y0 = y1 - height
 		else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
-		if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
+		if gfx.textbg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
 		self.draw.text((text_x0, text_y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
 
