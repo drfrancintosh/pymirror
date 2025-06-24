@@ -109,7 +109,7 @@ class PMScreen:
 		elif valign == "bottom": text_y0 = y1 - height
 		else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
-		if gfx.textbg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
+		if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
 		self.draw.text((text_x0, text_y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
 
