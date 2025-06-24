@@ -19,6 +19,7 @@ class Alert(PMModule):
 	def render(self):
 			gfx = self.gfx
 			gfx.text_bg_color = gfx.bg_color # Set background color for text
+			print(f"Rendering alert: {self.message[:20]}")
 			self.screen.text_box(gfx, self.message or "", gfx.x0, gfx.y0, gfx.x1, gfx.y1, valign="top")
 			# self.last_message = self.message
 			return 1
