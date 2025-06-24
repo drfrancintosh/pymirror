@@ -91,6 +91,7 @@ class AnalogClock(PMModule):
 			sec_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*self.second_length, now.second, 60.0, -15.0)
 			gfx.line_width = 1
 			gfx.color = self.second_hand
+			print("Second hand position:", sec_posn, "color:", gfx.color)
 			self.screen.line(gfx, gfx.x0+dx, gfx.y0+dy, sec_posn[0], sec_posn[1])
 			self.last_second = now.second
 			dirty = 1
