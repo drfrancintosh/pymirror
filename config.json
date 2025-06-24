@@ -80,7 +80,7 @@
         "alert_effect": "None",
         "display_time": 3500,
         "position": "center",
-        "welcome_message": "Welcome to PyMirror",
+        "welcome_message": "Welcome to PyMirror"
       }
     },
     {
