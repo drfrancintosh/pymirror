@@ -16,7 +16,7 @@ class Fps(PMModule):
 		self.last_time = now
 		fps = 1 / delta.total_seconds() if delta.total_seconds() > 0 else 0
 		text_box = self.screen.text_box
-		text_box(self.gfx, f"FPS: {fps:.2f}", self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1, "right", "bottom")
+		text_box(self.gfx, f"FPS: {fps:.2f}", self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1, "center", "center")
 		self.screen.rect(self.gfx, self.gfx.x0, self.gfx.y0, self.gfx.x1, self.gfx.y1, fill=False)
 
 	def onEvent(self, event):

@@ -75,7 +75,7 @@ class PMScreen:
 	def text(self, gfx,  msg, x0, y0):
 		self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
-	def text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, halign="center", valign="center"):
+	def text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
 		## get text bounding box
 		bbox = gfx.font.getbbox(msg)
 		width = bbox[2] - bbox[0]
