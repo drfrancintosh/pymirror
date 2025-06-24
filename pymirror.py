@@ -18,10 +18,10 @@ def _color(arr):
 				raise ValueError(F"Invalid hex color format {arr}, expected #RRGGBB or #RRGGBBAA.")
 		elif arr.startswith("(") and arr.endswith(")"):
 			# Convert rgb() string to RGB tuple
-			arr = arr[4:-1].split(',')
+			arr = arr[1:-1].split(',')
 			arr = [int(x.strip()) for x in arr]
 			if len(arr) < 3 or len(arr) > 4:
-				raise ValueError(F"Invalid rgb() format, expected rgb(R, G, B) or rgba(R, G, B, A).")
+				raise ValueError(F"Invalid rgb() format, expected (R, G, B) or (R, G, B, A).")
 	if len(arr) == 3:
 		return tuple(arr)  # RGB tuple
 	elif len(arr) == 4:
