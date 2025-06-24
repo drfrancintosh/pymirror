@@ -52,7 +52,9 @@ display_rotate=0    # Set rotation if needed (0 = no rotation, 1 = 90 degrees, e
 - The fonts in the `fonts` folder were appropriated from https://www.st-minutiae.com/resources/fonts/index.html
 - There were no credits there, but if anyone knows who to credit, I'll add credits here
 - The 7segment.txt font was from https://torinak.com/font/7-segment
-- The Default 
+- The Default font DejaVuSerif.ttf was delivered with RPI-OS and copied locally for convenience
+- Update this file as per your system
+
 ## Running
 - cd ~/pymirror
 - python3 pymirror.py ## note: from the main console. The frame buffer is otherwise not available

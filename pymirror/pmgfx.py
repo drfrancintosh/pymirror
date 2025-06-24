@@ -1,10 +1,8 @@
 import subprocess
 from PIL import Image, ImageDraw, ImageFont
 
-FONT_LIST=[font_name.split(":")[0] for font_name in subprocess.check_output(["fc-list"], text=True).split("\n")]
-
 class PMGfx:
-    fontlist = None
+    _fontlist = None
 
     def __init__(self):
         self.x0 = 0
@@ -22,20 +20,29 @@ class PMGfx:
         self.font_size = None
         self.font = None 
         self.antialias = True
+        self._read_fonts()
     
     def _read_fonts(self):
-        """Read the system fonts and return a list of font names."""
-        try:
-            return [font_name.split(":")[0] for font_name in subprocess.check_output(["fc-list"], text=True).split("\n") if font_name.strip()]
-        except subprocess.CalledProcessError as e:
-            print(f"Error reading system fonts: {e}")
-            return []
+        if self._fontlist: return # already read fonts
+        print("Reading system fonts...")
+        self._fontlist = []
+        with open("./fontlist.txt", "r") as f:
+            fonts = f.read().splitlines()
+            for font_path in fonts:
+                # split line at # discard the rest
+                font_path = font_path.split("#")[0].strip()
+                if not font_path: continue # skip empty lines
+                # split after the : # discard the rest
+                font_path = font_path.split(":")[0].strip()
+                if not font_path: continue # skip empty lines
+                self._fontlist.append(font_path)
+
     def set_font(self, font_name, pitch=64):
         if not pitch: pitch = 64
-        for font_path in FONT_LIST:
+        for font_path in self.fontlist:
             if font_name in font_path:
                 self.font = ImageFont.truetype(font_path, size=pitch)
-                ## NOTE: we don't set the font_name and font_size here
+                ## NOTE: we don't set the self.font_name and self.font_size here
                 ##       because we want to keep the original font name and size
                 # self.font_name = font_name
                 # self.font_size = pitch
