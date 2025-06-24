@@ -18,7 +18,7 @@ class PMGfx:
 		self.line_width = 5
 		self.font_name = None
 		self.font_size = None
-		self.font = ImageFont.truetype("DejaVuSans.ttf", 24) 
+		self.font = None 
 		self.antialias = True
 	
 	def set_font(self, font_name, pitch=24):
