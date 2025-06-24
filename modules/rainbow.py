@@ -10,8 +10,8 @@ class Rainbow(PMModule):
 		gfx = self.gfx
 		x = gfx.x0
 		y = gfx.y0
-		width = gfx.x1 - gfx.x0
-		height = gfx.y1 - gfx.y0
+		width = int(gfx.x1 - gfx.x0)
+		height = int(gfx.y1 - gfx.y0)
 		red = 0
 		green = 0
 		blue = 0
