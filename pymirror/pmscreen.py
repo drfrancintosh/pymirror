@@ -25,7 +25,18 @@ def _color(t):
     # so every pixel (tuple) is converted to a 16-bit RGB565 value
     # split across the odd bytes of a 32-bit integer
     if t is None: return None
-    print(f"Converting color {t} to RGB565")
+    if isinstance(t, str):
+        if t.startswith("#"):
+            # Convert hex color to RGB tuple
+            t = t.lstrip("#")
+            t = tuple(int(t[i:i+2], 16) for i in (0, 2, 4))
+        elif t.startswith("(") and t.endswith(")"):
+            # Convert rgb() string to RGB tuple
+            t = t[1:-1].split(',')
+            t = [int(x.strip()) for x in t]
+            if len(t) < 3:
+                raise ValueError(f"Invalid rgb() format, expected (R, G, B).")
+        return _color(tuple(t))  # Recursively convert to tuple if it's a string
     r, g, b = t
     r = (r >> 3) & 0x1F  # Convert to 5 bits
     g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
