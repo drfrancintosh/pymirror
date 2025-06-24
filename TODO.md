@@ -27,3 +27,5 @@
 8. Convert all forms of color to 32-bit integer for use in PIL "I" mode
 
 9. Handle Portrait mode
+
+10. handle exceptions
