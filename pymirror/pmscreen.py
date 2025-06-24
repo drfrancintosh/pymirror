@@ -9,8 +9,6 @@ class PMScreen:
         self.gfx = PMGfx()
         self.gfx.width, self.gfx.height = self.img.size
         self.gfx.rect = (0, 0, self.gfx.width-1, self.gfx.height-1)
-        print(f"Screen size: {self.gfx.rect}")
-        print(f"Image size: {self.img.size}")
         self.set_flush(False) ## do not flush by default
         self.clear()
 
@@ -26,7 +24,6 @@ class PMScreen:
         if self._doFlush: self.flush()
 
     def line(self, gfx: PMGfx, rect: tuple):
-        print(f"Drawing line with rect: {rect} and color: {gfx.color}")
         self.draw.line(rect, fill=gfx.color, width=gfx.line_width)
         if self._doFlush: self.flush()
 
