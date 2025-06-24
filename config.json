@@ -108,7 +108,7 @@
           "appid": "d0127c5a160a58e37651a83ff69922bf",
           "exclude": "minutely,hourly",
           "units": "imperial",
-          "lang": "english",]
+          "lang": "english"
         },
         "body_color": "#c0c000"
       }
