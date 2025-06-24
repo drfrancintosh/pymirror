@@ -27,7 +27,7 @@ def _color(t):
     b = (b >> 3) & 0x1F  # Convert to 5 bits
     if r < 0 or r > 31 or g < 0 or g > 63 or b < 0 or b > 31:
         raise ValueError(f"Invalid color value: {t}, expected RGB tuple with R in [0,31], G in [0,63], B in [0,31].")
-    x = r << 7
+    x = r << 8
     return x
 
 class PMScreen:
@@ -128,7 +128,7 @@ class PMScreen:
         raw = _image_to_rgb565(self.img)
         # Write to framebuffer
         with open("/dev/fb0", "wb") as f:
-            f.write(raw[1::2])  # Write every second byte for RGB565 format
+            f.write(raw[0::2])  # Write every second byte for RGB565 format
 
     def quit(self):
         if self._doFlush: self.flush()
