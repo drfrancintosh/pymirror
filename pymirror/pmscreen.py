@@ -8,6 +8,8 @@ class PMScreen:
         self.draw = ImageDraw.Draw(self.img)
         self.gfx = PMGfx()
         self.gfx.width, self.gfx.height = self.img.size
+        print(f"Screen size: {self.gfx.width}x{self.gfx.height}")
+        print(f"Image size: {self.img.size}")
         self.gfx.x1, self.gfx.y1 = (self.gfx.width-1, self.gfx.height-1)
         self.set_flush(False) ## do not flush by default
         self.clear()
