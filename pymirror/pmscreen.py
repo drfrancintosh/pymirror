@@ -24,28 +24,29 @@ def _color(t):
     # and we send every other byte to the framebuffer
     # so every pixel (tuple) is converted to a 16-bit RGB565 value
     # split across the odd bytes of a 32-bit integer
-    if t is None: return None
-    print(f"Converting color {t} to RGB565 format.")
-    if isinstance(t, str):
-        if t.startswith("#"):
-            # Convert hex color to RGB tuple
-            t = t.lstrip("#")
-            t = tuple(int(t[i:i+2], 16) for i in (0, 2, 4))
-        elif t.startswith("(") and t.endswith(")"):
-            # Convert rgb() string to RGB tuple
-            t = t[1:-1].split(',')
-            t = [int(x.strip()) for x in t]
-            if len(t) < 3:
-                raise ValueError(f"Invalid rgb() format, expected (R, G, B).")
-        return _color(tuple(t))  # Recursively convert to tuple if it's a string
-    r, g, b = t
-    r = (r >> 3) & 0x1F  # Convert to 5 bits
-    g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
-    g1 = (g >> 5) & 0x07  # Convert to upper 3 bits
-    b = (b >> 3) & 0x1F  # Convert to 5 bits
-    x = r << 19 | (g1 << 16 | g0 << 5 | b)
-    return x
-
+    try:
+        if t is None: return None
+        if isinstance(t, str):
+            if t.startswith("#"):
+                # Convert hex color to RGB tuple
+                t = t.lstrip("#")
+                t = tuple(int(t[i:i+2], 16) for i in (0, 2, 4))
+            elif t.startswith("(") and t.endswith(")"):
+                # Convert rgb() string to RGB tuple
+                t = t[1:-1].split(',')
+                t = [int(x.strip()) for x in t]
+                if len(t) < 3:
+                    raise ValueError(f"Invalid rgb() format, expected (R, G, B).")
+            return _color(tuple(t))  # Recursively convert to tuple if it's a string
+        r, g, b = t
+        r = (r >> 3) & 0x1F  # Convert to 5 bits
+        g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
+        g1 = (g >> 5) & 0x07  # Convert to upper 3 bits
+        b = (b >> 3) & 0x1F  # Convert to 5 bits
+        x = r << 19 | (g1 << 16 | g0 << 5 | b)
+        return x
+    except Exception as e:
+        raise ValueError(f"Invalid color format {t}, expected RGB tuple or hex string.") from e
 class PMScreen:
     def __init__(self):
         self.img = Image.new("I", (1920, 1080), 0)
