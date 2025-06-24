@@ -79,7 +79,7 @@ class PyMirror:
 				module.exec()
 				if self.config.debug:
 					print(f"Module {module.moddef.module} executed.")
-					self.screen.rect(screen.gfx, module.gfx.x0, module.gfx.y0, module.gfx.x1, module.gfx.y1, fill=False)
+					self.screen.rect(self.screen.gfx, module.gfx.x0, module.gfx.y0, module.gfx.x1, module.gfx.y1, fill=False)
 
 			self.screen.flush()
 
