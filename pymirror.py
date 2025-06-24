@@ -74,8 +74,8 @@ class PyMirror:
 				module.onEvent(event)
 
 	def run(self):
+		self.screen.clear()
 		while True:
-			self.screen.clear()
 			self.events = self.new_events # dispose of old events, process new events
 			self.new_events = []
 			for module in self.modules:
