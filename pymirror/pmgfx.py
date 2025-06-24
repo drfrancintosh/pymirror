@@ -39,7 +39,7 @@ class PMGfx:
 
     def set_font(self, font_name, pitch=64):
         if not pitch: pitch = 64
-        for font_path in self.fontlist:
+        for font_path in self._fontlist:
             if font_name in font_path:
                 self.font = ImageFont.truetype(font_path, size=pitch)
                 ## NOTE: we don't set the self.font_name and self.font_size here
