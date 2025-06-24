@@ -23,6 +23,7 @@ def _color(t):
 	if t is None: return None
 	r, g, b = t
 	x = ((r & 0x78) << 7) | ((g & 0xFC) << 3) | (b >> 3)
+	print(f"Converting color {t} to RGB565: {x:#06x}")
 	# Ensure x is a 16-bit value
 	x &= 0xFFFF	
 	return x
