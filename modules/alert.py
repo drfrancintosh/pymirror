@@ -20,6 +20,11 @@ class Alert(PMModule):
 		self.subscribe("ALERT")
 
 	def render(self):
+			if not self.message:
+				gfx = self.gfx
+				self.screen.rect(gfx, gfx.x0, gfx.y0, gfx.x1, gfx.y1, fill=gfx2.bg_color)
+				self.last_message = None
+				return 0
 			gfx2 = copy.copy(self.gfx)
 			gfx2.font_name = self.config.heading.font
 			gfx2.font_size = self.config.heading.font_size
