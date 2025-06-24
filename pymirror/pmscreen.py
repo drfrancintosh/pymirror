@@ -73,6 +73,13 @@ class PMScreen:
 				self.draw.rectangle((x0, y0, x1, y1), outline=gfx.color, width=gfx.line_width)
 		if self._doFlush: self.flush()
 	def text(self, gfx,  msg, x0, y0):
+		bbox = gfx.font.getbbox(msg)
+		width = bbox[2] - bbox[0]
+		height = bbox[3] - bbox[1]
+		# Draw background rectangle
+		if gfx.text_bg_color:
+			self.draw.rectangle((x0, y0, x0 + width, y0 + height), fill=gfx.text_bg_color)
+		# Draw text
 		self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
 	def text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
@@ -86,23 +93,27 @@ class PMScreen:
 		if x0 == None: x0 = gfx.x0
 		if y0 == None: y0 = gfx.y0
 
+		text_x = x0
+		text_y = y0
+
 		## if x1, y1 not specified, use the gfx.x1, y1
 		## if they are specified, then they are absolute coordinates
 		if x1 == None: x1 = gfx.x1
 		if y1 == None: y1 = gfx.y1
 
-		if halign == "left": x0 = x0
-		elif halign == "center": x0 += (x1 - x0 - width) / 2
-		elif halign == "right": x0 = x1 - width
+		if halign == "center": text_x0 = x0 + (x1 - x0 - width) / 2
+		elif halign == "left": text_x0 = x0
+		elif halign == "right": text_x0 = x1 - width
 		else: print(f"Invalid halign '{halign}' in text_box, using 'center' instead.")
 
-		if valign == "top": y0 = y0
-		elif valign == "center": y0 += (y1 - y0 - height) / 2
-		elif valign == "bottom": y0 = y1 - height
+		if valign == "center": text_y0 = y0 + (y1 - y0 - height) / 2
+		elif valign == "top": text_y0 = y0
+		elif valign == "bottom": text_y0 = y1 - height
 		else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
+		print(f"Drawing text box at ({x0}, {y0}, {x1}, {y1}) with text at ({text_x0}, {text_y0})")
 		if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
-		self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
+		self.draw.text((text_x0, text_y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
 
 	def flush(self):
