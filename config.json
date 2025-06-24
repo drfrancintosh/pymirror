@@ -115,6 +115,7 @@
       "position": "middle_right",
       "font": "TOS_Title.ttf",
       "font_size": 48,
+      "bg_color": "#000000",
       "config": {
         "effect": "None",
         "alert_effect": "None",
