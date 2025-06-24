@@ -20,7 +20,7 @@ class Alert(PMModule):
 			gfx = self.gfx
 			gfx.text_bg_color = "#c0c0c0" # Set background color for text
 			print(f"Rendering alert: {self.message[:20]}, text_color={gfx.text_color}, bg_color={gfx.bg_color}")
-			self.screen.text_box(gfx, self.message, gfx.x0, gfx.y0, gfx.x1, gfx.y1, valign="top")
+			self.screen.text_box(gfx, self.message[:10], gfx.x0, gfx.y0, gfx.x1, gfx.y1, valign="top")
 			# self.last_message = self.message
 			return 1
 
