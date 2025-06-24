@@ -1,6 +1,6 @@
 {
   "font": "DejaVuSans.ttf",
-  "font_size": 24,
+  "font_size": 64,
   "positions": {
     "top_left": [
       0.0,
@@ -73,7 +73,7 @@
     {
       "module": "alert",
       "position": "top_center",
-      "font": "Trek",
+      "font": "TOS_Title.ttf",
       "font_size": 48,
       "config": {
         "effect": "None",
@@ -100,7 +100,7 @@
     {
       "module": "analog_clock",
       "position": "middle_center",
-      "font": "Trek",
+      "font": "TOS_Title.ttf",
       "font_size": 48,
       "config": {}
     },
@@ -109,7 +109,7 @@
       "position": "top_left",
       "x_offset": 0,
       "y_offset": -100,
-      "font": "7segment",
+      "font": "7segment.ttf",
       "font_size": 128,
       "config": {
         "date_format": "%Y-%m-%d"
@@ -120,7 +120,7 @@
       "position": "top_right",
       "x_offset": 50,
       "y_offset": -100,
-      "font": "7segment",
+      "font": "7segment.ttf",
       "font_size": 128,
       "config": {
         "date_format": "%H:%M:%S"
@@ -129,7 +129,7 @@
     {
       "module": "clock",
       "position": "bottom_center",
-      "font": "Trek",
+      "font": "TOS_Title.ttf",
       "font_size": 96,
       "config": {
         "date_format": "%A"
