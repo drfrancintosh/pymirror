@@ -71,14 +71,21 @@ class PMScreen:
 	def text(self, gfx,  msg, x0, y0):
 		self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
-	def text_box(self, gfx, msg, x0, y0, x1=None, y1=None, halign="center", valign="center"):
+	def text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, halign="center", valign="center"):
+		## get text bounding box
 		bbox = gfx.font.getbbox(msg)
 		width = bbox[2] - bbox[0]
 		height = bbox[3] - bbox[1]
-		if x1 == None: x1 = x0 + width
-		if y1 == None: y1 = y0 + height
-		if x1 < 0: x1 += self.gfx.width
-		if y1 < 0: y1 += self.gfx.height
+
+		## if x0, y0 not specified, use the gfx.x0, y0
+		## if they are specified, then they are absolute coordinates
+		if x0 == None: x0 = gfx.x0
+		if y0 == None: y0 = gfx.y0
+
+		## if x1, y1 not specified, use the gfx.x1, y1
+		## if they are specified, then they are absolute coordinates
+		if x1 == None: x1 = gfx.x1
+		if y1 == None: y1 = gfx.y1
 
 		if halign == "left": x0 = x0
 		elif halign == "center": x0 += (x1 - x0 - width) / 2
@@ -89,7 +96,7 @@ class PMScreen:
 		elif valign == "center": y0 += (y1 - y0 - height) / 2
 		elif valign == "bottom": y0 = y1 - height
 		else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
-		
+
 		if gfx.text_bg_color: self.draw.rectangle((x0, y0, x1, y1), fill=gfx.text_bg_color)
 		self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
 		if self._doFlush: self.flush()
