@@ -117,21 +117,21 @@
     },
     {
       "module": "clock",
+      "position": "top_right",
+      "x_offset": 50,
+      "y_offset": -100,
+      "font": "7segment",
+      "font_size": 128,
       "config": {
-        "position": "top_right",
-        "x_offset": 50,
-        "y_offset": -100,
-        "font": "7segment",
-        "font_size": 128,
         "date_format": "%H:%M:%S"
       }
     },
     {
       "module": "clock",
+      "position": "bottom_center",
+      "font": "Trek",
+      "font_size": 96,
       "config": {
-        "position": "bottom_center",
-        "font": "Trek",
-        "font_size": 96,
         "date_format": "%A"
       }
     }
