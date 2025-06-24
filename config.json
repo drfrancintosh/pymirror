@@ -91,6 +91,7 @@
     },
     {
       "module": "cron",
+      "y_offset": 10,
       "config": {
         "name": "example_cron",
         "first_delay": 4000,
