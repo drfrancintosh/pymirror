@@ -9,7 +9,9 @@ class PyMirror:
 	def __init__(self, config_fname):
 		with open(config_fname, 'r') as file:
 			self.config = SafeNamespace(**json.load(file))
-		self.screen = PMScreen()
+		w = self.config.screen.width or 1920
+		h = self.config.screen.height or 1080
+		self.screen = PMScreen(w, h)
 		self.screen.gfx.color = self.config.screen.color or (255, 255, 255)  # default color
 		self.screen.gfx.bg_color = self.config.screen.bg_color or (0, 0, 0)
 		self.screen.gfx.text_color = self.config.screen.text_color or self.screen.gfx.color
