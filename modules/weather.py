@@ -71,6 +71,7 @@ class Weather(PMModule):
 				alert = alerts[0]
 				event = AlertEvent("weather_alert", alert["event"], f"{alert['description']}", self.refresh_minutes * 60 * 1000)
 				self.pm.add_event(event)
+		return True
 
 	def onEvent(self, event):
 		pass			
