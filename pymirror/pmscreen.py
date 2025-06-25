@@ -54,12 +54,12 @@ class PMScreen:
         if fill == "__use_bg_color__":
             # Use the gfx.background color if specified
             self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
-        elif fill:
-            # Use the specified fill color
-            self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width, fill=tocolor(fill))
-        else:
+        elif fill is None:
             # No fill, just draw the outline
             self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width)
+        else:
+            # Use the specified fill color
+            self.draw.rectangle(rect, outline=gfx.color, width=gfx.line_width, fill=tocolor(fill))
         if self._doFlush: self.flush()
 
     def text(self, gfx: PMGfx, msg: str, x0: int, y0: int) -> None:
