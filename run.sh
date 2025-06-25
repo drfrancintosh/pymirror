@@ -1,1 +1,1 @@
-python3 ./pymirror/pymirror.py
+python3 -m pymirror.pymirror
