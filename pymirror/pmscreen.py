@@ -94,7 +94,7 @@ class PMScreen:
 
         if valign == "center": text_y0 = y0 + (y1 - y0 - height - y_min) / 2
         elif valign == "top": text_y0 = y0 - y_min
-        elif valign == "bottom": text_y0 = y1 - height + y_min
+        elif valign == "bottom": text_y0 = y1 - height
         else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
         if gfx.text_bg_color is not None: self.draw.rectangle(rect, fill=gfx.text_bg_color)
