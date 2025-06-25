@@ -16,15 +16,15 @@ class Rainbow(PMModule):
 		height = int(gfx.y1 - gfx.y0)
 		for r in range(256):
 			gfx.color = (r, 0, 0)  # Red to black
-			self.screen.line(gfx, x, y, x, y + height)
+			self.screen.line(gfx, (x, y, x, y + height))
 			x += 1
 		for g in range(256):
 			gfx.color = (0, g, 0)  # Green to black
-			self.screen.line(gfx, x, y, x, y + height)
+			self.screen.line(gfx, (x, y, x, y + height))
 			x += 1
 		for b in range(256):
 			gfx.color = (0, 0, b)  # Blue to black
-			self.screen.line(gfx, x, y, x, y + height)
+			self.screen.line(gfx, (x, y, x, y + height))
 			x += 1
 		return True
 
