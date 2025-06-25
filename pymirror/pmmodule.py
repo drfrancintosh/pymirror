@@ -6,14 +6,14 @@ from dataclasses import dataclass
 @dataclass
 class PMModuleDef(ABC):
 	position: str
-	x_offset: int
-	y_offset: int
-	color: str
-	bg_color: str
-	text_color: str
-	text_bg_color: str
-	font: str
-	font_size: int
+	x_offset: int = 0
+	y_offset: int = 0
+	color: str = "(255,255,255)"
+	bg_color: str = None
+	text_color: str = "(255,255,255)"
+	text_bg_color: str = None
+	font: str = "DejaVuSans.ttf"
+	font_size: int = 64
 	subscriptions: list[str] = None
 
 class PMModule(ABC):
