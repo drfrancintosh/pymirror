@@ -13,7 +13,6 @@ class Clock(PMModule):
 	def render(self, force: bool = False) -> int:
 		if not force and self.last_time == self.curr_time: return 0
 		gfx = self.gfx
-		self.screen.rect(gfx, gfx.rect)
 		self.screen.text_box(gfx, self.curr_time,
 			(gfx.x0 + self.moddef.x_offset, gfx.y0 + self.moddef.y_offset,
 			gfx.x1 + self.moddef.x_offset, gfx.y1 + self.moddef.y_offset))
