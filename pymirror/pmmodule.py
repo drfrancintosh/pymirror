@@ -31,14 +31,14 @@ class PMModule(ABC):
 		self.timeout = 0
 		self.subscriptions = []
 		self.gfx = PMGfx() ## default graphics context
-		self.gfx.color = moddef.color or self.screen.gfx.color
-		self.gfx.bg_color = moddef.bg_color or self.screen.gfx.bg_color
-		self.gfx.text_color = moddef.text_color or self.screen.gfx.text_color
-		self.gfx.text_bg_color = moddef.text_bg_color or self.screen.gfx.text_bg_color
-		self.gfx.font_name = moddef.font or self.screen.gfx.font_name or "DejaVuSans.ttf"
-		self.gfx.font_size = moddef.font_size or 64
+		self.gfx.color = self.moddef.color or self.screen.gfx.color
+		self.gfx.bg_color = self.moddef.bg_color or self.screen.gfx.bg_color
+		self.gfx.text_color = self.moddef.text_color or self.screen.gfx.text_color
+		self.gfx.text_bg_color = self.moddef.text_bg_color or self.screen.gfx.text_bg_color
+		self.gfx.font_name = self.moddef.font or self.screen.gfx.font_name or "DejaVuSans.ttf"
+		self.gfx.font_size = self.moddef.font_size or 64
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
-		self.subscribe(moddef.subscriptions or [])
+		self.subscribe(self.moddef.subscriptions or [])
 		if self.moddef.position:
 			print(f"Module {self.moddef.position} initialized with position {pm.config.positions}")
 			dim_str = pm.config.positions[self.moddef.position]
