@@ -65,7 +65,7 @@ class PyMirror:
 		print(f"Module {module.moddef.name} executed.")
 		self.screen.rect(gfx, module.gfx.rect, fill=None)
 		gfx.set_font(gfx.font_name, 24)
-		self.screen.text(gfx, f"{module.moddef.module}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
+		self.screen.text(gfx, f"{module.moddef.name}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
 		gfx.reset_font()
 
 	def full_render(self):

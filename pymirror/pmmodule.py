@@ -31,6 +31,7 @@ class PMModule(ABC):
 		self.pm = pm
 		self.screen = pm.screen
 		self.moddef = PMModuleDef(**moddef.__dict__) if moddef else PMModuleDef(name=self.__class__.__name__, position="None")
+		if not self.moddef.name: self.moddef.name = self.__class__.__name__
 		self.config = config
 		self.timeout = 0
 		self.subscriptions = []
