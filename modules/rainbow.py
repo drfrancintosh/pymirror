@@ -7,7 +7,7 @@ class Rainbow(PMModule):
 		super().__init__(pm, moddef, config)
 		self.first_time = True
 
-	def render(self, force: bool = False) -> bool::
+	def render(self, force: bool = False) -> bool:
 		print("Rainbow render")
 		gfx = self.gfx
 		x = gfx.x0
