@@ -30,9 +30,6 @@ class PMModule(ABC):
 		self.config = config
 		self.timeout = 0
 		self.subscriptions = []
-		self.position = moddef.position
-		self.x_offset = moddef.x_offset or 0
-		self.y_offset = moddef.y_offset or 0
 		self.gfx = PMGfx() ## default graphics context
 		self.gfx.color = moddef.color or self.screen.gfx.color
 		self.gfx.bg_color = moddef.bg_color or self.screen.gfx.bg_color
