@@ -84,6 +84,7 @@ class PMModule(ABC):
 	def clear_region(self) -> None:
 		""" Clear the module's region on the screen. """
 		gfx = self.gfx
+		print(f"Clearing region {gfx.rect} for module {self.moddef.position}, bg_color={gfx.bg_color}")
 		self.screen.rect(gfx, gfx.rect, fill=gfx.bg_color)
 
 	@abstractmethod
