@@ -6,7 +6,7 @@
         "delay": 2000,
         "repeat": 5,
         "event": {
-            "name": "CronTest",
+            "name": "weather_alert",
             "message": "alert is kicked off",
             "timeout": 500
         }
