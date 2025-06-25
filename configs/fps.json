@@ -2,7 +2,8 @@
     "module": "fps",
     "moddef": {
         "name": "fps",
-        "position": "bottom_right"
+        "position": "bottom_right",
+        "font_size": 32
     },
     "config": {
         "valign": "bottom",
