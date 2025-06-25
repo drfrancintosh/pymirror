@@ -46,7 +46,6 @@ class Alert(PMModule):
 		return update
 
 	def exec(self) -> bool:
-		print(f"Alert exec: {self.message}, timeout={self.timeout}, last_message={self.last_message}")
 		if self.is_timedout(): self.message = None ## clear message
 		if self.message == self.last_message: return False
 		else: return True
