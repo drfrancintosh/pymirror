@@ -2,6 +2,8 @@
     "module": "clock",
     "moddef": {
         "name": "time",
+        "text_color": "#c0c000",
+        "text_bg_color": "#000000",
         "position": "top_right",
         "x_offset": 50,
         "y_offset": -100,
