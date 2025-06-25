@@ -19,7 +19,6 @@ class Alert(PMModule):
 		self.set_timeout(config.display_time)
 
 	def _render_heading(self) -> int: # returns next y position
-		print(f"Alert._render_heading: {self.heading}")
 		gfx = self.gfx
 		next_y0 = gfx.y0
 		hdg = self.config.heading
@@ -33,13 +32,11 @@ class Alert(PMModule):
 		return next_y0
 
 	def _render_body(self, y0) -> None:
-		print(f"Alert._render_body: {self.message}")
 		gfx = self.gfx
 		rect = (gfx.x0, y0, gfx.x1, gfx.y1)
 		self.screen.text_box(gfx, self.message or "", rect, halign="left", valign="top")
 
 	def render(self, force=False) -> bool:
-		print(f"Alert.render: {self.message}")
 		update = force or self.message != self.last_message
 		if update:
 			self.clear_region()
@@ -54,7 +51,6 @@ class Alert(PMModule):
 		else: return True	
 
 	def onEvent(self, event) -> None:
-		print(f"Alert.onEvent: {event}")
 		self.heading = event.heading
 		self.message = event.message
 		self.set_timeout(event.timeout)

@@ -8,7 +8,6 @@ class Rainbow(PMModule):
 		self.first_time = True
 
 	def render(self, force: bool = False) -> bool:
-		print("Rainbow render")
 		gfx = self.gfx
 		x = gfx.x0
 		y = gfx.y0
