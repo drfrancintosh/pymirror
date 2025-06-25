@@ -36,15 +36,17 @@ class Alert(PMModule):
 			self.screen.text_box(gfx, self.message or "", rect, halign="left", valign="top")
 
 	def render(self, force=False) -> bool:
-			update = force or self.message != self.last_message
-			if update:
-				self.clear_region()
-				next_y0 = self._render_heading()
-				self._render_body(next_y0)
-				self.last_message = self.message
-			return update
+		print(f"Alert render: {force}, msg={self.message}, last_message={self.last_message}")
+		update = force or self.message != self.last_message
+		if update:
+			self.clear_region()
+			next_y0 = self._render_heading()
+			self._render_body(next_y0)
+			self.last_message = self.message
+		return update
 
 	def exec(self) -> bool:
+		print(f"Alert exec: {self.message}, timeout={self.timeout}, last_message={self.last_message}")
 		if self.is_timedout(): self.message = None ## clear message
 		if self.message == self.last_message: return False
 		else: return True
