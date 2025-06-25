@@ -9,6 +9,6 @@
         "font_size": 128
     },
     "config": {
-        "date_format": "%Y-%m-%d"
+        "date_format": "%A"
     }
 }
