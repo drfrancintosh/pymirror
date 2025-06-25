@@ -26,7 +26,7 @@ class PMModule(ABC):
 		##     and config is the module "child" instance configuration
 		self.pm = pm
 		self.screen = pm.screen
-		self.moddef = PMModuleDef(**moddef.__dict__)
+		self.moddef = PMModuleDef(**moddef.__dict__) if moddef else PMModuleDef(position="None")
 		self.config = config
 		self.timeout = 0
 		self.subscriptions = []
