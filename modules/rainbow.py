@@ -14,18 +14,24 @@ class Rainbow(PMModule):
 		y = gfx.y0
 		width = int(gfx.x1 - gfx.x0)
 		height = int(gfx.y1 - gfx.y0)
+		dw = width / 3 / 256
+		dx = 0
+		x = int(dx)
 		for r in range(256):
 			gfx.color = (r, 0, 0)  # Red to black
 			self.screen.line(gfx, (x, y, x, y + height))
-			x += 1
+			dx += dw
+			x = int(dx)
 		for g in range(256):
 			gfx.color = (0, g, 0)  # Green to black
 			self.screen.line(gfx, (x, y, x, y + height))
-			x += 1
+			dx += dw
+			x = int(dx)
 		for b in range(256):
 			gfx.color = (0, 0, b)  # Blue to black
 			self.screen.line(gfx, (x, y, x, y + height))
-			x += 1
+			dx += dw
+			x = int(dx)
 		return True
 
 	def exec(self):
