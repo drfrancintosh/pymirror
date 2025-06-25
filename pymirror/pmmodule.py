@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import time
+import copy
 from pymirror.pmscreen import PMGfx
 from dataclasses import dataclass
 
@@ -82,7 +83,8 @@ class PMModule(ABC):
 
 	def clear_region(self) -> None:
 		""" Clear the module's region on the screen. """
-		gfx = self.gfx
+		gfx = copy.copy(self.gfx)
+		gfx.color = gfx.bg_color
 		self.screen.rect(gfx, gfx.rect, fill=gfx.bg_color)
 
 	def dispatchEvent(self, event) -> None:
