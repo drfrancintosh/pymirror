@@ -1,0 +1,13 @@
+{
+    "module": "clock",
+    "moddef": {
+        "position": "top_left",
+        "x_offset": 0,
+        "y_offset": -100,
+        "font": "7segment.ttf",
+        "font_size": 128
+    },
+    "config": {
+        "date_format": "%Y-%m-%d"
+    }
+}
