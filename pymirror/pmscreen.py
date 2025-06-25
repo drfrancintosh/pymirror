@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw
 from pymirror.pmgfx import PMGfx, tocolor
 
 class PMScreen:
-    def __init__(self, width: int = 1920, height: int = 1080):
+    def __init__(self, width: int = 1920, height: int = 1000):
         self.img = Image.new("I", (width, height), 0)
         self.draw = ImageDraw.Draw(self.img)
         self.gfx = PMGfx()
