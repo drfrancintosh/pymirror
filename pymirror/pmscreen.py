@@ -83,7 +83,7 @@ class PMScreen:
         (x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
         width = x_max - x_min
         height = y_max
-        print(f"text_box: '{msg}'{x_min}, {y_min}, {x_max}, {y_max} (width={width}, height={height})")
+        if msg == "Tuesday": print(f"text_box: '{msg}'{x_min}, {y_min}, {x_max}, {y_max} (width={width}, height={height})")
         x0, y0, x1, y1 = rect
         text_x0 = x0
         text_y0 = y0
