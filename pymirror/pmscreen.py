@@ -3,14 +3,19 @@ from PIL import Image, ImageDraw
 from pymirror.pmgfx import PMGfx, tocolor
 
 class PMScreen:
-    def __init__(self, width: int = 1920, height: int = 1000):
+    def __init__(self, width: int = 1920, height: int = 1080):
         self.img = Image.new("I", (width, height), 0)
         self.draw = ImageDraw.Draw(self.img)
         self.gfx = PMGfx()
         self.gfx.width, self.gfx.height = self.img.size
         self.gfx.rect = (0, 0, self.gfx.width-1, self.gfx.height-1)
         self.set_flush(False) ## do not flush by default
-        self.clear()
+        self._hard_clear()
+
+    def _hard_clear(self):
+        """Clear the framebuffer by writing zeros to it."""
+        with open("/dev/fb0", "wb") as f:
+            f.write(b'\x00' * (1920 * 1080 * 2))  # Assuming RGB565 format, 2 bytes per pixel
 
     def set_flush(self, doFlush: bool) -> None:
         self._doFlush = doFlush
