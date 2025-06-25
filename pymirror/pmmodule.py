@@ -44,7 +44,8 @@ class PMModule(ABC):
 		self.subscribe(moddef.subscriptions or [])
 		if self.moddef.position:
 			print(f"Module {self.moddef.position} initialized with position {pm.config.positions}")
-			dims = pm.config.positions[self.moddef.position]
+			dim_str = pm.config.positions[self.moddef.position]
+			dims = [float(x) for x in dim_str.split(",")]
 			## this is the bounding box for the module
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
 			## these are in percentages of the screen size
