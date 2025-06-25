@@ -24,7 +24,7 @@
     "configs/weather_alert.json",
     "configs/cron_test.json",
     "configs/date.json",
-    "configs/time.json"
+    "configs/time.json",
     "configs/dow.json"
   ]
 }
