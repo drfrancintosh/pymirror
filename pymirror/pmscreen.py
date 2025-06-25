@@ -71,7 +71,6 @@ class PMScreen:
         (x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
         width = x_max - x_min
         height = y_max
-        print(f"text: {x_min}, {y_min}, {x_max}, {y_max} (width={width}, height={height})")
         # Draw background rectangle
         if gfx.text_bg_color:
             self.draw.rectangle((x0, y0, x0 + width, y0 + height), fill=gfx.text_bg_color)
