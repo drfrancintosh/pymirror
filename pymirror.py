@@ -31,7 +31,7 @@ class PyMirror:
 				## if moddef is a string, it is the name of a module config file
 				## load the module definition from the file
 				## the file should be in JSON format
-				print("Loading module definition from %s\n", module_config)
+				print(f"Loading module definition from {module_config}")
 				with open(module_config, 'r') as file:
 					module_config = SafeNamespace(**json.load(file))
 			## import the module using its name
