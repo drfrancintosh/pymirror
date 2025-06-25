@@ -11,6 +11,6 @@
         "font_size": 128
     },
     "config": {
-        "date_format": "%I:%M:%S %p"
+        "date_format": "%I:%M:%S"
     }
 }
