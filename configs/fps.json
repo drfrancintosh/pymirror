@@ -1,0 +1,11 @@
+{
+    "module": "fps",
+    "moddef": {
+        "name": "fps",
+        "position": "bottom_right"
+    },
+    "config": {
+        "valign": "bottom",
+        "halign": "right"
+    }
+}
