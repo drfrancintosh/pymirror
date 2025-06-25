@@ -1,1 +1,1 @@
-PYTHONPATH=. python3 pymirror/pymirror.py
+python3 pymirror.py
