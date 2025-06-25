@@ -28,7 +28,7 @@ class Alert(PMModule):
 			gfx2.set_font(hdg.font or gfx.font_name, hdg.font_size or gfx.font_size)
 			gfx2.text_color = hdg.text_color or gfx.text_color
 			gfx2.text_bg_color = hdg.text_bg_color or gfx.text_bg_color
-			self.screen.text_box(gfx2, self.heading, (gfx2.x0, next_y0, gfx2.x1, gfx2.y1 + gfx2.font_size), halign="center", valign="center")
+			self.screen.text_box(gfx2, self.heading, (gfx2.x0, next_y0, gfx2.x1, gfx2.font_size), halign="center", valign="center")
 			next_y0 += gfx2.font_size
 		return next_y0
 
