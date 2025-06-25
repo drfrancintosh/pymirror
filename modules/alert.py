@@ -14,6 +14,7 @@ class Alert(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.last_message = None
+		self.heading = config.heading or ""
 		self.message = config.welcome_message
 		self.set_timeout(config.display_time)
 
