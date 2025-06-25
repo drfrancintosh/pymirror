@@ -92,7 +92,7 @@ def tocolor(t):
                 t = [int(x.strip()) for x in t]
                 if len(t) < 3:
                     raise ValueError(f"Invalid rgb() format, expected (R, G, B).")
-            return _color(tuple(t))  # Recursively convert to tuple if it's a string
+            return tocolor(tuple(t))  # Recursively convert to tuple if it's a string
         r, g, b = t
         r = (r >> 3) & 0x1F  # Convert to 5 bits
         g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
