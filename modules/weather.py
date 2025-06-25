@@ -6,7 +6,6 @@ import json
 import copy
 from types import SimpleNamespace
 from dataclasses import dataclass
-from pymirror.PMGfx import PMGfx
 from pymirror.pmmodule import PMModule
 from modules.alert import AlertEvent
 
