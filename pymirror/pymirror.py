@@ -63,7 +63,7 @@ class PyMirror:
 	def _debug(self, module):
 		gfx = self.screen.gfx
 		print(f"Module {module.moddef.name} executed.")
-		self.screen.rect(gfx, module.gfx.x0, module.gfx.y0, module.gfx.x1, module.gfx.y1, fill=False)
+		self.screen.rect(gfx, module.gfx.rect, fill=None)
 		gfx.set_font(gfx.font_name, 24)
 		self.screen.text(gfx, f"{module.moddef.module}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
 		gfx.reset_font()
