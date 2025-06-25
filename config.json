@@ -9,6 +9,7 @@
     "text_bg_color": null
   },
   "positions": {
+    "None": "0.0,0.0,0.0,0.0",
     "top_left": "0.0,0.0,0.33,0.33",
     "top_center": "0.33,0.0,0.66,0.10",
     "top_right": "0.66,0.0,1.00,0.33",
@@ -20,6 +21,7 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
   },
   "modules": [
-    "configs/weather_alert.json"
+    "configs/weather_alert.json",
+    "configs/cron_test.json"
   ]
 }

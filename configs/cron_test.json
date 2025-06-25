@@ -1,0 +1,14 @@
+{
+    "module": "cron",
+    "config": {
+        "name": "example_cron",
+        "first_delay": 4000,
+        "delay": 2000,
+        "repeat": 5,
+        "event": {
+            "name": "weather_alert",
+            "message": "alert is kicked off",
+            "timeout": 500
+        }
+    }
+}
