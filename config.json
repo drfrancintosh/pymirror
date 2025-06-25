@@ -25,6 +25,7 @@
     "configs/weather.json",
     "configs/date.json",
     "configs/time.json",
+    "configs/analog_clock.json",
     "configs/day_of_week.json"
   ]
 }
