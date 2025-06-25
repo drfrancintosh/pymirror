@@ -15,6 +15,7 @@ class PMModuleDef(ABC):
 	font: str = "DejaVuSans.ttf"
 	font_size: int = 64
 	subscriptions: list[str] = None
+	disabled: bool = False
 
 class PMModule(ABC):
 	def __init__(self, pm, moddef, config):
