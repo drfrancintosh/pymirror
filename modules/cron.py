@@ -15,7 +15,6 @@ class Cron(PMModule):
 		pass
 
 	def exec(self):
-		print(f"Cron exec: {self.moddef.name}, repeat={self.repeat}, delay={self.delay}")
 		if self.is_timedout():
 			print(f"Cron timedout: {self.name}, repeat={self.repeat}, delay={self.delay}")
 			if self.repeat == 0: return 0
