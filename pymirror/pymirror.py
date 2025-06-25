@@ -1,5 +1,6 @@
 import importlib
 import json
+import copy
 from pymirror.pmscreen import PMScreen
 from pymirror.safe_namespace import SafeNamespace
 from pymirror.utils import snake_to_pascal
@@ -61,12 +62,11 @@ class PyMirror:
 		self.new_events.append(event)
 
 	def _debug(self, module):
-		gfx = self.screen.gfx
+		gfx = copy.copy(module.gfx)
 		print(f"Module {module.moddef.name} executed.")
 		self.screen.rect(gfx, module.gfx.rect, fill=None)
 		gfx.set_font(gfx.font_name, 24)
 		self.screen.text(gfx, f"{module.moddef.name}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
-		gfx.reset_font()
 
 	def full_render(self):
 		self.screen.clear()
