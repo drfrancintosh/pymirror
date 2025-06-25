@@ -80,7 +80,7 @@ class PMScreen:
 
     def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
         ## get text bounding box
-        (x_min, y_min, x_max, y_max) = gfx.font.getbbox(msg)
+        (x_min, baseline, x_max, y_max) = gfx.font.getbbox(msg)
         width = x_max - x_min
         height = y_max
         x0, y0, x1, y1 = rect
@@ -92,8 +92,8 @@ class PMScreen:
         elif halign == "right": text_x0 = x1 - width
         else: print(f"Invalid halign '{halign}' in text_box, using 'center' instead.")
 
-        if valign == "center": text_y0 = y0 + (y1 - y0 - height - y_min) / 2
-        elif valign == "top": text_y0 = y0 - y_min
+        if valign == "center": text_y0 = y0 + (y1 - y0 - height - baseline / 2) / 2
+        elif valign == "top": text_y0 = y0 - baseline
         elif valign == "bottom": text_y0 = y1 - height
         else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
