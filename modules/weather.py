@@ -6,6 +6,7 @@ import json
 import copy
 from types import SimpleNamespace
 from dataclasses import dataclass
+from pymirror.PMGfx import PMGfx
 from pymirror.pmmodule import PMModule
 from modules.alert import AlertEvent
 
@@ -40,7 +41,7 @@ class Weather(PMModule):
 		self.weather_response = None
 		self.weather_api = OpenWeatherMap()
 
-	def render(self):
+	def render(self, force: bool = False) -> int:
 		if not self.weather_response: return 0
 		gfx = copy.copy(self.gfx)
 		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
@@ -49,29 +50,28 @@ class Weather(PMModule):
 		w = SimpleNamespace(**self.weather_response["current"])
 		text = self.screen.text
 		text_box = self.screen.text_box
-		# text_box(self, gfx, msg, x0=None, y0=None, x1=None, y1=None, valign="center", halign="center"):
+    	# text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
 		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y)
-		text_box(gfx, "Weather", valign="top")
+		text_box(gfx, "Weather", gfx.rect, valign="top")
 		y += gfx.font_size / 2  # Offset for the text
 		gfx.text_color = self.config.body_color or gfx.text_color
-		text_box(gfx, f"{w.temp}{degrees}", x, y + gfx.font_size, gfx.x1, y + gfx.font_size * 2)
-		text_box(gfx, f"{w.humidity} %", x, y + gfx.font_size * 2, gfx.x1, y + gfx.font_size * 3)
-		text_box(gfx, f"{w.feels_like}{degrees}", x, y + gfx.font_size * 3, gfx.x1, y + gfx.font_size * 4)
+		text_box(gfx, f"{w.temp}{degrees}", (x, y + gfx.font_size, gfx.x1, y + gfx.font_size * 2))
+		text_box(gfx, f"{w.humidity} %", (x, y + gfx.font_size * 2, gfx.x1, y + gfx.font_size * 3))
+		text_box(gfx, f"{w.feels_like}{degrees}", (x, y + gfx.font_size * 3, gfx.x1, y + gfx.font_size * 4))
 		self.weather_response = None  # Clear response after rendering
 		return 1
 
-	def exec(self):
-		if self.is_timedout():
-			self.weather_response = self.weather_api.fetch(self.weather_data)
-			# print(json.dumps(self.weather_response, indent=2))
-			self.set_timeout(self.refresh_minutes * 60 * 1000)
-			if self.weather_response.get("alerts"):
-				alerts = self.weather_response["alerts"]
-				if alerts:
-					alert = alerts[0]
-					event = AlertEvent("ALERT", alert["event"], f"{alert['description']}", self.refresh_minutes * 60 * 1000)
-					self.pm.add_event(event)
-		return self.render()
+	def exec(self) -> bool:
+		if not self.is_timedout(): return False
+		self.weather_response = self.weather_api.fetch(self.weather_data)
+		print(json.dumps(self.weather_response, indent=2))
+		self.set_timeout(self.refresh_minutes * 60 * 1000)
+		if self.weather_response.get("alerts"):
+			alerts = self.weather_response["alerts"]
+			if alerts:
+				alert = alerts[0]
+				event = AlertEvent("weather_alert", alert["event"], f"{alert['description']}", self.refresh_minutes * 60 * 1000)
+				self.pm.add_event(event)
 
 	def onEvent(self, event):
 		pass			
