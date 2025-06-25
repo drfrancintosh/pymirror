@@ -33,11 +33,12 @@ class Alert(PMModule):
 
 	def _render_body(self, y0) -> None:
 		print(f"Alert._render_body: {self.message}")
-			gfx = self.gfx
-			rect = (gfx.x0, y0, gfx.x1, gfx.y1)
-			self.screen.text_box(gfx, self.message or "", rect, halign="left", valign="top")
+		gfx = self.gfx
+		rect = (gfx.x0, y0, gfx.x1, gfx.y1)
+		self.screen.text_box(gfx, self.message or "", rect, halign="left", valign="top")
 
 	def render(self, force=False) -> bool:
+		print(f"Alert.render: {self.message}")
 		update = force or self.message != self.last_message
 		if update:
 			self.clear_region()
