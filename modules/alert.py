@@ -36,7 +36,6 @@ class Alert(PMModule):
 			self.screen.text_box(gfx, self.message or "", rect, halign="left", valign="top")
 
 	def render(self, force=False) -> bool:
-		print(f"Alert render: {force}, msg={self.message}, last_message={self.last_message}")
 		update = force or self.message != self.last_message
 		if update:
 			self.clear_region()
