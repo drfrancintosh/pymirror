@@ -22,6 +22,7 @@
   },
   "modules": [
     "configs/weather_alert.json",
+    "configs/weather.json",
     "configs/cron_test.json",
     "configs/date.json",
     "configs/time.json",
