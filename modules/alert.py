@@ -32,7 +32,8 @@ class Alert(PMModule):
 
 	def _render_body(self, y0) -> None:
 			gfx = self.gfx
-			self.screen.text_box(gfx, self.message, gfx.x0, y0, gfx.x1, gfx.y1, halign="left", valign="top")
+			rect = (gfx.x0, y0, gfx.x1, gfx.y1)
+			self.screen.text_box(gfx, self.message, rect, halign="left", valign="top")
 
 	def render(self, force=False) -> bool:
 			update = force or self.message != self.last_message
