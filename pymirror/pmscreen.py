@@ -107,7 +107,7 @@ class PMScreen:
         if self._doFlush: self.flush()
 
 def main():
-    pms = PMScreen(1920, 1080)
+    pms = PMScreen(1920, 1000)
     pms.gfx.color = (0, 0, 255)
     pms.clear()
     pms.line(pms.gfx, pms.gfx.rect)
