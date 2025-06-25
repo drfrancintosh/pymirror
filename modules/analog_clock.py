@@ -64,7 +64,7 @@ class AnalogClock(PMModule):
 		else: r = dy
 
 
-		if dirty or \
+		if force or \
 		   (self.hour_hand and self.last_hour != now.hour) or \
 		   (self.minute_hand and self.last_minute != now.minute) or \
 		   (self.second_hand and self.last_second != now.second):

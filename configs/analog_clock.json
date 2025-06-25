@@ -2,6 +2,8 @@
     "module": "analog_clock",
     "moddef": {
         "name": "analog_clock",
+        "color": "#c0c000",
+        "bg_color": "#000000",
         "text_color": "#c0c000",
         "text_bg_color": "#000000",
         "position": "middle_center",
