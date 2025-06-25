@@ -47,6 +47,22 @@ class PMGfx:
     def text_bg_color(self, value):
         self._text_bg_color = tocolor(value)
 
+    @property
+    def x0(self):
+        return self.rect[0]
+
+    @property
+    def y0(self):
+        return self.rect[1]
+
+    @property
+    def x1(self):
+        return self.rect[2]
+
+    @property
+    def y1(self):
+        return self.rect[3]
+
     def _read_fonts(self) -> None:
         if self.__class__._fontlist: return # already read fonts
         self.__class__._fontlist = []

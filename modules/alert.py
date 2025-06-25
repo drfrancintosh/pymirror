@@ -18,10 +18,10 @@ class Alert(PMModule):
 		self.set_timeout(config.display_time)
 
 	def _render_heading(self) -> int: # returns next y position
+		gfx = self.gfx
 		next_y0 = gfx.y0
 		hdg = self.config.heading
 		if hdg:
-			gfx = self.gfx
 			gfx2 = copy.copy(self.gfx)
 			gfx2.set_font(hdg.font or gfx.font_name, hdg.font_size or gfx.font_size)
 			gfx2.text_color = hdg.text_color or gfx.text_color
