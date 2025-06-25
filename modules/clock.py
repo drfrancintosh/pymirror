@@ -10,10 +10,10 @@ class Clock(PMModule):
 		self.last_time = None
 		self.curr_time = datetime.now().strftime(self.date_format)
 	
-	def render(self, force: bool = False) -> None:
+	def render(self, force: bool = False) -> int:
 		if not force and self.last_time == self.curr_time: return 0
 		gfx = self.gfx
-		gfx.text_bg_color = gfx.bg_color
+		# self.clear_region(gfx)
 		self.screen.text_box(gfx, self.curr_time,
 			(gfx.x0 + self.moddef.x_offset, gfx.y0 + self.moddef.y_offset,
 			gfx.x1 + self.moddef.x_offset, gfx.y1 + self.moddef.y_offset))
