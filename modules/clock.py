@@ -1,12 +1,11 @@
 from datetime import datetime
-from pymirror.pmmodule import PMModule
-from pymirror.pmscreen import PMGfx
+from pymirror.pmmodule import PMModule, PMModuleDef
 
 class Clock(PMModule):
-	def __init__(self, pm, moddef, config):
+	def __init__(self, pm: PyMirror, moddef: PMModuleDef, config: SafeNamespace):
 		super().__init__(pm, moddef, config)
 		self.date_format = "%I:%M:%S %p"
-		if config.date_format: self.date_format = config.date_format
+		self.date_format = config.date_format if config.date_format else "%I:%M:%S %p"
 		self.last_time = None
 		self.curr_time = datetime.now().strftime(self.date_format)
 	
