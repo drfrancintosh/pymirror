@@ -1,5 +1,7 @@
 from datetime import datetime
+from pymirror import PyMirror
 from pymirror.pmmodule import PMModule, PMModuleDef
+from pymirror.safe_namespace import SafeNamespace
 
 class Clock(PMModule):
 	def __init__(self, pm: PyMirror, moddef: PMModuleDef, config: SafeNamespace):

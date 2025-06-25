@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
 import time
+from pymirror import PyMirror
 from pymirror.pmscreen import PMGfx
 from dataclasses import dataclass
+
+from pymirror.safe_namespace import SafeNamespace
 
 @dataclass
 class PMModuleDef(ABC):
@@ -19,7 +22,7 @@ class PMModuleDef(ABC):
 	disabled: bool = False
 
 class PMModule(ABC):
-	def __init__(self, pm, moddef, config):
+	def __init__(self, pm: PyMirror, moddef: PMModuleDef, config: SafeNamespace):
 		## Initialize the module based on moddef
 		## NOTE: config is often moddef.config, but not always
 		## NOTE: we only init the module on moddef, not on config
