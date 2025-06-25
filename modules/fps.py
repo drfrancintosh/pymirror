@@ -12,6 +12,7 @@ class Fps(PMModule):
 		self.last_time = now
 		fps = 1 / delta.total_seconds() if delta.total_seconds() > 0 else 0
 		text_box = self.screen.text_box
+		self.clear_region()
 		text_box(self.gfx, f"FPS: {fps:.2f}", self.gfx.rect, valign=self.config.valign, halign=self.config.halign)
 		return True
 
