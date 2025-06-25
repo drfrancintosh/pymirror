@@ -9,13 +9,13 @@ class PyMirror:
 		with open(config_fname, 'r') as file:
 			self.config = SafeNamespace(**json.load(file))
 		self.screen = PMScreen()
-		self.screen.gfx.color = self.config.color or (255, 255, 255)  # default color
-		self.screen.gfx.bg_color = self.config.bg_color or (0, 0, 0)
-		self.screen.gfx.text_color = self.config.text_color or self.screen.gfx.color
-		self.screen.gfx.text_bg_color = self.config.text_bg_color or None
-		self.screen.gfx.line_width = self.config.line_width or 5
-		self.screen.gfx.font_name = self.config.font or "DejaVuSans.ttf"
-		self.screen.gfx.font_size = self.config.font_size or 64
+		self.screen.gfx.color = self.config.screen.color or (255, 255, 255)  # default color
+		self.screen.gfx.bg_color = self.config.screen.bg_color or (0, 0, 0)
+		self.screen.gfx.text_color = self.config.screen.text_color or self.screen.gfx.color
+		self.screen.gfx.text_bg_color = self.config.screen.text_bg_color or None
+		self.screen.gfx.line_width = self.config.screen.line_width or 5
+		self.screen.gfx.font_name = self.config.screen.font or "DejaVuSans.ttf"
+		self.screen.gfx.font_size = self.config.screen.font_size or 64
 		self.screen.gfx.set_font(self.screen.gfx.font_name, self.screen.gfx.font_size)
 
 		self.screen.set_flush(False)

@@ -43,6 +43,7 @@ class PMModule(ABC):
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
 		self.subscribe(moddef.subscriptions or [])
 		if self.moddef.position:
+			print(f"Module {self.moddef.position} initialized with position {pm.config.positions}")
 			dims = pm.config.positions[self.moddef.position]
 			## this is the bounding box for the module
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
