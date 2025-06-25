@@ -62,8 +62,7 @@ class PyMirror:
 		self.new_events.append(event)
 
 	def _debug(self, module):
-		gfx = copy.copy(module.gfx)
-		print(f"Module {module.moddef.name} executed.")
+		gfx = copy.copy(self.screen.gfx)
 		self.screen.rect(gfx, module.gfx.rect, fill=None)
 		gfx.set_font(gfx.font_name, 24)
 		self.screen.text(gfx, f"{module.moddef.name}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
