@@ -80,7 +80,7 @@ class PMModule(ABC):
 	def clear_region(self) -> None:
 		""" Clear the module's region on the screen. """
 		gfx = self.gfx
-		self.screen.rect(gfx, gfx.x0, gfx.y0, gfx.x1, gfx.y1, fill=gfx.bg_color)
+		self.screen.rect(gfx, gfx.rect, fill=gfx.bg_color)
 
 	@abstractmethod
 	def render(self, force: bool = False) -> bool:
