@@ -16,7 +16,6 @@ class Alert(PMModule):
 		self.last_message = None
 		self.message = config.welcome_message
 		self.set_timeout(config.display_time)
-		self.subscribe(config.subscriptions)
 
 	def _render_heading(self) -> int: # returns next y position
 		next_y0 = gfx.y0

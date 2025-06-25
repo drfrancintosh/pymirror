@@ -41,6 +41,7 @@ class PMModule(ABC):
 		self.gfx.font_name = moddef.font or self.screen.gfx.font_name or "DejaVuSans.ttf"
 		self.gfx.font_size = moddef.font_size or 64
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
+		self.subscribe(moddef.subscriptions or [])
 		if self.moddef.position:
 			dims = pm.config.positions[self.moddef.position]
 			## this is the bounding box for the module
