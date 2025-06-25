@@ -1,0 +1,21 @@
+{
+    "module": "weather",
+    "moddef": {
+        "name": "weather",
+        "text_color": "#c0c000",
+        "text_bg_color": "#000000",
+        "font": "DejaVuSans",
+        "font_size": 64
+    },
+    "config": {
+        "weather_data": {
+            "lat": "37.50598",
+            "lon": "-77.64916",
+            "appid": "d0127c5a160a58e37651a83ff69922bf",
+            "exclude": "minutely,hourly",
+            "units": "imperial",
+            "lang": "english"
+        },
+        "body_color": "#c0c000"
+    }
+}
