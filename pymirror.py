@@ -86,7 +86,7 @@ class PyMirror:
 				self._send_events(module)
 				do_update = module.exec() # exec() returns 1 render update is needed
 				if do_update:
-					do_flush += module.render(self.screen, force=False) # render() returns 1 if flush is needed
+					do_flush += module.render(force=False) # render() returns 1 if flush is needed
 				if self.config.debug: self._debug(module)
 			if do_flush:
 				self.screen.flush()
