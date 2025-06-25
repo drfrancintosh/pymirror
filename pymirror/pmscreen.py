@@ -42,12 +42,12 @@ class PMScreen:
         if fill == "__use_bg_color__":
             # Use the gfx.background color
             self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=gfx.bg_color)
-        elif fill:
-            # Use the specified fill color
-            self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=tocolor(fill))
-        else:
+        elif fill is None:
             # No fill, just draw the outline
             self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width)
+        else:
+            # Use the specified fill color
+            self.draw.ellipse(bbox, outline=gfx.color, width=gfx.line_width, fill=tocolor(fill))
         if self._doFlush: self.flush()
 
     def rect(self, gfx: PMGfx, rect: tuple, fill="__use_bg_color__"):
