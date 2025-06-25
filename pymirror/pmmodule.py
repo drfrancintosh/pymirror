@@ -5,7 +5,8 @@ from dataclasses import dataclass
 
 @dataclass
 class PMModuleDef(ABC):
-	position: str
+	name: str = None
+	position: str = "None"
 	x_offset: int = 0
 	y_offset: int = 0
 	color: str = "(255,255,255)"
@@ -26,7 +27,7 @@ class PMModule(ABC):
 		##     and config is the module "child" instance configuration
 		self.pm = pm
 		self.screen = pm.screen
-		self.moddef = PMModuleDef(**moddef.__dict__) if moddef else PMModuleDef(position="None")
+		self.moddef = PMModuleDef(**moddef.__dict__) if moddef else PMModuleDef(name=self.__class__.__name__, position="None")
 		self.config = config
 		self.timeout = 0
 		self.subscriptions = []
@@ -84,6 +85,14 @@ class PMModule(ABC):
 		print(f"Clearing region {gfx.rect} for module {self.moddef.position}, bg_color={gfx.bg_color}")
 		self.screen.rect(gfx, gfx.rect, fill=gfx.bg_color)
 
+	def dispatchEvent(self, event) -> None:
+		method_name = f"on{event.name}Event"
+		method = getattr(self, method_name, None)
+		if method:
+			method(event)
+		else:
+			print(f"No handler for event {event.name} in module {self.moddef.position}")
+
 	@abstractmethod
 	def render(self, force: bool = False) -> bool:
 		""" Render the module on the screen.
@@ -101,7 +110,8 @@ class PMModule(ABC):
 
 	@abstractmethod
 	def onEvent(self, event) -> None:
-		"""
-		Handle an event for the module.
+		""" Handle an event.
+		This method is called when an event is dispatched to the module.
+		you can dispatch with self.dispatchEvent(event)
 		"""
 		pass

@@ -1,6 +1,7 @@
 {
     "module": "alert",
     "moddef": {
+        "name": "Weather Alert",
         "position": "middle_right",
         "font": "TOS_Title.ttf",
         "font_size": 32,

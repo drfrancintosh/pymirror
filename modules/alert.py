@@ -48,18 +48,9 @@ class Alert(PMModule):
 	def exec(self) -> bool:
 		if self.is_timedout(): self.message = None ## clear message
 		if self.message == self.last_message: return False
-		else: return True
+		else: return True	
 
-	def onAlertEvent(self, event) -> None:
+	def onEvent(self, event) -> None:
 		self.heading = event.heading
 		self.message = event.message
 		self.set_timeout(event.timeout)
-	
-	def onEvent(self, event) -> None:
-		handlers = {
-			"ALERT": self.onAlertEvent,
-		}
-		handler = handlers.get(event.name)
-		if handler: handler(event)
-		else: print(f"No handler for {event.name}")
-
