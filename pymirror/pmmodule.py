@@ -47,13 +47,15 @@ class PMModule(ABC):
 			## this is the bounding box for the module
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
 			## these are in percentages of the screen size
-			## so we need to multiply by the screen size to get the actual pixel values
+			## so we need to multiply to get the actual pixel values
 			## NOTE: self.x_offset and self.y_offset are used by the render() method
 			## 		 to offset the text position within the bounding box
-			self.gfx.x0 = self.pm.screen.gfx.width * dims[0]
-			self.gfx.y0 = self.pm.screen.gfx.height * dims[1]
-			self.gfx.x1 = self.pm.screen.gfx.width * dims[2] 
-			self.gfx.y1 = self.pm.screen.gfx.height * dims[3] 
+			self.gfx.rect = (
+				int(self.pm.screen.gfx.width * dims[0]),
+				int(self.pm.screen.gfx.height * dims[1]),
+				int(self.pm.screen.gfx.width * dims[2]),
+				int(self.pm.screen.gfx.height * dims[3])
+			)
 
 
 	def subscribe(self, event_names):
