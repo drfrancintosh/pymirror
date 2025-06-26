@@ -48,7 +48,7 @@ class WebApi(PMModule):
 		n = 0
 		display = copy.copy(self.config.display.__dict__)
 		expand_dict(display, context) # extract the number of items to display
-		n = str(display.get("n", "1"))
+		n = int(display.get("n", "1"))
 		for _n_ in range(n):
 			display = copy.copy(self.config.display.__dict__)
 			context["_n_"] = _n_
