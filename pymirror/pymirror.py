@@ -28,11 +28,12 @@ class PyMirror:
 			# self.config = SafeNamespace(**json.load(file))
 			config = json.load(file)
 		# Load secrets from .secrets file if specified
-		if config.secrets:
-			config.secrets = os.path.expandvars(config.secrets)
+		secrets_path = config.get("secrets")
+		if secrets_path:
+			secrets_path = os.path.expandvars(secrets_path)
 		else:
-			config.secrets = ".secrets"
-		load_dotenv(dotenv_path=config.secrets)
+			secrets_path = ".secrets"
+		load_dotenv(dotenv_path=secrets_path)
 		# Expand environment variables in the config
 		expand_dict(config, os.environ)
 		self.config = SafeNamespace(**config)
