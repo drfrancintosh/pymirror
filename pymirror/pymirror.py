@@ -16,17 +16,7 @@ class PyMirror:
 		self.config.secrets
 		# Load secrets from .secrets file if specified
 		load_dotenv(dotenv_path=os.path.expandvars(self.config.secrets) if self.config.secrets else ".secrets")
-		w = self.config.screen.width or 1920
-		h = self.config.screen.height or 1080
-		self.screen = PMScreen(w, h)
-		self.screen.gfx.color = self.config.screen.color or (255, 255, 255)  # default color
-		self.screen.gfx.bg_color = self.config.screen.bg_color or (0, 0, 0)
-		self.screen.gfx.text_color = self.config.screen.text_color or self.screen.gfx.color
-		self.screen.gfx.text_bg_color = self.config.screen.text_bg_color or None
-		self.screen.gfx.line_width = self.config.screen.line_width or 1
-		self.screen.gfx.font_name = self.config.screen.font or "DejaVuSans.ttf"
-		self.screen.gfx.font_size = self.config.screen.font_size or 64
-		self.screen.gfx.set_font(self.screen.gfx.font_name, self.screen.gfx.font_size)
+		self.screen = PMScreen(self.config.screen)
 
 		self.screen.set_flush(False)
 		self.modules = []
