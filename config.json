@@ -26,7 +26,6 @@
   },
   "modules": [
     "configs/fps.json",
-    "configs/rainbow.json",
     "configs/weather_alert.json",
     "configs/weather.json",
     "configs/web_api.json",

@@ -2,11 +2,11 @@
     "module": "web_api",
     "moddef": {
         "name": "newsapi.com",
-        "position": "top_center",
+        "position": "bottom_left",
         "text_color": "#000000",
         "text_bg_color": "#c0c0c0",
         "font": "DejaVuSans",
-        "font_size": 32
+        "font_size": 24
     },
     "config": {
         "update_mins": 60,
