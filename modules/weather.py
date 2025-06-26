@@ -13,12 +13,12 @@ from modules.alert import AlertEvent
 
 @dataclass
 class WeatherData:
-	lat: str
-	lon: str
+	lat: str = "37.5050"
+	lon: str = "-77.6491"
 	appid: str = "$OPENWEATHERMAP_API_KEY"
-	exclude: str #current,minutely,hourly,daily,alerts
-	units: str #standard, metric, imperial
-	lang: str
+	exclude: str = "minutely"
+	units: str = "imperial"
+	lang: str = "english"
 
 class OpenWeatherMap:
 	def __init__(self):
