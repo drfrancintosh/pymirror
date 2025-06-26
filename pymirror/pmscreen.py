@@ -99,7 +99,7 @@ class PMScreen:
         # else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
         if gfx.text_bg_color is not None: self.draw.rectangle(rect, fill=gfx.text_bg_color)
-        lines = _text_split(gfx, msg, rect, split_fn=_text_split_chars)
+        lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
         for line in lines:
             print("LINE:", line)
             self.draw.text((text_x0, text_y0), line, fill=gfx.text_color, font=gfx.font)
@@ -141,12 +141,12 @@ def _fit_text_words(gfx, words: list[str], rect: tuple) -> int:
     while True:
         if n >= max:
             return n
-        last_n = n
         test_words = words[:n]
         test_line = " ".join(test_words)
         width = gfx.font.getbbox(test_line)[2]  # Get width of the text
         if width > _width(rect):
             return last_n
+        last_n = n
         n += 1
 
 def _text_split_words(gfx, s, rect: tuple) -> list[str]:
