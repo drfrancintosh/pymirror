@@ -56,6 +56,7 @@ class Weather(PMModule):
 		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
 		x = gfx.x0
 		y = gfx.y0
+		print(f"self.weather_response: {self.weather_response}")
 		w = SimpleNamespace(**self.weather_response["current"])
 		text = self.screen.text
 		text_box = self.screen.text_box
