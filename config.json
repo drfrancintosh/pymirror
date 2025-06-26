@@ -1,5 +1,5 @@
 {
-  "debug": true,
+  "debug": false,
   "screen": {
     "font": "DejaVuSans.ttf",
     "font_size": 64,
