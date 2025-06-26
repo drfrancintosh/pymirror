@@ -4,21 +4,26 @@ from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMGfx
 import math
 
-def _compute_clock_positions(x0, y0, r):
-    """Compute the 12 positions around a clock face given center (x0, y0) and radius r."""
-    positions = []
-    for hour in range(12):
-        # Compute the angle for the hour (in radians)
-        theta = 2 * math.pi * (hour - 2) / 12 
-        
-        # Calculate x, y using the angle and radius
-        x = x0 + r * math.cos(theta)  # x-coordinate
-        y = y0 + r * math.sin(theta)  # y-coordinate
-        
-        # Append the position as a tuple (x, y)
-        positions.append((x, y))
-    
-    return positions
+def _compute_clock_positions(gfx, dx, dy, r):
+	"""Compute the 12 positions around a clock face given center (x0, y0) and radius r."""
+	positions = []
+	for hour in range(12):
+		hrs = str(hour)
+		# Compute the angle for the hour (in radians)
+		theta = 2 * math.pi * (hour - 2) / 12 
+		x0 = gfx.x0 + dx  # Center x-coordinate
+		y0 = gfx.y0 + dy  # Center y-coordinate
+		# Calculate x, y using the angle and radius
+		x0 = x0 + r * math.cos(theta)  # x-coordinate
+		y0 = y0 + r * math.sin(theta)  # y-coordinate
+		# Adjust for the font size to center the text
+		x0 -= gfx.font_width * len(hrs) // 2
+		y0 -= gfx.font_height // 2
+		x1 = x0 + gfx.font_width * len(hrs)
+		y1 = y0 + gfx.font_height
+		positions.append((x0, y0, x1, y1))
+
+	return positions
 
 def _compute_hand_posn(x0, y0, r, value, divisor, offset):
 	value += offset 
@@ -47,8 +52,8 @@ class AnalogClock(PMModule):
 		gfx = self.gfx
 		hr = 1
 		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
-		for posn in _compute_clock_positions(gfx.x0 + dx, gfx.y0 + dy, r):
-			self.screen.text_box(gfx, str(hr), (posn[0]-gfx.font_width//2, posn[1]-gfx.font_height//2, posn[0]+gfx.font_width*len(str(hr)), posn[1]+gfx.font_height), valign="center", halign="center")
+		for posn in _compute_clock_positions(gfx, dx, dy, r):
+			self.screen.text_box(gfx, str(hr), posn, valign="center", halign="center")
 			hr += 1
 		gfx.line_width = 3
 
