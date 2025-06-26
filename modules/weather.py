@@ -37,7 +37,7 @@ def _paragraph_fix(text: str) -> str:
 		lines = paragraph.split("\n")
 		paragraph = " ".join(line.strip() for line in lines)
 		results.append(paragraph)
-	return "\n".join(results)
+	return "\n\n".join(results)
 
 class Weather(PMModule):
 	def __init__(self, pm, moddef, config):
