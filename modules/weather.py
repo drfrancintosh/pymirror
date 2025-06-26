@@ -48,7 +48,7 @@ class Weather(PMModule):
 		self.weather_data = WeatherData(**config.weather_data.__dict__)
 		print(f"WeatherData before: {self.weather_data}")
 		print(f"{os.path.expandvars('$OPENWEATHERMAP_API_KEY')}")
-		self.weather_data.appid == os.path.expandvars(self.weather_data.appid) # Expand environment variables
+		self.weather_data.appid = os.path.expandvars(self.weather_data.appid) # Expand environment variables
 		print(f"WeatherData after: {self.weather_data}")
 		self.refresh_minutes = 5
 		self.set_timeout(1) # refresh right away
