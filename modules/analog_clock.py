@@ -8,7 +8,7 @@ def _compute_clock_positions(gfx, dx, dy, r):
 	"""Compute the 12 positions around a clock face given center (x0, y0) and radius r."""
 	positions = []
 	for hour in range(12):
-		hrs = str((hour+1) % 12 + 1)  # Convert hour to 1-12 format
+		hrs = str(hour)  # Convert hour to 1-12 format
 		(offset, baseline, width, height) = gfx.font.getbbox(hrs)  # Get bounding box of the hour text
 		print(hrs, offset, baseline, width, height)
 		# Compute the angle for the hour (in radians)
@@ -23,7 +23,7 @@ def _compute_clock_positions(gfx, dx, dy, r):
 		y0 -= height // 2
 		x1 = x0 + width
 		y1 = y0 + height
-		positions.append((x0, y0, x1, y1))
+		positions.append(hrs, (x0, y0, x1, y1))
 
 	return positions
 
@@ -55,7 +55,8 @@ class AnalogClock(PMModule):
 		hr = 1
 		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
 		for posn in _compute_clock_positions(gfx, dx, dy, r):
-			self.screen.text_box(gfx, str(hr), posn, valign="center", halign="center")
+			hrs, rect = posn
+			self.screen.text_box(gfx, hrs, rect, valign="center", halign="center")
 			hr += 1
 		gfx.line_width = 3
 
