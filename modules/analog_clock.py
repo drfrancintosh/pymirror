@@ -21,8 +21,8 @@ def _compute_clock_positions(gfx, dx, dy, r):
 		# Adjust for the font size to center the text
 		x0 = int(x0)
 		y0 = int(y0)
-		x1 = x0 + width
-		y1 = y0 + height
+		x1 = x0 + width + baseline
+		y1 = y0 + height + offset
 		positions.append([hrs, (x0, y0, x1, y1)])
 
 	return positions
