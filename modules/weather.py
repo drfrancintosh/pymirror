@@ -15,7 +15,7 @@ from modules.alert import AlertEvent
 class WeatherData:
 	lat: str = "37.5050"
 	lon: str = "-77.6491"
-	appid: str = "$OPENWEATHERMAP_API_KEY"
+	appid: str = ""
 	exclude: str = "minutely"
 	units: str = "imperial"
 	lang: str = "english"
