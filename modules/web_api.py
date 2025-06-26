@@ -35,6 +35,7 @@ def _paragraph_fix(text: str) -> str:
 		results.append(paragraph)
 	return "\n\n".join(results)
 
+
 class WebApi(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
@@ -44,6 +45,11 @@ class WebApi(PMModule):
 		self.response = None
 		self.item_number = 0
 		self.max_items = 1
+
+	def _render_body(self, y0, msg) -> None:
+		gfx = self.gfx
+		rect = (gfx.x0, y0, gfx.x1, gfx.y1)
+		self.screen.text_box(gfx, msg or "<empty>", rect, halign="left", valign="center")
 
 	def render(self, force: bool = False) -> int:
 		context = {
@@ -65,6 +71,7 @@ class WebApi(PMModule):
 		display = copy.copy(self.config.display.__dict__)
 		expand_dict(display, context) # extract the 'nth' item to display
 		print(f"WebApi.render: {self.item_number} {display}, context: {context}")
+		self._render_body(self.gfx.y0, display.header)
 		self.item_number += 1
 
 		return 0
