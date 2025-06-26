@@ -140,11 +140,11 @@ def _fit_text_words(gfx, words: list[str], rect: tuple) -> int:
     max = len(words)
     while True:
         if n >= max:
-            return last_n
+            return n
         test_words = words[:n]
         test_line = " ".join(test_words)
         width = gfx.font.getbbox(test_line)[2]  # Get width of the text
-        if width > _width(rect):
+        if width >= _width(rect):
             return last_n
         last_n = n
         n += 1
