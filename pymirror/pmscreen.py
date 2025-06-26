@@ -102,7 +102,7 @@ class PMScreen:
 
     def flush(self):
         portrait = self.img.rotate(90, expand=True) 
-        raw = self.img.tobytes("raw")
+        raw = portrait.tobytes("raw")
         # Write to framebuffer
         with open("/dev/fb0", "wb") as f:
             f.write(raw[0::2])  # Write every second byte for RGB565 format
