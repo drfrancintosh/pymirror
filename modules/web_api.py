@@ -71,7 +71,7 @@ class WebApi(PMModule):
 		display = copy.copy(self.config.display.__dict__)
 		expand_dict(display, context) # extract the 'nth' item to display
 		print(f"WebApi.render: {self.item_number} {display}, context: {context}")
-		self._render_body(self.gfx.y0, display.header)
+		self._render_body(self.gfx.y0, display['header'])
 		self.item_number += 1
 
 		return 0
