@@ -11,13 +11,13 @@ class PMScreen:
         self.gfx.width, self.gfx.height = self.img.size
         self.gfx.rect = (0, 0, self.gfx.width-1, self.gfx.height-1)
         self.set_flush(False) ## do not flush by default
-        self.gfx.color = self.config.screen.color or (255, 255, 255)  # default color
-        self.gfx.bg_color = self.config.screen.bg_color or (0, 0, 0)
-        self.gfx.text_color = self.config.screen.text_color or self.gfx.color
-        self.gfx.text_bg_color = self.config.screen.text_bg_color or None
-        self.gfx.line_width = self.config.screen.line_width or 1
-        self.gfx.font_name = self.config.screen.font or "DejaVuSans.ttf"
-        self.gfx.font_size = self.config.screen.font_size or 64
+        self.gfx.color = self.config.color or (255, 255, 255)  # default color
+        self.gfx.bg_color = self.config.bg_color or (0, 0, 0)
+        self.gfx.text_color = self.config.text_color or self.gfx.color
+        self.gfx.text_bg_color = self.config.text_bg_color or None
+        self.gfx.line_width = self.config.line_width or 1
+        self.gfx.font_name = self.config.font or "DejaVuSans.ttf"
+        self.gfx.font_size = self.config.font_size or 64
         self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
 
         self._hard_clear()
