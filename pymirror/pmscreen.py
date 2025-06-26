@@ -97,6 +97,7 @@ class PMScreen:
         # elif valign == "bottom": text_y0 = y1 - height
         # else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
+        gfx.text_bg_color = "#c0c0c0"
         if gfx.text_bg_color is not None: self.draw.rectangle(rect, fill=gfx.text_bg_color)
         lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
         for line in lines:
