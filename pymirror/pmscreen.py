@@ -87,10 +87,10 @@ class PMScreen:
         text_x0 = x0
         text_y0 = y0
 
-        if halign == "center": text_x0 = x0 + (x1 - x0 - width) / 2
-        elif halign == "left": text_x0 = x0
-        elif halign == "right": text_x0 = x1 - width
-        else: print(f"Invalid halign '{halign}' in text_box, using 'center' instead.")
+        # if halign == "center": text_x0 = x0 + (x1 - x0 - width) / 2
+        # elif halign == "left": text_x0 = x0
+        # elif halign == "right": text_x0 = x1 - width
+        # else: print(f"Invalid halign '{halign}' in text_box, using 'center' instead.")
 
         # if valign == "center": text_y0 = y0 + (y1 - y0 - (height+baseline/2)) / 2
         # elif valign == "top": text_y0 = y0 - baseline
