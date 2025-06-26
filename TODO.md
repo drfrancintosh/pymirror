@@ -14,6 +14,8 @@
 
 12. Boundary clipping ?
 
+13. weather.py - error checking for bad api results
+
 # DONE
 
 1. update gfx object so "set_font(font_name, font_size)" is 'permanent'

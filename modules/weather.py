@@ -25,7 +25,6 @@ class OpenWeatherMap:
 		self.base_url = "https://api.openweathermap.org/data/3.0/onecall?"
 
 	def fetch(self, args: WeatherData):
-		print(f"Fetching {args.__dict__}")
 		response = requests.get(self.base_url, params=args.__dict__)
 		if response.ok:
 			return response.json()
@@ -46,10 +45,7 @@ class Weather(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.weather_data = WeatherData(**config.weather_data.__dict__)
-		print(f"WeatherData before: {self.weather_data}")
-		print(f"{os.path.expandvars('$OPENWEATHERMAP_API_KEY')}")
 		self.weather_data.appid = os.path.expandvars(self.weather_data.appid) # Expand environment variables
-		print(f"WeatherData after: {self.weather_data}")
 		self.refresh_minutes = 5
 		self.set_timeout(1) # refresh right away
 		self.weather_response = None
@@ -61,7 +57,6 @@ class Weather(PMModule):
 		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
 		x = gfx.x0
 		y = gfx.y0
-		print(f"self.weather_response: {self.weather_response}")
 		w = SimpleNamespace(**self.weather_response.get("current"))
 		if not w: return 0
 		text = self.screen.text
@@ -80,7 +75,6 @@ class Weather(PMModule):
 	def exec(self) -> bool:
 		if not self.is_timedout(): return False
 		self.weather_response = self.weather_api.fetch(self.weather_data)
-		# print(json.dumps(self.weather_response, indent=2))
 		self.set_timeout(self.refresh_minutes * 60 * 1000)
 		if self.weather_response.get("alerts"):
 			alerts = self.weather_response["alerts"]

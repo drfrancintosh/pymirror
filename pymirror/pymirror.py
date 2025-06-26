@@ -9,12 +9,13 @@ from dotenv import load_dotenv
 
 class PyMirror:
 	def __init__(self, config_fname):
-		load_dotenv()  # Load environment variables from .env file
+		# Load environment variables from .env file
+		load_dotenv()  
 		with open(config_fname, 'r') as file:
 			self.config = SafeNamespace(**json.load(file))
 		self.config.secrets
+		# Load secrets from .secrets file if specified
 		load_dotenv(dotenv_path=os.path.expandvars(self.config.secrets) if self.config.secrets else ".secrets")
-		print(os.environ)
 		w = self.config.screen.width or 1920
 		h = self.config.screen.height or 1080
 		self.screen = PMScreen(w, h)
