@@ -54,10 +54,10 @@ class PMModule(ABC):
 			## NOTE: self.x_offset and self.y_offset are used by the render() method
 			## 		 to offset the text position within the bounding box
 			self.gfx.rect = (
-				int(self.pm.screen.gfx.width * dims[0]),
-				int(self.pm.screen.gfx.height * dims[1]),
-				int(self.pm.screen.gfx.width * dims[2]),
-				int(self.pm.screen.gfx.height * dims[3])
+				int((self.pm.screen.gfx.width - 1) * dims[0]),
+				int((self.pm.screen.gfx.height - 1) * dims[1]),
+				int((self.pm.screen.gfx.width - 1) * dims[2]),
+				int((self.pm.screen.gfx.height - 1) * dims[3])
 			)
 
 
