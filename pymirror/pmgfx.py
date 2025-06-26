@@ -86,9 +86,9 @@ class PMGfx:
                 self.font = ImageFont.truetype(font_path, size=pitch)
                 self.font_name = font_name
                 self.font_size = pitch
-                return True # successfully set the font
-        self.font_metrics = self.font.getbbox("M")
-        self.font_height = self.font_metrics[3] - self.font_metrics[1]
+                self.font_metrics = self.font.getbbox("M")
+                self.font_height = self.font_metrics[3]
+        return True # successfully set the font
         print(f"Font '{font_name}' not found in system fonts. font unchanged.")
         return False
     
