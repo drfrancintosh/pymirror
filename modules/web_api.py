@@ -45,9 +45,14 @@ class WebApi(PMModule):
 			"_n_": 0,
 			"payload": self.response,
 		}
+		n = 0
 		display = copy.copy(self.config.display.__dict__)
-		expand_dict(display, context)
-		print(f"WebApi.render: {display}")
+		expand_dict(display, context) # extract the number of items to display
+		for n in range(display.get("n", 0)):
+			display = copy.copy(self.config.display.__dict__)
+			context["_n_"] = n
+			expand_dict(display, context) # extract the number of items to display
+			print(f"WebApi.render: {display}")
 		return 0
 
 	def exec(self) -> bool:

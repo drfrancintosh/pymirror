@@ -26,8 +26,8 @@
         },
         "display": {
             "n": "{{payload.totalResults}}",
-            "header": "{{payload.articles[_n_].title}}",
-            "body": "{{payload.articles[_n_].description}}",
+            "header": "{{payload.articles[_n_].description}}",
+            "body": "{{payload.articles[_n_].content}}",
             "footer": "{{payload.articles[_n_].source.name}} @ {{payload.articles[_n_].publishedAt}}"
         }
     }
