@@ -53,7 +53,7 @@ class WebApi(PMModule):
 			display = copy.copy(self.config.display.__dict__)
 			context["_n_"] = _n_
 			expand_dict(display, context) # extract the number of items to display
-			print(f"WebApi.render: {display}")
+			print(f"WebApi.render: {display}, context: {context}")
 		return 0
 
 	def exec(self) -> bool:
