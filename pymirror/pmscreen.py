@@ -82,6 +82,7 @@ class PMScreen:
         ## get text bounding box
         (x_min, baseline, x_max, y_max) = gfx.font.getbbox(msg)
         print(f"Text bounding box: {msg} ({x_min}, {baseline}, {x_max}, {y_max})")
+        print(f"Text box rect: {gfx}")
         width = x_max - x_min
         height = y_max
         x0, y0, x1, y1 = rect
