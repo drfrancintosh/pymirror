@@ -81,8 +81,6 @@ class PMScreen:
     def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
         ## get text bounding box
         (x_min, baseline, x_max, y_max) = gfx.font.getbbox(msg)
-        print(f"Text bounding box: {msg} ({x_min}, {baseline}, {x_max}, {y_max})")
-        print(f"Text box rect: {gfx.font_metrics}")
         width = x_max - x_min
         height = y_max
         x0, y0, x1, y1 = rect
@@ -180,6 +178,7 @@ def _text_split(gfx, s, split_fn=None) -> list[str]:
     first_line = True
     height = 0
     for s in s.splitlines():
+        print(f"Processing line: {s}")
         height += gfx.font_height
         if height >= gfx.height:
             break
