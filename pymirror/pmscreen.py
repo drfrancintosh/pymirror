@@ -160,7 +160,6 @@ def _text_split_words(gfx, s, rect: tuple) -> list[str]:
         lines.append(" ".join(words[n:n+l]))
         n += l
         if n >= end: break
-        lines.append("") # Add a newline after each line that did not fit
     return lines
 
 def _text_split_chars(gfx, s, rect: tuple) -> list[str]:
