@@ -30,14 +30,14 @@ class Alert(PMModule):
 			rect = (gfx2.x0, next_y0, gfx2.x1, next_y0 +gfx2.font_size)
 			print(f"Alert: {rect} {self.heading} {hdg.text_color} {hdg.text_bg_color}")
 			self.screen.text_box(gfx2, self.heading, rect, halign="center", valign="center")
-			next_y0 += gfx2.font_size + 4 # add some space after the heading
+			next_y0 += gfx2.font_size
 		return next_y0
 
 	def _render_body(self, y0) -> None:
 		gfx = self.gfx
 		rect = (gfx.x0, y0, gfx.x1, gfx.y1)
 		print(f"Alert: {rect} {self.message} {gfx.text_color} {gfx.text_bg_color}")
-		self.screen.text_box(gfx, self.message or "", rect, halign="left", valign="top")
+		self.screen.text_box(gfx, self.message or "", rect, halign="center", valign="center")
 
 	def render(self, force=False) -> bool:
 		update = force or self.message != self.last_message
