@@ -8,7 +8,7 @@ def _compute_clock_positions(gfx, dx, dy, r):
 	"""Compute the 12 positions around a clock face given center (x0, y0) and radius r."""
 	positions = []
 	for hour in range(12):
-		hrs = str(hour)  # Convert hour to 1-12 format
+		hrs = str(hour+1)  # Convert hour to 1-12 format
 		(offset, baseline, width, height) = gfx.font.getbbox(hrs)  # Get bounding box of the hour text
 		print(hrs, offset, baseline, width, height)
 		# Compute the angle for the hour (in radians)
