@@ -9,12 +9,13 @@
         "font_size": 32
     },
     "config": {
-        "update_mins": 15,
+        "update_mins": 60,
         "cycle_seconds": 15,
         "url": "https://newsapi.org/v2/top-headlines",
         "params": {
             "apiKey": "$NEWSAPI_KEY",
-            "country": "us"
+            "country": "us",
+            "pageSize": 10
         },
         "colors":
         {
@@ -25,7 +26,7 @@
             "publishedAt": "#000000"
         },
         "display": {
-            "n": "{{payload.totalResults}}",
+            "max": "{{payload.totalResults}}",
             "header": "{{payload.articles[_n_].description}}",
             "body": "{{payload.articles[_n_].content}}",
             "footer": "{{payload.articles[_n_].source.name}} @ {{payload.articles[_n_].publishedAt}}"

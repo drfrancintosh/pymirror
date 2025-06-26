@@ -39,42 +39,50 @@ class WebApi(PMModule):
 		super().__init__(pm, moddef, config)
 		self.api = Api(config)
 		self.timer.set_timeout(1) # refresh right away
+		self.display_timer = PMTimer(0)
+		self.response = None
+		self.item_number = 0
+		self.max_items = 1
 
 	def render(self, force: bool = False) -> int:
 		context = {
 			"_n_": 0,
 			"payload": self.response,
 		}
-		n = 0
+
+		 # extract the maximum number of items to display
 		display = copy.copy(self.config.display.__dict__)
-		expand_dict(display, context) # extract the number of items to display
-		n = int(display.get("n", "1"))
-		for _n_ in range(n):
-			display = copy.copy(self.config.display.__dict__)
-			context["_n_"] = _n_
-			expand_dict(display, context) # extract the number of items to display
-			print(f"WebApi.render: {display}, context: {context}")
+		expand_dict(display, context)
+		self.max_items = int(display.get("max", "1"))
+	
+		# reset the item number if necessar
+		if self.item_number >= self.max_items:
+			self.item_number = 0
+
+		# extract the 'nth' item to display
+		context["_n_"] = self.item_number
+		display = copy.copy(self.config.display.__dict__)
+		expand_dict(display, context) # extract the 'nth' item to display
+		print(f"WebApi.render: {self.item_number} {display}, context: {context}")
+		self.item_number += 1
+
 		return 0
 
 	def exec(self) -> bool:
-		if not self.timer.is_timedout(): return False
-		self.response = self.api.fetch()
-		self.timer.set_timeout(self.config.update_mins * 60 * 1000)
-		if self.response.get("error"):
-			print(f"Error fetching data: {self.response['error']}")
-			return False
-		return True
-
+		if self.timer.is_timedout():
+			self.response = self.api.fetch()
+			self.timer.set_timeout(self.config.update_mins * 60 * 1000)
+			self.display_timer.set_timeout(1)
+			self.item_number = 0
+			self.max_items = 1
+			if self.response.get("error"):
+				print(f"Error fetching data: {self.response['error']}")
+		if self.display_timer.is_timedout():
+			self.display_timer.set_timeout(self.config.display_time * 1000)
+			if self.response:
+				self.render()
+				return True
+		return False
+	
 	def onEvent(self, event):
 		pass			
-			
-		
-def main():
-	parms = WeatherData(37.5037, -77.6428, "appid", "minutely,hourly,daily", "imperial", "english")	
-	weather = OpenWeatherMap()
-	current = weather.fetch(parms)
-	print(json.dumps(current, indent=2))
-
-if __name__ == "__main__":
-	main()
-
