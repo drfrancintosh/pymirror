@@ -8,8 +8,6 @@
 
 7. Some sort of full refresh. PyMirror would clear the screen and all render methods would be called with "force=True"
 
-9. Handle Portrait mode
-
 10. handle exceptions
 
 12. Boundary clipping ?
@@ -35,6 +33,8 @@
 
 8. Convert all forms of color to 32-bit integer for use in PIL "I" mode
 
+9. Handle Portrait mode
+
 11. text_box() needs text_wrap abilities
     - None (just a straight line of text)
     - Wrap (split on character boundaries)
@@ -45,3 +45,4 @@
 13. Update screen.draw() methods to accept tuples rather than parms
 
 14. Move configurations to separate files
+

@@ -2,20 +2,15 @@ import importlib
 import json
 import copy
 import os
+from dotenv import load_dotenv
+
 from pymirror.pmscreen import PMScreen
 from pymirror.safe_namespace import SafeNamespace
-from pymirror.utils import snake_to_pascal
-from dotenv import load_dotenv
+from pymirror.utils import snake_to_pascal, expand_dict
 
 class PyMirror:
 	def __init__(self, config_fname):
-		# Load environment variables from .env file
-		load_dotenv()  
-		with open(config_fname, 'r') as file:
-			self.config = SafeNamespace(**json.load(file))
-		self.config.secrets
-		# Load secrets from .secrets file if specified
-		load_dotenv(dotenv_path=os.path.expandvars(self.config.secrets) if self.config.secrets else ".secrets")
+		self._load_config(config_fname)
 		self.screen = PMScreen(self.config.screen)
 
 		self.screen.set_flush(False)
@@ -24,6 +19,23 @@ class PyMirror:
 		self.events = []
 
 		self._load_modules()
+
+	def _load_config(self, config_fname):
+		# read .env file if it exists
+		load_dotenv()
+		# Load the main configuration file
+		with open(config_fname, 'r') as file:
+			# self.config = SafeNamespace(**json.load(file))
+			config = json.load(file)
+		# Load secrets from .secrets file if specified
+		if config.secrets:
+			config.secrets = os.path.expandvars(config.secrets)
+		else:
+			config.secrets = ".secrets"
+		load_dotenv(dotenv_path=config.secrets)
+		# Expand environment variables in the config
+		expand_dict(config, os.environ)
+		self.config = SafeNamespace(**config)
 
 	def _load_modules(self):
 		for module_config in self.config.modules:
@@ -78,7 +90,7 @@ class PyMirror:
 		while True:
 			self.events = self.new_events # dispose of old events, process new events
 			self.new_events = []
-			is_dirty = 1
+			is_dirty = 0
 			for module in self.modules:
 				if module.moddef.disabled: continue
 				self._send_events(module)
