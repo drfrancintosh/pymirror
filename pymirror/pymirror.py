@@ -4,7 +4,8 @@ import copy
 from pymirror.pmscreen import PMScreen
 from pymirror.safe_namespace import SafeNamespace
 from pymirror.utils import snake_to_pascal
-from dontenv import load_dotenv
+from dotenv import load_dotenv
+
 class PyMirror:
 	def __init__(self, config_fname):
 		load_dotenv()  # Load environment variables from .env file
