@@ -30,6 +30,14 @@ class OpenWeatherMap:
 		else:
 			return {"error": "error"}
 
+def _paragraph_fix(text: str) -> str:
+	results = []
+	paragraphs = text.split("\n\n")
+	for paragraph in paragraphs:
+		lines = paragraph.split("\n")
+		paragraph = " ".join(line.strip() for line in lines)
+		results.append(paragraph)
+	return "\n".join(results)
 
 class Weather(PMModule):
 	def __init__(self, pm, moddef, config):
@@ -69,7 +77,7 @@ class Weather(PMModule):
 			alerts = self.weather_response["alerts"]
 			if alerts:
 				alert = alerts[0]
-				event = AlertEvent("weather_alert", alert["event"], f"{alert['description']}", self.refresh_minutes * 60 * 1000)
+				event = AlertEvent("weather_alert", alert["event"], f"{_paragraph_fix(alert['description'])}", self.refresh_minutes * 60 * 1000)
 				self.pm.add_event(event)
 		return True
 
