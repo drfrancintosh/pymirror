@@ -23,7 +23,7 @@ def _compute_clock_positions(gfx, dx, dy, r):
 		y0 -= height // 2
 		x1 = x0 + width
 		y1 = y0 + height
-		positions.append(hrs, (x0, y0, x1, y1))
+		positions.append((hrs, (x0, y0, x1, y1)))
 
 	return positions
 
