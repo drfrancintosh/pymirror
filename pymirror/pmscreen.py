@@ -4,6 +4,7 @@ from pymirror.pmgfx import PMGfx, tocolor
 
 class PMScreen:
     def __init__(self, config):
+        self.config = config
         self.img = Image.new("I", (config.width, config.height), 0)
         self.draw = ImageDraw.Draw(self.img)
         self.gfx = PMGfx()
