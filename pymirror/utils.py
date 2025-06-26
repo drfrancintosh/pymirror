@@ -1,5 +1,6 @@
 import os
 from types import SimpleNamespace
+from jinja2 import Template
 
 def snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
@@ -10,7 +11,8 @@ def expand_string(s: str, context: dict) -> str:
 	if isinstance(s, str):
 		s = os.path.expandvars(s)
 		try:
-			s = s.format(**context)
+			template = Template(s)
+			s = template.render(**context)
 		except KeyError as e:
 			## print(f"KeyError: {e} in string '{s}' with context {context}")
 			pass

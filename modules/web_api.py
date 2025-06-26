@@ -5,6 +5,8 @@ import os
 import requests
 import json
 import copy
+from jinja2 import Template
+
 from dataclasses import dataclass
 from pymirror.pmmodule import PMModule
 from modules.alert import AlertEvent
