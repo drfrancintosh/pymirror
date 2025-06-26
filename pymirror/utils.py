@@ -15,7 +15,6 @@ def expand_string(s: str, context: dict) -> str:
 			s = template.render(**context)
 		except Exception as e:
 			print(f"KeyError: {e} in string '{s}' with context {context}")
-			raise e
 			pass
 	return s
 
