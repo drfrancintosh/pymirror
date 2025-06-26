@@ -99,6 +99,7 @@ class PMScreen:
 
         if gfx.text_bg_color is not None: self.draw.rectangle(rect, fill=gfx.text_bg_color)
         lines = _text_split(gfx, msg, split_fn=_text_split_words)
+        print(f"Text box lines: {lines}")
         for line in lines:
             self.draw.text((text_x0, text_y0), line, fill=gfx.text_color, font=gfx.font)
             text_y0 += gfx.font_height
