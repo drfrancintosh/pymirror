@@ -8,8 +8,8 @@
     "bg_color": "#000000",
     "text_color": "(255,255,255)",
     "text_bg_color": null,
-    "width": 1920,
-    "height": 1080
+    "width": 1080,
+    "height": 1920
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
