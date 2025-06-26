@@ -4,11 +4,13 @@ import copy
 from pymirror.pmscreen import PMScreen
 from pymirror.safe_namespace import SafeNamespace
 from pymirror.utils import snake_to_pascal
-
+from dontenv import load_dotenv
 class PyMirror:
 	def __init__(self, config_fname):
+		load_dotenv()  # Load environment variables from .env file
 		with open(config_fname, 'r') as file:
 			self.config = SafeNamespace(**json.load(file))
+		load_dotenv(self.config.secrets if self.config.secrets else ".secrets")
 		w = self.config.screen.width or 1920
 		h = self.config.screen.height or 1080
 		self.screen = PMScreen(w, h)
@@ -25,6 +27,8 @@ class PyMirror:
 		self.modules = []
 		self.new_events = []
 		self.events = []
+
+		self.secrets = PMSecrets(self.config.secrets if self.config.secrets else ".secrets")
 		self._load_modules()
 
 	def _load_modules(self):

@@ -12,7 +12,7 @@
         "weather_data": {
             "lat": "37.50598",
             "lon": "-77.64916",
-            "appid": "d0127c5a160a58e37651a83ff69922bf",
+            "appid": "$OPENWEATHERMAP_API_KEY",
             "exclude": "minutely,hourly",
             "units": "imperial",
             "lang": "english"

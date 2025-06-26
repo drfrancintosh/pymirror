@@ -1,6 +1,7 @@
 # weather.py
 # https://openweathermap.org/api/one-call-3#current
 
+import os
 import requests
 import json
 import copy
@@ -14,7 +15,7 @@ from modules.alert import AlertEvent
 class WeatherData:
 	lat: str
 	lon: str
-	appid: str
+	appid: str = "$OPENWEATHERMAP_API_KEY"
 	exclude: str #current,minutely,hourly,daily,alerts
 	units: str #standard, metric, imperial
 	lang: str
@@ -43,6 +44,8 @@ class Weather(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.weather_data = WeatherData(**config.weather_data.__dict__)
+		if self.weather_data.appid[0] == "$":
+			self.weather_data.appid = os.getenv(self.weather_data.appid[1:])  # Remove the $ and get the environment variable
 		self.refresh_minutes = 5
 		self.set_timeout(1) # refresh right away
 		self.weather_response = None
