@@ -8,7 +8,11 @@ def expand_string(s: str, context: dict) -> str:
 	if not s: return s
 	if isinstance(s, str):
 		s = os.path.expandvars(s)
-		s = s.format(**context)
+		try:
+			s = s.format(**context)
+		except KeyError as e:
+			## print(f"KeyError: {e} in string '{s}' with context {context}")
+			pass
 	return s
 
 def expand_dict(config: dict, context: dict):
