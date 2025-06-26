@@ -78,15 +78,15 @@ class PyMirror:
 		while True:
 			self.events = self.new_events # dispose of old events, process new events
 			self.new_events = []
-			do_flush = 0
+			is_dirty = 1
 			for module in self.modules:
 				if module.moddef.disabled: continue
 				self._send_events(module)
 				do_update = module.exec() # exec() returns 1 render update is needed
 				if do_update:
-					do_flush += module.render(force=False) # render() returns 1 if flush is needed
+					is_dirty += module.render(force=False) # render() returns 1 if something changed
 				if self.config.debug: self._debug(module)
-			if do_flush:
+			if is_dirty:
 				self.screen.flush()
 
 def main():
