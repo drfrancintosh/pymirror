@@ -28,7 +28,7 @@
             "n": "{payload.totalResults}",
             "header": "{payload.articles[_n_].}",
             "body": "{payload.articles[_n_].description}",
-            "footer": "{payload.articles[_n_].source.name} @ {payload.articles[_n_].publishedAt}",
+            "footer": "{payload.articles[_n_].source.name} @ {payload.articles[_n_].publishedAt}"
         }
     }
 }
