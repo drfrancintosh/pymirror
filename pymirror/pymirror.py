@@ -14,6 +14,7 @@ class PyMirror:
 			self.config = SafeNamespace(**json.load(file))
 		self.config.secrets
 		load_dotenv(dotenv_path=os.path.expandvars(self.config.secrets) if self.config.secrets else ".secrets")
+		print(os.environ)
 		w = self.config.screen.width or 1920
 		h = self.config.screen.height or 1080
 		self.screen = PMScreen(w, h)
