@@ -25,6 +25,7 @@ class OpenWeatherMap:
 		self.base_url = "https://api.openweathermap.org/data/3.0/onecall?"
 
 	def fetch(self, args: WeatherData):
+		print(f"Fetching {args.__dict__}")
 		response = requests.get(self.base_url, params=args.__dict__)
 		if response.ok:
 			return response.json()
