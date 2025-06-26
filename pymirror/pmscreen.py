@@ -103,7 +103,7 @@ class PMScreen:
         for line in lines:
             print("LINE:", line)
             self.draw.text((text_x0, text_y0), line, fill=gfx.text_color, font=gfx.font)
-            text_y0 += font_height
+            text_y0 += font_height / 2
         if self._doFlush: self.flush()
 
     def flush(self):
