@@ -43,54 +43,58 @@ class WebApi(PMModule):
 		self.timer.set_timeout(1) # refresh right away
 		self.display_timer = PMTimer(0)
 		self.response = None
-		self.item_number = 0
-		self.max_items = 1
+		self.items = 0
 
-	def _render_body(self, y0, msg) -> None:
-		gfx = self.gfx
-		rect = (gfx.x0, y0, gfx.x1, gfx.y1)
-		self.screen.text_box(gfx, msg or "<empty>", rect, halign="left", valign="center")
-
-	def render(self, force: bool = False) -> int:
+	def _read_items(self, force: bool = False) -> int:
 		context = {
 			"_n_": 0,
 			"payload": self.response,
 		}
+		self.items = []
 
 		 # extract the maximum number of items to display
 		display = copy.copy(self.config.display.__dict__)
 		expand_dict(display, context)
-		self.max_items = int(display.get("max", "1"))
-	
-		# reset the item number if necessar
-		if self.item_number >= self.max_items:
-			self.item_number = 0
+		max_items = int(display.get("max", "1"))
+		total_items = int(display.get("total", "1"))
+		if total_items > max_items:
+			total_items = max_items
+		for n in range(total_items):
+			context["_n_"] = n
+			display = copy.copy(self.config.display.__dict__)
+			expand_dict(display, context) # extract the 'nth' item to display
+			print(f"WebApi.render: {n} {display}, context: {context}")
+			self.items.append(display)	
+		return len(self.items)
 
-		# extract the 'nth' item to display
-		context["_n_"] = self.item_number
-		display = copy.copy(self.config.display.__dict__)
-		expand_dict(display, context) # extract the 'nth' item to display
-		print(f"WebApi.render: {self.item_number} {display}, context: {context}")
-		self._render_body(self.gfx.y0, display['header'])
-		self.item_number += 1
+	def _render_text(self, msg, x0, y0, x1, y1, y_multiplier, config, halign="center", valign="center") -> int: # returns next y position
+		gfx = self.gfx
+		gfx2 = copy.copy(self.gfx)
+		gfx2.set_font(config.font or gfx.font_name, config.font_size or gfx.font_size)
+		gfx2.text_color = config.color or gfx.text_color
+		gfx2.text_bg_color = config.bg_color or gfx.text_bg_color
+		rect = (x0, y0, x1, y1 + gfx2.font_height * y_multiplier)
+		self.screen.text_box(gfx2, msg, rect, halign="center", valign="center")
+		return y0 + gfx2.font_height * y_multiplier
 
-		return 0
+	def render(self, force: bool = False) -> bool:
+		if not force and not self.display_timer.is_timedout(): return False
+		self.clear_region()
+		gfx = self.gfx
+		next_y0 = self._render_text(self.item[0].header, gfx.x0, gfx.y0, gfx.x1, gfx.y0, 1, self.config.fonts.header, halign="center", valign="top")
+		self._render_text(self.item[0].body, gfx.x0, next_y0, gfx.x1, gfx.y1, 0, self.config.fonts.body, halign="left", valign="top")
+		self._render_text(self.item[0].footer, gfx.x0, gfx.y1, gfx.x1, gfx.y1, -1, self.config.fonts.footer, halign="right", valign="bottom")
 
 	def exec(self) -> bool:
 		if self.timer.is_timedout():
 			self.response = self.api.fetch()
-			self.timer.set_timeout(self.config.update_mins * 60 * 1000)
-			self.display_timer.set_timeout(1)
-			self.item_number = 0
-			self.max_items = 1
 			if self.response.get("error"):
 				print(f"Error fetching data: {self.response['error']}")
-		if self.display_timer.is_timedout():
-			self.display_timer.set_timeout(self.config.cycle_seconds * 1000)
-			if self.response:
-				self.render()
-				return True
-		return False
+				return False
+			self.timer.set_timeout(self.config.update_mins * 60 * 1000)
+			self.display_timer.set_timeout(1)
+			self._read_items()
+		return True
 	
 	def onEvent(self, event):
 		pass			

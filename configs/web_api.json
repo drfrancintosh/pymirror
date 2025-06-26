@@ -17,16 +17,30 @@
             "country": "us",
             "pageSize": 10
         },
-        "colors":
+        "fonts":
         {
-            "background": "#ffffff",
-            "title": "#000000",
-            "description": "#000000",
-            "source": "#000000",
-            "publishedAt": "#000000"
+            "header": {
+                "font": "DejaVuSans",
+                "font_size": 24,
+                "color": "#000000",
+                "bg_color": "#c0c0c0"
+            },
+            "body": {
+                "font": "DejaVuSans",
+                "font_size": 24,
+                "color": "#000000",
+                "bg_color": "#f0f0f0"
+            },
+            "footer": {
+                "font": "DejaVuSans",
+                "font_size": 24,
+                "color": "#000000",
+                "bg_color": "#c0c0c0"
+            }
         },
         "display": {
-            "max": "{{payload.totalResults}}",
+            "total": "{{payload.totalResults}}",
+            "max": "10",
             "header": "{{payload.articles[_n_].description}}",
             "body": "{{payload.articles[_n_].content}}",
             "footer": "{{payload.articles[_n_].source.name}} @ {{payload.articles[_n_].publishedAt}}"
