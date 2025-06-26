@@ -79,29 +79,28 @@ class PMScreen:
         if self._doFlush: self.flush()
 
     def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
-        ## get text bounding box
-        (x_min, baseline, x_max, font_height) = gfx.font.getbbox(msg)
-        width = x_max - x_min
-        height = font_height
-        font_height = font_height - baseline  # Adjust height to include baseline
         x0, y0, x1, y1 = rect
         text_x0 = x0
         text_y0 = y0
 
-        # if halign == "center": text_x0 = x0 + (x1 - x0 - width) / 2
-        # elif halign == "left": text_x0 = x0
-        # elif halign == "right": text_x0 = x1 - width
-        # else: print(f"Invalid halign '{halign}' in text_box, using 'center' instead.")
-
-        # if valign == "center": text_y0 = y0 + (y1 - y0 - (height+baseline/2)) / 2
-        # elif valign == "top": text_y0 = y0 - baseline
-        # elif valign == "bottom": text_y0 = y1 - height
-        # else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
-
         if gfx.text_bg_color is not None: self.draw.rectangle(rect, fill=gfx.text_bg_color)
         lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
         for line in lines:
-            print("LINE:", line)
+            (x_min, baseline, x_max, font_height) = gfx.font.getbbox(line)
+            width = x_max - x_min
+            height = font_height
+            font_height = font_height - baseline  # Adjust height to include baseline
+
+            if halign == "center": text_x0 = x0 + (x1 - x0 - width) / 2
+            elif halign == "left": text_x0 = x0
+            elif halign == "right": text_x0 = x1 - width
+            else: print(f"Invalid halign '{halign}' in text_box, using 'center' instead.")
+
+            if valign == "center": text_y0 = y0 + (y1 - y0 - (height+baseline/2)) / 2
+            elif valign == "top": text_y0 = y0 - baseline
+            elif valign == "bottom": text_y0 = y1 - height
+            else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
+
             self.draw.text((text_x0, text_y0), line, fill=gfx.text_color, font=gfx.font)
             text_y0 += gfx.font_height
         if self._doFlush: self.flush()
