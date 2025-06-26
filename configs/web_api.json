@@ -1,5 +1,5 @@
 {
-    "module": "webapi",
+    "module": "web_api",
     "moddef": {
         "name": "newsapi.com",
         "position": "top_center",
