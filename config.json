@@ -1,5 +1,6 @@
 {
   "debug": false,
+  "secrets": ".secrets",
   "screen": {
     "font": "DejaVuSans.ttf",
     "font_size": 64,
