@@ -114,6 +114,12 @@ class PMScreen:
     def quit(self):
         if self._doFlush: self.flush()
 
+def _height(rect: tuple) -> int:
+    return rect[3] - rect[1]
+
+def _width(rect: tuple) -> int:
+    return rect[2] - rect[0]
+
 def _fit_text_chars(gfx, msg: str, rect: tuple) -> int:
     n = 0
     last_n = 0
@@ -123,7 +129,7 @@ def _fit_text_chars(gfx, msg: str, rect: tuple) -> int:
             return n
         last_n = n
         width = gfx.font.getbbox(msg[:n])[2]  # Get width of the text
-        if width > rect.width:
+        if width > _width(rect):
             return last_n
         n += 1
 
@@ -138,7 +144,7 @@ def _fit_text_words(gfx, words: list[str], rect: tuple) -> int:
         test_words = words[:n]
         test_line = " ".join(test_words)
         width = gfx.font.getbbox(test_line)[2]  # Get width of the text
-        if width > rect.width:
+        if width > _width(rect):
             return last_n
         n += 1
         if width > gfx.width:
@@ -182,7 +188,7 @@ def _text_split(gfx, s, rect:tuple, split_fn=None) -> list[str]:
     height = 0
     for s in s.splitlines():
         height += gfx.font_height
-        if height >= rect.height:
+        if height >= _height(rect):
             break
         if not first_line:
             results.append(f"")
