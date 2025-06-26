@@ -80,9 +80,9 @@ class PMScreen:
 
     def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
         ## get text bounding box
-        (x_min, baseline, x_max, y_max) = gfx.font.getbbox(msg)
+        (x_min, baseline, x_max, font_height) = gfx.font.getbbox(msg)
         width = x_max - x_min
-        height = y_max
+        height = font_height
         x0, y0, x1, y1 = rect
         text_x0 = x0
         text_y0 = y0
@@ -102,7 +102,7 @@ class PMScreen:
         for line in lines:
             print("LINE:", line)
             self.draw.text((text_x0, text_y0), line, fill=gfx.text_color, font=gfx.font)
-            text_y0 += gfx.font_height
+            text_y0 += font_height
         if self._doFlush: self.flush()
 
     def flush(self):
