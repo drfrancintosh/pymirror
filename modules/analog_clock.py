@@ -10,7 +10,6 @@ def _compute_clock_positions(gfx, dx, dy, r):
 	for hour in range(12):
 		hrs = str(hour+1)  # Convert hour to 1-12 format
 		(offset, baseline, width, height) = gfx.font.getbbox(hrs)  # Get bounding box of the hour text
-		print(hrs, offset, baseline, width, height)
 		# Compute the angle for the hour (in radians)
 		theta = 2 * math.pi * (hour - 2) / 12 
 		x0 = gfx.x0 + dx  # Center x-coordinate
@@ -56,7 +55,6 @@ class AnalogClock(PMModule):
 		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
 		for posn in _compute_clock_positions(gfx, dx, dy, r - gfx.font_height):
 			hrs, rect = posn
-			print("...", hrs, rect)
 			self.screen.text_box(gfx, hrs, rect, valign="center", halign="center")
 			hr += 1
 		gfx.line_width = 3
