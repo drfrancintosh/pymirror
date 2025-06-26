@@ -29,6 +29,7 @@ class OpenWeatherMap:
 		if response.ok:
 			return response.json()
 		else:
+			print(f"Error fetching weather data: {response.status_code} - {response.text}")
 			return {"error": "error"}
 
 def _paragraph_fix(text: str) -> str:
@@ -57,7 +58,8 @@ class Weather(PMModule):
 		x = gfx.x0
 		y = gfx.y0
 		print(f"self.weather_response: {self.weather_response}")
-		w = SimpleNamespace(**self.weather_response["current"])
+		w = SimpleNamespace(**self.weather_response.get("current"))
+		if not w: return 0
 		text = self.screen.text
 		text_box = self.screen.text_box
     	# text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
