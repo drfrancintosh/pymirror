@@ -46,6 +46,7 @@ class WebApi(PMModule):
 		display = copy.copy(self.config.display.__dict__)
 		expand_dict(display, context)
 		print(f"WebApi.render: {display}")
+		return 0
 
 	def exec(self) -> bool:
 		if not self.is_timedout(): return False
