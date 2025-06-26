@@ -78,11 +78,11 @@ class PMScreen:
         self.draw.text((x0, y0), msg, fill=gfx.text_color, font=gfx.font)
         if self._doFlush: self.flush()
 
-    def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center", wrap="char") -> None:
+    def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
         ## get text bounding box
-        (x_min, baseline, font_width, font_height) = gfx.font.getbbox(msg)
-        width = font_width - x_min
-        height = font_height
+        (x_min, baseline, x_max, y_max) = gfx.font.getbbox(msg)
+        width = x_max - x_min
+        height = y_max
         x0, y0, x1, y1 = rect
         text_x0 = x0
         text_y0 = y0
@@ -98,13 +98,7 @@ class PMScreen:
         else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
         if gfx.text_bg_color is not None: self.draw.rectangle(rect, fill=gfx.text_bg_color)
-        if wrap == "word":
-            lines = _text_split(gfx, msg, split_fn=_text_split_words)
-        else:
-            lines = _text_split(gfx, msg, split_fn=_text_split_chars)
-        for line in lines:
-            self.draw.text((text_x0, text_y0), msg, fill=gfx.text_color, font=gfx.font)
-            text_y0 += font_height  # Move down for the next line
+        self.draw.text((text_x0, text_y0), msg, fill=gfx.text_color, font=gfx.font)
         if self._doFlush: self.flush()
 
     def flush(self):
@@ -115,90 +109,6 @@ class PMScreen:
 
     def quit(self):
         if self._doFlush: self.flush()
-
-def _text_width(gfx, s):
-    # width, _ = gfx.font.getbbox(s)[2:4]
-    width = len(s) * gfx.font_width  # assuming fixed-width font
-    return width
-
-def _debug(msg: str):
-    # print(f"DEBUG: {msg}")
-    pass
-
-def _fit_text_chars(gfx, msg: str) -> int:
-    n = 0
-    last_n = 0
-    max = len(msg)
-    while True:
-        if n >= max:
-            return n
-        last_n = n
-        width = _text_width(gfx, msg[:n])
-        if width > gfx.width:
-            return last_n
-        n += 1
-
-def _fit_text_words(gfx, words: list[str]) -> int:
-    n = 0
-    last_n = 0
-    max = len(words)
-    while True:
-        if n >= max:
-            return n
-        last_n = n
-        test_words = words[:n]
-        test_line = " ".join(test_words)
-        width = _text_width(gfx, test_line)
-        if width > gfx.width:
-            return last_n
-        n += 1
-
-def _text_split_words(gfx, s) -> list[str]:
-    words = s.split()
-    n = 0
-    end = len(words)
-    lines = []
-    while True:
-        test_words = words[n:]
-        l = _fit_text_words(gfx, test_words)
-        lines.append(" ".join(words[n:n+l]))
-        n += l
-        if n >= end:
-            break
-    return lines
-
-def _text_split_chars(gfx, s) -> list[str]:
-    n = 0
-    lines = []
-    max = len(s)
-    while True:
-        if n >= max:
-            break
-        if s[n] == ' ':
-            n += 1
-            continue
-        l = _fit_text_chars(gfx, s[n:])
-        if l == 0:
-            break
-        lines.append(s[n:n+l])
-        n += l
-    return lines
-
-def _text_split(gfx, s, split_fn=None) -> list[str]:
-    results = []
-    first_line = True
-    height = 0
-    for s in s.splitlines():
-        height += gfx.font_height
-        if height >= gfx.height:
-            break
-        if not first_line:
-            results.append(f"")
-        s = s.strip()
-        split_lines = split_fn(gfx, s)
-        results.extend(split_lines)
-        first_line = False
-    return results
 
 def main():
     pms = PMScreen(1920, 1000)

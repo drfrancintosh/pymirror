@@ -14,7 +14,9 @@ class PMGfx:
         self.line_width = 1
         self.font_name = None
         self.font_size = None
-        self.font = None 
+        self.font = None
+        self.font_height = 0
+        self.font_width = 0
         self.antialias = True
         self._read_fonts()
         self.set_font("DejaVuSerif", 64)  # default font
@@ -85,6 +87,8 @@ class PMGfx:
                 self.font_name = font_name
                 self.font_size = pitch
                 return True # successfully set the font
+        self.font_metrics = self.font.getbbox("M")
+        self.font_height = self.font_metrics[3] - self.font_metrics[1]
         print(f"Font '{font_name}' not found in system fonts. font unchanged.")
         return False
     
