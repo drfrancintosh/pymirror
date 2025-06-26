@@ -8,18 +8,18 @@ class Cron(PMModule):
 		self.event = config.event
 		self.repeat = config.repeat ## number of times to repeat, -1 = forever
 		self.delay = config.delay
-		if config.first_delay: self.set_timeout(config.first_delay) ## emit event immediately
-		else: self.set_timeout(self.delay)
+		if config.first_delay: self.timer.set_timeout(config.first_delay) ## emit event immediately
+		else: self.timer.set_timeout(self.delay)
 
 	def render(self):
 		pass
 
 	def exec(self):
-		if self.is_timedout():
+		if self.timer.is_timedout():
 			if self.repeat == 0: return 0
 			self.pm.add_event(self.event)
 			if self.repeat > 0: self.repeat -= 1
-			self.set_timeout(self.delay) # note: self.repeat < 0 repeats forever
+			self.timer.set_timeout(self.delay) # note: self.repeat < 0 repeats forever
 		return 0
 
 	def onEvent(self, event):

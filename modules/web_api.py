@@ -38,7 +38,7 @@ class WebApi(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.api = Api(config)
-		self.set_timeout(1) # refresh right away
+		self.timer.set_timeout(1) # refresh right away
 
 	def render(self, force: bool = False) -> int:
 		context = {
@@ -57,9 +57,9 @@ class WebApi(PMModule):
 		return 0
 
 	def exec(self) -> bool:
-		if not self.is_timedout(): return False
+		if not self.timer.is_timedout(): return False
 		self.response = self.api.fetch()
-		self.set_timeout(self.config.update_mins * 60 * 1000)
+		self.timer.set_timeout(self.config.update_mins * 60 * 1000)
 		if self.response.get("error"):
 			print(f"Error fetching data: {self.response['error']}")
 			return False

@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-import time
 import copy
 from pymirror.pmscreen import PMGfx
 from dataclasses import dataclass
 
+from pymirror.pmtimer import PMTimer
 from pymirror.utils import SafeNamespace
 
 @dataclass
@@ -33,7 +33,7 @@ class PMModule(ABC):
 		self.moddef = PMModuleDef(**moddef.__dict__) if moddef else PMModuleDef(name=self.__class__.__name__, position="None")
 		if not self.moddef.name: self.moddef.name = self.__class__.__name__
 		self.config = config
-		self.timeout = 0
+		self.timer = PMTimer(0)
 		self.subscriptions = []
 		self.gfx = PMGfx() ## default graphics context
 		self.gfx.color = self.moddef.color or self.screen.gfx.color
@@ -69,18 +69,6 @@ class PMModule(ABC):
 
 	def is_subscribed(self, event_name):
 		return event_name in self.subscriptions
-
-	def set_timeout(self, ms):
-		if not ms: self.timeout = 0 ## disable timer
-		else: self.timeout = time.time() + ms / 1000
-
-	def is_timedout(self):
-		if not self.timeout: return False # disabled timer always returns False
-		if time.time() < self.timeout:
-			return False ## we're not timed out yet
-		else:
-			self.set_timeout(0) ## disable timer
-			return True
 
 	def clear_region(self) -> None:
 		""" Clear the module's region on the screen. """

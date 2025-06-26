@@ -193,6 +193,7 @@ context = {
     },
 }
 template = Template(s)
+print(context["payload"]["articles"][context["_n_"]]["description"])
 for _n_ in range(35):
     context["_n_"] = _n_
     result = template.render(context)

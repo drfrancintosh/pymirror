@@ -46,7 +46,7 @@ class Weather(PMModule):
 		super().__init__(pm, moddef, config)
 		self.weather_data = WeatherData(**config.weather_data.__dict__)
 		self.refresh_minutes = 5
-		self.set_timeout(1) # refresh right away
+		self.timer.set_timeout(1) # refresh right away
 		self.weather_response = None
 		self.weather_api = OpenWeatherMap()
 
@@ -72,9 +72,9 @@ class Weather(PMModule):
 		return 1
 
 	def exec(self) -> bool:
-		if not self.is_timedout(): return False
+		if not self.timer.is_timedout(): return False
 		self.weather_response = self.weather_api.fetch(self.weather_data)
-		self.set_timeout(self.refresh_minutes * 60 * 1000)
+		self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
 		if self.weather_response.get("alerts"):
 			alerts = self.weather_response["alerts"]
 			if alerts:

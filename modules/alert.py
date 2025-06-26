@@ -16,7 +16,7 @@ class Alert(PMModule):
 		self.last_message = None
 		self.heading = config.heading.text
 		self.message = config.welcome_message
-		self.set_timeout(config.display_time)
+		self.timer.set_timeout(config.display_time)
 
 	def _render_heading(self) -> int: # returns next y position
 		gfx = self.gfx
@@ -47,11 +47,11 @@ class Alert(PMModule):
 		return update
 
 	def exec(self) -> bool:
-		if self.is_timedout(): self.message = None ## clear message
+		if self.timer.is_timedout(): self.message = None ## clear message
 		if self.message == self.last_message: return False
 		else: return True	
 
 	def onEvent(self, event) -> None:
 		self.heading = event.heading
 		self.message = event.message
-		self.set_timeout(event.timeout)
+		self.timer.set_timeout(event.timeout)
