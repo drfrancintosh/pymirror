@@ -15,6 +15,7 @@ def expand_dict(config: dict, context: dict):
 	## recursively expand environment variables in the config dictionary
 	for key, value in config.items():
 		if isinstance(value, str):
+			print(f"Expanding {key} = {value}, {context}")
 			config[key] = expand_string(value, context)
 		elif isinstance(value, dict):
 			expand_dict(value, context)
