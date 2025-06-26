@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from pymirror.pmmodule import PMModule
 from modules.alert import AlertEvent
 from pymirror.utils import expand_dict, SafeNamespace
+from pymirror.pmtimer import PMTimer
 
 class Api:
 	def __init__(self, config):
