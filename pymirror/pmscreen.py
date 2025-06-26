@@ -83,6 +83,7 @@ class PMScreen:
         (x_min, baseline, x_max, font_height) = gfx.font.getbbox(msg)
         width = x_max - x_min
         height = font_height
+        font_height = font_height - baseline  # Adjust height to include baseline
         x0, y0, x1, y1 = rect
         text_x0 = x0
         text_y0 = y0
