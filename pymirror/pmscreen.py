@@ -161,7 +161,7 @@ def _text_split_words(gfx, s, rect: tuple) -> list[str]:
         if l == 0:
             break
         lines.append(" ".join(words[n:n+l-1]))
-        n += l - 1
+        n += l
         if n >= end:
             break
     return lines
