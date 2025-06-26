@@ -12,13 +12,6 @@
 
 10. handle exceptions
 
-11. text_box() needs text_wrap abilities
-    - None (just a straight line of text)
-    - Wrap (split on character boundaries)
-    - Word Wrap (split on word boundaries)
-    - Handle (or ignore) newlines
-    - Boundary clipping
-
 12. Boundary clipping ?
 
 # DONE
@@ -39,6 +32,13 @@
     - it is up to the module to determine what needs updating
 
 8. Convert all forms of color to 32-bit integer for use in PIL "I" mode
+
+11. text_box() needs text_wrap abilities
+    - None (just a straight line of text)
+    - Wrap (split on character boundaries)
+    - Word Wrap (split on word boundaries)
+    - Handle (or ignore) newlines
+    - Boundary clipping
 
 13. Update screen.draw() methods to accept tuples rather than parms
 
