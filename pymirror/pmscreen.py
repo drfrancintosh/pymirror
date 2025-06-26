@@ -84,9 +84,9 @@ class PMScreen:
         if gfx.text_bg_color is not None: self.draw.rectangle(rect, fill=gfx.text_bg_color)
         lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
 
-        if valign == "center": text_y0 = y0 + ( _height(rect) - gfx.font_height * len(lines)) / 2
+        if valign == "center": text_y0 = y0 + ( _height(rect) - gfx.font_height * len(lines)) / 2 - gfx.font_baseline / 2
         elif valign == "top": text_y0 = y0 - gfx.font_baseline
-        elif valign == "bottom": text_y0 = y1 + _height(rect) - gfx.font_height * len(lines) - gfx.font_baseline
+        elif valign == "bottom": text_y0 = y1 - gfx.font_height * len(lines) - gfx.font_baseline
         else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
 
         for line in lines:
