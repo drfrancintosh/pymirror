@@ -5,11 +5,10 @@ import os
 import requests
 import json
 import copy
-from types import SimpleNamespace
 from dataclasses import dataclass
 from pymirror.pmmodule import PMModule
 from modules.alert import AlertEvent
-from pymirror.utils import expand_dict
+from pymirror.utils import expand_dict, SafeNamespace
 
 class Api:
 	def __init__(self, config):
@@ -42,10 +41,10 @@ class WebApi(PMModule):
 	def render(self, force: bool = False) -> int:
 		context = {
 			"_n_": 0,
-			"payload": self.response,
+			"payload": SafeNamespace(**self.response),
 		}
-		display = copy.copy(self.config.display.__dict__)
-		display = expand_dict(display, context)
+		display = copy.copy(self.config.display)
+		expand_dict(display, context)
 		print(f"WebApi.render: {display}")
 
 	def exec(self) -> bool:

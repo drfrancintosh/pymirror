@@ -4,7 +4,7 @@ import copy
 from pymirror.pmscreen import PMGfx
 from dataclasses import dataclass
 
-from pymirror.safe_namespace import SafeNamespace
+from pymirror.utils import SafeNamespace
 
 @dataclass
 class PMModuleDef(ABC):

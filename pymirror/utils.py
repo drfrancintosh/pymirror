@@ -1,4 +1,5 @@
 import os
+from types import SimpleNamespace
 
 def snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
@@ -29,3 +30,24 @@ def expand_dict(config: dict, context: dict):
 					value[i] = expand_string(value[i], context)
 				elif isinstance(value[i], dict):
 					expand_dict(value[i], context)
+
+class SafeNamespace(SimpleNamespace):
+    def __init__(self, **kwargs):
+        # Recursively convert dicts and lists to SafeNamespace
+        for k, v in kwargs.items():
+            if isinstance(v, dict):
+                kwargs[k] = SafeNamespace(**v)
+            elif isinstance(v, list):
+                kwargs[k] = [
+                    SafeNamespace(**i) if isinstance(i, dict) else i for i in v
+                ]
+        super().__init__(**kwargs)
+        self.__dict__.update(kwargs)
+
+    def __getattr__(self, name):
+        # Override __getattr__ to return None for undefined attributes
+        return None
+
+    def __getitem__(self, name):
+        # Implement __getitem__ to allow [] notation
+        return getattr(self, name, None)

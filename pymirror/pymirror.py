@@ -5,8 +5,7 @@ import os
 from dotenv import load_dotenv
 
 from pymirror.pmscreen import PMScreen
-from pymirror.safe_namespace import SafeNamespace
-from pymirror.utils import snake_to_pascal, expand_dict
+from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
 
 class PyMirror:
 	def __init__(self, config_fname):
