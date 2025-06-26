@@ -158,8 +158,10 @@ def _text_split_words(gfx, s, rect: tuple) -> list[str]:
     while True:
         test_words = words[n:]
         l = _fit_text_words(gfx, test_words, rect)
-        lines.append(" ".join(words[n:n+l]))
-        n += l
+        if l == 0:
+            break
+        lines.append(" ".join(words[n:n+l-1]))
+        n += l - 1
         if n >= end:
             break
     return lines
