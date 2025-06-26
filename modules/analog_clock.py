@@ -19,8 +19,8 @@ def _compute_clock_positions(gfx, dx, dy, r):
 		x0 = x0 + r * math.cos(theta)  # x-coordinate
 		y0 = y0 + r * math.sin(theta)  # y-coordinate
 		# Adjust for the font size to center the text
-		x0 -= width
-		y0 -= height
+		x0 = int(x0 + width // 2)
+		y0 = int(y0 + height // 2)
 		x1 = x0 + width
 		y1 = y0 + height
 		positions.append([hrs, (x0, y0, x1, y1)])
