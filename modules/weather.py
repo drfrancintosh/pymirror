@@ -44,8 +44,7 @@ class Weather(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.weather_data = WeatherData(**config.weather_data.__dict__)
-		if self.weather_data.appid[0] == "$":
-			self.weather_data.appid = os.getenv(self.weather_data.appid[1:])  # Remove the $ and get the environment variable
+		self.weather_data.appid == os.path.expandvars(self.weather_data.appid) # Expand environment variables
 		self.refresh_minutes = 5
 		self.set_timeout(1) # refresh right away
 		self.weather_response = None
