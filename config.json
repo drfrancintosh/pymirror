@@ -29,6 +29,7 @@
     "configs/rainbow.json",
     "configs/weather_alert.json",
     "configs/weather.json",
+    "configs/webapi.json",
     "configs/date.json",
     "configs/time.json",
     "configs/analog_clock.json",
