@@ -10,6 +10,7 @@ def _compute_clock_positions(gfx, dx, dy, r):
 	for hour in range(12):
 		hrs = str(hour)
 		(offset, baseline, width, height) = gfx.font.getbbox(hrs)  # Get bounding box of the hour text
+		print(hrs, offset, baseline, width, height)
 		# Compute the angle for the hour (in radians)
 		theta = 2 * math.pi * (hour - 2) / 12 
 		x0 = gfx.x0 + dx  # Center x-coordinate
