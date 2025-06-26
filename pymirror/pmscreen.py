@@ -155,12 +155,11 @@ def _text_split_words(gfx, s, rect: tuple) -> list[str]:
     n = 0
     end = len(words)
     lines = []
-    newline = False
     while True:
         test_words = words[n:]
         l = _fit_text_words(gfx, test_words, rect)
         if l == 0: break
-        lines.append(" ".join(words[n:n+l-1]))
+        lines.append(" ".join(words[n:n+l]))
         n += l
         if n >= end: break
         lines.append("") # Add a newline after each line that did not fit
