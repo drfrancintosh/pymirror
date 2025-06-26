@@ -112,7 +112,8 @@ class PMScreen:
 
     def flush(self):
         if self.config.rotate:
-            rotated = self.img.rotate(self.config.rotate, expand=False) 
+            print(f"Rotating image by {self.config.rotate} degrees")
+            rotated = self.img.rotate(self.config.rotate, expand=True) 
             raw = rotated.tobytes("raw")
         else:
             raw = self.img.tobytes("raw")
