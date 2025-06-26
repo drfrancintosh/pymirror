@@ -51,13 +51,10 @@ class AnalogClock(PMModule):
 	def _render_clock_face(self, dx=0, dy=0, r=0):
 		"""Render the clock face with hour markers."""
 		gfx = self.gfx
-		hr = 1
 		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
 		for posn in _compute_clock_positions(gfx, dx, dy, r - gfx.font_height):
 			hrs, rect = posn
 			self.screen.text_box(gfx, hrs, rect, valign="center", halign="center")
-			hr += 1
-		gfx.line_width = 3
 
 	def render(self, force: bool = False) -> bool:
 		save_color = self.gfx.color
