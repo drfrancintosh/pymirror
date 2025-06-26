@@ -30,7 +30,7 @@ class Alert(PMModule):
 			rect = (gfx2.x0, next_y0, gfx2.x1, next_y0 +gfx2.font_size)
 			print(f"Alert: {rect} {self.heading} {hdg.text_color} {hdg.text_bg_color}")
 			self.screen.text_box(gfx2, self.heading, rect, halign="center", valign="center")
-			next_y0 += gfx2.font_size
+			next_y0 += gfx2.font_size + 2 # add some space after the heading
 		return next_y0
 
 	def _render_body(self, y0) -> None:
