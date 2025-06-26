@@ -25,10 +25,10 @@
             "publishedAt": "#000000"
         },
         "display": {
-            "n": "{payload.totalResults}",
-            "header": "{payload.articles[_n_].}",
-            "body": "{payload.articles[_n_].description}",
-            "footer": "{payload.articles[_n_].source.name} @ {payload.articles[_n_].publishedAt}"
+            "n": "{payload['totalResults']}",
+            "header": "{payload['articles'][_n_]['title']}",
+            "body": "{payload['articles'][_n_]['description']}",
+            "footer": "{payload['articles'][_n_]['source']['name']} @ {payload['articles'][_n_]['publishedAt']}"
         }
     }
 }

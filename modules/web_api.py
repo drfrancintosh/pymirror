@@ -41,7 +41,7 @@ class WebApi(PMModule):
 	def render(self, force: bool = False) -> int:
 		context = {
 			"_n_": 0,
-			"payload": SafeNamespace(**self.response),
+			"payload": self.response,
 		}
 		display = copy.copy(self.config.display)
 		expand_dict(display, context)
