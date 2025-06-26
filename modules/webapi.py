@@ -45,7 +45,7 @@ class WebApi(PMModule):
 			"payload": self.response,
 		}
 		display = copy.copy(self.config.display.__dict__)
-		display = expand_dict(self.response, context)
+		display = expand_dict(display, context)
 		print(f"WebApi.render: {display}")
 
 	def exec(self) -> bool:
