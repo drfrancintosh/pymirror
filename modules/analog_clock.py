@@ -56,6 +56,7 @@ class AnalogClock(PMModule):
 		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
 		for posn in _compute_clock_positions(gfx, dx, dy, r):
 			hrs, rect = posn
+			print("...", hrs, rect)
 			self.screen.text_box(gfx, hrs, rect, valign="center", halign="center")
 			hr += 1
 		gfx.line_width = 3
