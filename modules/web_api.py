@@ -79,7 +79,7 @@ class WebApi(PMModule):
 			if self.response.get("error"):
 				print(f"Error fetching data: {self.response['error']}")
 		if self.display_timer.is_timedout():
-			self.display_timer.set_timeout(self.config.display_time * 1000)
+			self.display_timer.set_timeout(self.config.cycle_seconds * 1000)
 			if self.response:
 				self.render()
 				return True
