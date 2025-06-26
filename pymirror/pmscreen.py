@@ -182,17 +182,13 @@ def _text_split_chars(gfx, s, rect: tuple) -> list[str]:
 
 def _text_split(gfx, s, rect:tuple, split_fn=None) -> list[str]:
     results = []
-    first_line = True
     height = 0
     for s in s.splitlines():
         if height >= _height(rect):
             break
-        if not first_line:
-            results.append(f"")
         s = s.strip()
         split_lines = split_fn(gfx, s, rect)
         results.extend(split_lines)
-        first_line = False
         height += gfx.font_height
     return results
 
