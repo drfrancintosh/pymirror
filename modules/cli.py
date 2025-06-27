@@ -18,7 +18,7 @@ class Cli(PMModule):
 
 	def _render_text(self, field, x0, y0, x1, y1, config, halign="center", valign="center") -> int: # returns next y position
 		context = {
-			"title": self.config.name,
+			"title": self.moddef.name,
 			"stdout": self.stdout,
 			"command": self.config.command,
 		}
