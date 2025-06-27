@@ -40,6 +40,7 @@ class Alert(PMModule):
 	def render(self, force=False) -> bool:
 		update = force or self.message != self.last_message
 		if update:
+			print(f"Alert module rendering: {self.heading} - {self.message}")
 			self.clear_region()
 			next_y0 = self._render_heading()
 			self._render_body(next_y0)
