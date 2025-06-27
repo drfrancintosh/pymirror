@@ -33,6 +33,7 @@ class Cli(PMModule):
 		gfx2.text_color = config.color or gfx.text_color
 		gfx2.text_bg_color = config.bg_color or gfx.text_bg_color
 		rect = (x0, y0, x1, y1)
+		print(f"Rendering {field} text: {display[field]} with rect: {rect}, halign: {halign}, valign: {valign}")
 		self.screen.text_box(gfx2, display[field], rect, halign=halign, valign=valign)
 
 	def render(self, force: bool = False) -> bool:
@@ -45,7 +46,7 @@ class Cli(PMModule):
 	
 	def exec(self) -> bool:
 		if self.timer.is_timedout():
-			self.stdout = subprocess.check_output(self.config.command, shell=True, text=True)
+			self.stdout = subprocess.check_output(self.config.command, shell=True, text=True).strip()
 			print(f"Executing CLI command: {self.config.command}")
 			print(f"CLI output: {self.stdout}")
 			self.timer.set_timeout(self.config.cycle_seconds * 1000)
