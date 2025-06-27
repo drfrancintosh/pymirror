@@ -14,6 +14,14 @@
 
 13. weather.py - error checking for bad api results
 
+14. Add generalized class for "window" that has header/body/footer
+
+15. Add webserver to control modules via events
+
+16. shore-up event processing with "onEventName()" events
+
+17. add device drivers for display to include write-to-file and webserver
+
 # DONE
 
 1. update gfx object so "set_font(font_name, font_size)" is 'permanent'

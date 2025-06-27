@@ -3,9 +3,11 @@ import json
 import copy
 import os
 from dotenv import load_dotenv
+import queue
 
 from pymirror.pmscreen import PMScreen
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
+from pmserver.pmserver import PMServer
 
 class PyMirror:
 	def __init__(self, config_fname):
@@ -15,9 +17,11 @@ class PyMirror:
 		self.screen.set_flush(False)
 		self.modules = []
 		self.new_events = []
-		self.events = []
+		self.event_queue = queue.Queue()  # Use a queue to manage events
+		self.server = PMServer(self.config.server, self.event_queue)
 
 		self._load_modules()
+		self.server.start()  # Start the server to handle incoming events
 
 	def _load_config(self, config_fname):
 		# read .env file if it exists
@@ -67,7 +71,7 @@ class PyMirror:
 			self.modules.append(obj)
 
 	def _send_events(self, module):
-		for event in self.events:
+		for event in self.event_queue:
 			if module.is_subscribed(event.name):
 				module.onEvent(event)
 
@@ -90,7 +94,7 @@ class PyMirror:
 	def run(self):
 		self.screen.clear()
 		while True:
-			self.events = self.new_events # dispose of old events, process new events
+			self.event_queue = self.new_events # dispose of old events, process new events
 			self.new_events = []
 			is_dirty = 0
 			for module in self.modules:
