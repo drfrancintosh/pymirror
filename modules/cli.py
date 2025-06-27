@@ -46,6 +46,8 @@ class Cli(PMModule):
 	def exec(self) -> bool:
 		if self.timer.is_timedout():
 			self.stdout = subprocess.check_output(self.config.command, shell=True, text=True)
+			print(f"Executing CLI command: {self.config.command}")
+			print(f"CLI output: {self.stdout}")
 			self.timer.set_timeout(self.config.cycle_seconds * 1000)
 			return True
 		return False
