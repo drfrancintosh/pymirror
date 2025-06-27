@@ -15,7 +15,7 @@ class Cli(PMModule):
 		super().__init__(pm, moddef, config)
 		self.timer.set_timeout(1)  # refresh right away
 		print(f"CLI: {self.config}")
-		
+
 	def _render_text(self, field, x0, y0, x1, y1, config, halign="center", valign="center") -> int: # returns next y position
 		context = {
 			"title": self.config.title,
@@ -52,6 +52,7 @@ class Cli(PMModule):
 			self.stdout = subprocess.check_output(self.config.command, shell=True, text=True).strip()
 			print(f"Executing CLI command: {self.config.command}")
 			print(f"CLI output: {self.stdout}")
+			print(f"CLI config: {self.config}")
 			self.timer.set_timeout(self.config.cycle_seconds * 1000)
 			return True
 		return False
