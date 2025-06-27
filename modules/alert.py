@@ -59,7 +59,7 @@ class Alert(PMModule):
 
 	def exec(self) -> bool:
 		if self.timer.is_timedout(): 
-			self._clear_message()
+			self._reset_message(None, None)
 			return True
 		return self._has_message_changed()	
 
