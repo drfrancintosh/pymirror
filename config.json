@@ -28,7 +28,7 @@
     "configs/fps.json",
     "configs/weather_alert.json",
     "configs/weather.json",
-    "configs/cli.json",
+    "configs/fortune.json",
     "configs/web_api.json",
     "configs/date.json",
     "configs/time.json",
