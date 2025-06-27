@@ -23,7 +23,7 @@ class Alert(PMModule):
 		gfx = self.gfx
 		next_y0 = gfx.y0
 		hdg = self.config.heading
-		if hdg:
+		if hdg and self.heading:
 			gfx2 = copy.copy(self.gfx)
 			gfx2.set_font(hdg.font or gfx.font_name, hdg.font_size or gfx.font_size)
 			gfx2.text_color = hdg.text_color or gfx.text_color
@@ -36,7 +36,7 @@ class Alert(PMModule):
 	def _render_body(self, y0) -> None:
 		gfx = self.gfx
 		rect = (gfx.x0, y0, gfx.x1, gfx.y1)
-		self.screen.text_box(gfx, self.message or "", rect, halign="left", valign="center")
+		self.screen.text_box(gfx, self.message, rect, halign="left", valign="center")
 
 	def _update_message(self, heading: str, message: str) -> None:
 		self.last_message = self.message
