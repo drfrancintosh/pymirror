@@ -6,24 +6,12 @@ def snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
 
 def expand_string(s: str, context: dict) -> str:
-	## recursively expand environment variables in the string
 	if not s: return s
-	if isinstance(s, str):
-		s = os.path.expandvars(s)
-		try:
-			if s == "{{title}}":
-				print("EXPAND", s, context)
-				env = Environment(undefined=DebugUndefined)
-				template = env.from_string(s)
-				s = template.render(**context)
-				print("EXPAND", s, context)
-			else:
-				template = Template(s)
-				s = template.render(**context)
-
-		except Exception as e:
-			# print(f"KeyError: {e} in string '{s}' with context {context}")
-			pass
+	if not isinstance(s, str): return s
+	s = os.path.expandvars(s)
+	env = Environment(undefined=DebugUndefined)
+	template = env.from_string(s)
+	s = template.render(**context)
 	return s
 
 def expand_dict(config: dict, context: dict):
