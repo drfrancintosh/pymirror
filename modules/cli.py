@@ -10,7 +10,7 @@ from modules.alert import AlertEvent
 from pymirror.utils import expand_dict, SafeNamespace
 from pymirror.pmtimer import PMTimer
 
-class CliMCliodule(PMModule):
+class Cli(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 
