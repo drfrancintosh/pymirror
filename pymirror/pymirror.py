@@ -46,7 +46,7 @@ class PyMirror:
 				## the file should be in JSON format
 				with open(module_config, 'r') as file:
 					config = json.load(file)
-					expand_dict(config, os.environ)  # Expand environment variables in the config
+					expand_dict(config, {})  # Expand environment variables in the config
 					module_config = SafeNamespace(**config)
 			## import the module using its name
 			## all modules should be in the "modules" directory
