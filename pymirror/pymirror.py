@@ -3,7 +3,7 @@ import json
 import copy
 import os
 from dotenv import load_dotenv
-from queue import queue, Empty
+import queue
 
 from pymirror.pmscreen import PMScreen
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
@@ -75,7 +75,7 @@ class PyMirror:
 		try:
 			while event := self.event_queue.get(0):
 				self.add_event(event)
-		except Empty:
+		except queue.Empty:
 			# No new events in the queue
 			pass
 
