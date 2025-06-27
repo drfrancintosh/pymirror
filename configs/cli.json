@@ -2,7 +2,7 @@
     "module": "web_api",
     "moddef": {
         "name": "fortune",
-        "position": "top_middle",
+        "position": "top_center",
         "text_color": "#000000",
         "text_bg_color": "#c0c0c0",
         "font": "DejaVuSans",
