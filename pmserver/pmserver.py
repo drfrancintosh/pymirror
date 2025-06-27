@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from threading import Thread
 
 class PMServer:
-    def __init__(self, config, event_queue, host="0.0.0.0", port=80):
+    def __init__(self, config, event_queue, host="0.0.0.0", port=8080):
         self.app = Flask(__name__)
         self.queue = event_queue
         self.host = host
