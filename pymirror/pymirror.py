@@ -70,11 +70,17 @@ class PyMirror:
 			## add the module to the list of modules
 			self.modules.append(obj)
 
-	def _read_server_queue(self, module):
+	def _read_server_queue(self):
 		## add any messages that have come from the web server
 		while event := self.event_queue.get(0):
 			self.add_event(event)
-			
+
+	def _send_events(self, module, events):
+		## send all events to the module
+		if not module.subscriptions: return
+		for event in events:
+			if event["name"] in module.subscriptions:
+				module.onEvent(event)
 
 	def add_event(self, event):
 		self.new_events.append(event)
@@ -101,8 +107,8 @@ class PyMirror:
 			is_dirty = 0
 			for module in self.modules:
 				if module.moddef.disabled: continue
-				self._send_events(module, events) # send all events to the module
-				do_update = module.exec() # update module state (retursns True if something changed)
+				self._send_events(module, events) # send all subscribed events to the module
+				do_update = module.exec() # update module state (returns True if the state has changed)
 				if do_update:
 					is_dirty += module.render(force=False) # render() returns True if new rendering occurred
 				if self.config.debug: self._debug(module) # draw boxes around each module if debug is enabled
