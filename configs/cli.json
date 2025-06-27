@@ -1,5 +1,5 @@
 {
-    "module": "web_api",
+    "module": "cli",
     "moddef": {
         "name": "fortune",
         "position": "top_center",

@@ -18,7 +18,6 @@ class Api:
 		self.config = config
 
 	def fetch(self):
-
 		response = requests.get(self.config.url, params=self.config.params.__dict__)
 		if response.ok:
 			return response.json()
