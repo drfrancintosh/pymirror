@@ -123,7 +123,19 @@ class PMScreen:
             with open(self.config.frame_buffer, "wb") as f:
                 f.write(raw[0::2])  # Write every second byte for RGB565 format
         if self.config.output_file:
-            img = img.convert("RGB")
+            import numpy as np
+            raw = self.img.tobytes("raw")[0::2]
+            arr = np.frombuffer(raw, dtype=np.uint16).reshape((self.height, self.width))
+
+            # Unpack RGB565 to 8-bit RGB
+            r = ((arr >> 11) & 0x1F) << 3
+            g = ((arr >> 5) & 0x3F) << 2
+            b = (arr & 0x1F) << 3
+
+            rgb = np.dstack((r, g, b)).astype(np.uint8)
+
+            # Create a PIL Image
+            img = Image.fromarray(rgb, "RGB")
             img.save(self.config.output_file, "JPEG")
 
     def quit(self):
