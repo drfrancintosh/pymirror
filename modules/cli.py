@@ -22,10 +22,12 @@ class Cli(PMModule):
 			"command": self.config.command,
 		}
 		self.items = []
-
-		 # extract the maximum number of items to display
+		print(f"Context for rendering {field}: {context}")
+		print(f"display config: {self.config.display}")
 		display = copy.copy(self.config.display.__dict__)
+		print(f"Display before expansion: {display}")
 		expand_dict(display, context)
+		print(f"Display after expansion: {display}")
 
 		gfx = self.gfx
 		gfx2 = copy.copy(self.gfx)
