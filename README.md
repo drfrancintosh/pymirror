@@ -26,9 +26,12 @@
 - sudo apt-get install libfreetype6 libfreetype6-dev
 - sudo apt-get install fbi fbset
 - sudo usermod -aG video $USER
-
-## installing PIL
-sudo apt install python3-pillow
+- sudo apt install python3-dotenv
+- sudo apt install python3-dotenv
+- sudo apt install python3-jinja2
+- sudo apt install python3-jinja2
+- sudo apt install fortune
+- sudo apt install python3-pillow
 
 ## setup config.txt
 - sudo vi /boot/firmware/config.txt

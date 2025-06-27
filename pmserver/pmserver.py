@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify
 from threading import Thread
 
 class PMServer:
-    def __init__(self, event_queue, host="0.0.0.0", port=5000):
+    def __init__(self, config, event_queue, host="0.0.0.0", port=80):
         self.app = Flask(__name__)
         self.queue = event_queue
         self.host = host
         self.port = port
+        self.config = config
         self._setup_routes()
 
     def _setup_routes(self):
