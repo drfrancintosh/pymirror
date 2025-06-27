@@ -73,7 +73,7 @@ class WebApi(PMModule):
 		gfx2.set_font(config.font or gfx.font_name, config.font_size or gfx.font_size)
 		gfx2.text_color = config.color or gfx.text_color
 		gfx2.text_bg_color = config.bg_color or gfx.text_bg_color
-		rect = (x0, y0, x1, y1 + gfx2.font_height * y_multiplier)
+		rect = (x0, y0, x1, y1)
 		self.screen.text_box(gfx2, msg, rect, halign=halign, valign=valign)
 
 	def render(self, force: bool = False) -> bool:
