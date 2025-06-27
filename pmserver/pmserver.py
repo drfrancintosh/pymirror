@@ -17,7 +17,7 @@ class PMServer:
             if not data:
                 return jsonify({"error": "Missing 'action'"}), 400
             self.queue.put(data)
-            return jsonify({"status": "queued", "action": data.get("action")})
+            return jsonify({"status": "queued", "action": data})
 
     def start(self):
         def run():
