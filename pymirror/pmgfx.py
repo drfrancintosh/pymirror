@@ -91,7 +91,7 @@ class PMGfx:
                 self.font_baseline = self.font_metrics[1]
                 self.font_width = self.font_metrics[2]
                 self.font_height = self.font_metrics[3]
-        return True # successfully set the font
+                return True # successfully set the font
         print(f"Font '{font_name}' not found in system fonts. font unchanged.")
         return False
     

@@ -14,7 +14,7 @@ def expand_string(s: str, context: dict) -> str:
 	try:
 		s = template.render(**context)
 	except Exception as e:
-		print(f"Error rendering string '{s}' with context {context}: {e}")
+		# print(f"Error rendering string '{s}' with context {context}: {e}")
 		pass
 	return s
 
