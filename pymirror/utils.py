@@ -1,6 +1,6 @@
 import os
 from types import SimpleNamespace
-from jinja2 import Template, StrictUndefined, Environment, Undefined
+from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
 
 def snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
@@ -13,7 +13,7 @@ def expand_string(s: str, context: dict) -> str:
 		try:
 			if s == "{{title}}":
 				print("EXPAND", s, context)
-				env = Environment(undefined=Undefined)  # or DebugUndefined
+				env = Environment(undefined=DebugUndefined)
 				template = env.from_string(s)
 				s = template.render(**context)
 				print("EXPAND", s, context)
