@@ -9,7 +9,7 @@
         "font_size": 24
     },
     "config": {
-        "cycle_seconds": 15,
+        "cycle_seconds": 60,
         "command": "fortune",
         "fonts":
         {
