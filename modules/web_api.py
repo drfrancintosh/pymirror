@@ -84,7 +84,8 @@ class WebApi(PMModule):
 		next_y0 = self._render_text(self.items[0]['header'], gfx.x0, gfx.y0, gfx.x1, gfx.y0, 1, self.config.fonts.header, halign="center", valign="top")
 		self._render_text(self.items[0]['body'], gfx.x0, next_y0, gfx.x1, gfx.y1, 0, self.config.fonts.body, halign="left", valign="top")
 		self._render_text(self.items[0]['footer'], gfx.x0, gfx.y1, gfx.x1, gfx.y1, -1, self.config.fonts.footer, halign="right", valign="bottom")
-
+		return True
+	
 	def exec(self) -> bool:
 		if self.timer.is_timedout():
 			self.response = self.api.fetch()
