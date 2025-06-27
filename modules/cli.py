@@ -13,7 +13,8 @@ from pymirror.pmtimer import PMTimer
 class Cli(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
-
+		self.timer.set_timeout(1)  # refresh right away
+		
 	def _render_text(self, msg, x0, y0, x1, y1, config, halign="center", valign="center") -> int: # returns next y position
 		context = {
 			"title": self.config.title,
