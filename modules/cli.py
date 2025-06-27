@@ -38,7 +38,7 @@ class Cli(PMModule):
 	def render(self, force: bool = False) -> bool:
 		self.clear_region()
 		gfx = self.gfx
-		self._render_text('title', gfx.x0, gfx.y0, gfx.x1, gfx.y0 + self.config.fonts.header.font_size * 2, self.config.fonts.header, halign="left", valign="top")
+		self._render_text('header', gfx.x0, gfx.y0, gfx.x1, gfx.y0 + self.config.fonts.header.font_size * 2, self.config.fonts.header, halign="left", valign="top")
 		self._render_text('body', gfx.x0, gfx.y0 + self.config.fonts.header.font_size * 2, gfx.x1, gfx.y1, self.config.fonts.body, halign="center", valign="center")
 		self._render_text('footer', gfx.x0, gfx.y1 - self.config.fonts.footer.font_size, gfx.x1, gfx.y1, self.config.fonts.footer, halign="center", valign="center")
 		self.item_number += 1
