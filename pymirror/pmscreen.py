@@ -125,7 +125,7 @@ class PMScreen:
         if self.config.output_file:
             import numpy as np
             raw = self.img.tobytes("raw")[0::2]
-            arr = np.frombuffer(raw, dtype=np.uint16).reshape((self.height, self.width))
+            arr = np.frombuffer(raw, dtype=np.uint16).reshape((self.gfx.height, self.gfx.width))
 
             # Unpack RGB565 to 8-bit RGB
             r = ((arr >> 11) & 0x1F) << 3
