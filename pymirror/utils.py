@@ -11,8 +11,15 @@ def expand_string(s: str, context: dict) -> str:
 	if isinstance(s, str):
 		s = os.path.expandvars(s)
 		try:
-			template = Template(s)
-			s = template.render(**context)
+			if s == "{{title}}":
+				print("EXPAND", s, context)
+				template = Template(s)
+				s = template.render(**context)
+				print("EXPAND", s, context)
+			else:
+				template = Template(s)
+				s = template.render(**context)
+
 		except Exception as e:
 			# print(f"KeyError: {e} in string '{s}' with context {context}")
 			pass
