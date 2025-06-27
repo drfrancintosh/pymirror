@@ -24,8 +24,10 @@ class PMScreen:
 
     def _hard_clear(self):
         """Clear the framebuffer by writing zeros to it."""
-        with open("/dev/fb0", "wb") as f:
-            f.write(b'\x00' * (1920 * 1080 * 2))  # Assuming RGB565 format, 2 bytes per pixel
+        if self.config.frame_buffer:
+            # Open the framebuffer device and write zeros to it
+            with open(self.config.frame_buffer, "wb") as f:
+                f.write(b'\x00' * (1920 * 1080 * 2))  # Assuming RGB565 format, 2 bytes per pixel
 
     def set_flush(self, doFlush: bool) -> None:
         self._doFlush = doFlush

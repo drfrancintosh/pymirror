@@ -3,7 +3,7 @@
   "secrets": ".secrets",
   "screen": {
     "output_file": "output.jpg",
-    "frame_buffer": "/dev/fb0",
+    "frame_buffer": null,
     "font": "DejaVuSans.ttf",
     "font_size": 64,
     "color": "(255,255,255)",

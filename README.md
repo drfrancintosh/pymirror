@@ -32,6 +32,7 @@
 - sudo apt install python3-jinja2
 - sudo apt install fortune
 - sudo apt install python3-pillow
+- sudo apt install fortune
 
 ## setup config.txt
 - sudo vi /boot/firmware/config.txt
