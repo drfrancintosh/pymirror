@@ -64,19 +64,17 @@ class WebApi(PMModule):
 			context["_n_"] = n
 			display = copy.copy(self.config.display.__dict__)
 			expand_dict(display, context) # extract the 'nth' item to display
-			print(f"WebApi.render: {n} {display}, context: {context}")
 			self.items.append(display)	
 		return len(self.items)
 
-	def _render_text(self, msg, x0, y0, x1, y1, y_multiplier, config, halign="center", valign="center") -> int: # returns next y position
+	def _render_text(self, msg, x0, y0, x1, y1, config, halign="center", valign="center") -> int: # returns next y position
 		gfx = self.gfx
 		gfx2 = copy.copy(self.gfx)
 		gfx2.set_font(config.font or gfx.font_name, config.font_size or gfx.font_size)
 		gfx2.text_color = config.color or gfx.text_color
 		gfx2.text_bg_color = config.bg_color or gfx.text_bg_color
 		rect = (x0, y0, x1, y1 + gfx2.font_height * y_multiplier)
-		self.screen.text_box(gfx2, msg, rect, halign="center", valign="center")
-		return y0 + gfx2.font_height * y_multiplier
+		self.screen.text_box(gfx2, msg, rect, halign=halign, valign=valign)
 
 	def render(self, force: bool = False) -> bool:
 		if not force and not self.display_timer.is_timedout(): return False
@@ -86,9 +84,9 @@ class WebApi(PMModule):
 			self.item_number = 0
 		gfx = self.gfx
 		n = self.item_number
-		next_y0 = self._render_text(self.items[n]['header'], gfx.x0, gfx.y0, gfx.x1, gfx.y0 + self.config.fonts.header.font_size * 2, 0, self.config.fonts.header, halign="center", valign="top")
-		self._render_text(self.items[n]['body'], gfx.x0, next_y0, gfx.x1, gfx.y1, 0, self.config.fonts.body, halign="left", valign="top")
-		self._render_text(self.items[n]['footer'], gfx.x0, gfx.y1 - self.config.fonts.footer.font_size, gfx.x1, gfx.y1, 0, self.config.fonts.footer, halign="right", valign="bottom")
+		self._render_text(self.items[n]['header'], gfx.x0, gfx.y0, gfx.x1, gfx.y0 + self.config.fonts.header.font_size * 2, self.config.fonts.header, halign="left", valign="top")
+		self._render_text(self.items[n]['body'], gfx.x0, gfx.y0 + self.config.fonts.header.font_size * 2, gfx.x1, gfx.y1, self.config.fonts.body, halign="center", valign="center")
+		self._render_text(self.items[n]['footer'], gfx.x0, gfx.y1 - self.config.fonts.footer.font_size, gfx.x1, gfx.y1, self.config.fonts.footer, halign="center", valign="center")
 		self.item_number += 1
 		return True
 	
