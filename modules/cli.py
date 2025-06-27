@@ -14,8 +14,8 @@ class Cli(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.timer.set_timeout(1)  # refresh right away
-		
-	def _render_text(self, msg, x0, y0, x1, y1, config, halign="center", valign="center") -> int: # returns next y position
+
+	def _render_text(self, field, x0, y0, x1, y1, config, halign="center", valign="center") -> int: # returns next y position
 		context = {
 			"title": self.config.title,
 			"stdout": self.stdout,
@@ -33,14 +33,14 @@ class Cli(PMModule):
 		gfx2.text_color = config.color or gfx.text_color
 		gfx2.text_bg_color = config.bg_color or gfx.text_bg_color
 		rect = (x0, y0, x1, y1)
-		self.screen.text_box(gfx2, msg, rect, halign=halign, valign=valign)
+		self.screen.text_box(gfx2, display[field], rect, halign=halign, valign=valign)
 
 	def render(self, force: bool = False) -> bool:
 		self.clear_region()
 		gfx = self.gfx
-		self._render_text(self.items[n]['body'], gfx.x0, gfx.y0, gfx.x1, gfx.y0 + self.config.fonts.header.font_size * 2, self.config.fonts.header, halign="left", valign="top")
-		self._render_text(self.items[n]['body'], gfx.x0, gfx.y0 + self.config.fonts.header.font_size * 2, gfx.x1, gfx.y1, self.config.fonts.body, halign="center", valign="center")
-		self._render_text(self.items[n]['footer'], gfx.x0, gfx.y1 - self.config.fonts.footer.font_size, gfx.x1, gfx.y1, self.config.fonts.footer, halign="center", valign="center")
+		self._render_text('title', gfx.x0, gfx.y0, gfx.x1, gfx.y0 + self.config.fonts.header.font_size * 2, self.config.fonts.header, halign="left", valign="top")
+		self._render_text('body', gfx.x0, gfx.y0 + self.config.fonts.header.font_size * 2, gfx.x1, gfx.y1, self.config.fonts.body, halign="center", valign="center")
+		self._render_text('footer', gfx.x0, gfx.y1 - self.config.fonts.footer.font_size, gfx.x1, gfx.y1, self.config.fonts.footer, halign="center", valign="center")
 		self.item_number += 1
 		return True
 	
