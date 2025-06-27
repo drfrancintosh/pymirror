@@ -11,7 +11,11 @@ def expand_string(s: str, context: dict) -> str:
 	s = os.path.expandvars(s)
 	env = Environment(undefined=DebugUndefined)
 	template = env.from_string(s)
-	s = template.render(**context)
+	try:
+		s = template.render(**context)
+	except Exception as e:
+		print(f"Error rendering string '{s}' with context {context}: {e}")
+		pass
 	return s
 
 def expand_dict(config: dict, context: dict):
