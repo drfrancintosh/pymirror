@@ -91,7 +91,10 @@ class PMScreen:
     def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
         x0, y0, x1, y1 = rect
 
-        if gfx.text_bg_color is not None: self.draw.rectangle(rect, fill=gfx.text_bg_color)
+        if gfx.text_bg_color is not None: 
+            self.draw.rectangle(rect, fill=gfx.text_bg_color)
+        if msg is None:
+            msg = ""
         lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
 
         if valign == "center": text_y0 = y0 + ( _height(rect) - gfx.font_height * len(lines)) / 2 - gfx.font_baseline / 2
