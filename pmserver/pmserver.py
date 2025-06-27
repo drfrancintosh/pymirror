@@ -14,10 +14,10 @@ class PMServer:
         @self.app.route("/command", methods=["POST"])
         def command():
             data = request.get_json()
-            if not data or "action" not in data:
+            if not data:
                 return jsonify({"error": "Missing 'action'"}), 400
-            self.queue.put(data["action"])
-            return jsonify({"status": "queued", "action": data["action"]})
+            self.queue.put(data)
+            return jsonify({"status": "queued", "action": data.get("action")})
 
     def start(self):
         def run():
