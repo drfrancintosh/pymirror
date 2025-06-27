@@ -43,7 +43,8 @@ class WebApi(PMModule):
 		self.timer.set_timeout(1) # refresh right away
 		self.display_timer = PMTimer(0)
 		self.response = None
-		self.items = 0
+		self.items = []
+		self.item_number = 0
 
 	def _read_items(self, force: bool = False) -> int:
 		context = {
@@ -80,10 +81,14 @@ class WebApi(PMModule):
 	def render(self, force: bool = False) -> bool:
 		if not force and not self.display_timer.is_timedout(): return False
 		self.clear_region()
+		if self.item_number >= len(self.items):
+			self.item_number = 0
 		gfx = self.gfx
-		next_y0 = self._render_text(self.items[0]['header'], gfx.x0, gfx.y0, gfx.x1, gfx.y0, 2, self.config.fonts.header, halign="center", valign="top")
-		self._render_text(self.items[0]['body'], gfx.x0, next_y0, gfx.x1, gfx.y1, 0, self.config.fonts.body, halign="left", valign="top")
-		self._render_text(self.items[0]['footer'], gfx.x0, gfx.y1, gfx.x1, gfx.y1, -2, self.config.fonts.footer, halign="right", valign="bottom")
+		n = self.item_number
+		next_y0 = self._render_text(self.items[n]['header'], gfx.x0, gfx.y0, gfx.x1, gfx.y0, 2, self.config.fonts.header, halign="center", valign="top")
+		self._render_text(self.items[n]['body'], gfx.x0, next_y0, gfx.x1, gfx.y1, 0, self.config.fonts.body, halign="left", valign="top")
+		self._render_text(self.items[n]['footer'], gfx.x0, gfx.y1, gfx.x1, gfx.y1, -2, self.config.fonts.footer, halign="right", valign="bottom")
+		self.item_number += 1
 		return True
 	
 	def exec(self) -> bool:

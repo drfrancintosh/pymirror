@@ -41,8 +41,8 @@
         "display": {
             "total": "{{payload.totalResults}}",
             "max": "10",
-            "header": "{{payload.articles[_n_].description}}",
-            "body": "{{payload.articles[_n_].content}}",
+            "header": "{{payload.articles[_n_].title}}",
+            "body": "{{payload.articles[_n_].description}}",
             "footer": "{{payload.articles[_n_].source.name}} @ {{payload.articles[_n_].publishedAt}}"
         }
     }
