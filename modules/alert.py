@@ -52,6 +52,16 @@ class Alert(PMModule):
 		else: return True	
 
 	def onEvent(self, event) -> None:
-		self.heading = event.heading
-		self.message = event.message
-		self.timer.set_timeout(event.timeout)
+		if isinstance(event, AlertEvent):
+			self.heading = event.heading
+			self.message = event.message
+			self.timer.set_timeout(event.timeout)
+		elif isinstance(event, dict):
+			if "heading" in event:
+				self.heading = event["heading"]
+			if "message" in event:
+				self.message = event["message"]
+			if "timeout" in event:
+				self.timer.set_timeout(event["timeout"])
+		else:
+			print(f"Alert module received unexpected event: {event.name}")
