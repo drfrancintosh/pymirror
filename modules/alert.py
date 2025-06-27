@@ -14,6 +14,7 @@ class Alert(PMModule):
 	def __init__(self, pm, moddef, config):
 		super().__init__(pm, moddef, config)
 		self.last_message = None
+		self.last_heading = None
 		self.heading = config.heading.text
 		self.message = config.welcome_message
 		self.timer.set_timeout(config.display_time)
@@ -37,32 +38,37 @@ class Alert(PMModule):
 		rect = (gfx.x0, y0, gfx.x1, gfx.y1)
 		self.screen.text_box(gfx, self.message or "", rect, halign="left", valign="center")
 
+	def _update_message(self, heading: str, message: str) -> None:
+		self.last_message = self.message
+		self.last_heading = self.heading
+		self.heading = heading
+		self.message = message
+
+	def _has_message_changed(self) -> bool:
+		return self.message != self.last_message or self.heading != self.last_heading
+	
 	def render(self, force=False) -> bool:
-		update = force or self.message != self.last_message
+		update = force or self._has_message_changed()
 		if update:
 			print(f"Alert module rendering: {self.heading} - {self.message}")
 			self.clear_region()
 			next_y0 = self._render_heading()
 			self._render_body(next_y0)
-			self.last_message = self.message
+			self._update_message(self.heading, self.message)
 		return update
 
 	def exec(self) -> bool:
-		if self.timer.is_timedout(): self.message = None ## clear message
-		if self.message == self.last_message: return False
-		else: return True	
+		if self.timer.is_timedout(): 
+			self._clear_message()
+			return True
+		return self._has_message_changed()	
 
 	def onEvent(self, event) -> None:
 		if isinstance(event, AlertEvent):
-			self.heading = event.heading
-			self.message = event.message
+			self._update_message(event.heading, event.message)
 			self.timer.set_timeout(event.timeout)
 		elif isinstance(event, dict):
-			if "heading" in event:
-				self.heading = event["heading"]
-			if "message" in event:
-				self.message = event["message"]
-			if "timeout" in event:
-				self.timer.set_timeout(event["timeout"])
+			self._update_message(event.get("heading", ""), event.get("message", ""))
+			self.timer.set_timeout(event.get("timeout", 0))
 		else:
 			print(f"Alert module received unexpected event: {event.name}")
