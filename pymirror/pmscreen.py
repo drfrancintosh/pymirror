@@ -113,15 +113,19 @@ class PMScreen:
             text_y0 += gfx.font_height
         if self._doFlush: self.flush()
 
-    def flush(self):
+    def flush(self) -> None:
         if self.config.rotate:
             rotated = self.img.rotate(self.config.rotate, expand=True) 
             raw = rotated.tobytes("raw")
         else:
             raw = self.img.tobytes("raw")
         # Write to framebuffer
-        with open("/dev/fb0", "wb") as f:
-            f.write(raw[0::2])  # Write every second byte for RGB565 format
+        if self.config.frame_buffer:
+            with open(self.config.frame_buffer, "wb") as f:
+                f.write(raw[0::2])  # Write every second byte for RGB565 format
+        if self.config.output_file:
+            img = raw.convert("RGB")
+            img.save(self.config.output_file, "JPEG")
 
     def quit(self):
         if self._doFlush: self.flush()
