@@ -86,7 +86,7 @@ class WebApi(PMModule):
 			self.item_number = 0
 		gfx = self.gfx
 		n = self.item_number
-		next_y0 = self._render_text(self.items[n]['header'], gfx.x0, gfx.y0, gfx.x1, gfx.y0, 2, self.config.fonts.header, halign="center", valign="top")
+		next_y0 = self._render_text(self.items[n]['header'], gfx.x0, gfx.y0, gfx.x1, gfx.y0 + self.config.fonts.header.font_size * 2, 0, self.config.fonts.header, halign="center", valign="top")
 		self._render_text(self.items[n]['body'], gfx.x0, next_y0, gfx.x1, gfx.y1, 0, self.config.fonts.body, halign="left", valign="top")
 		self._render_text(self.items[n]['footer'], gfx.x0, gfx.y1 - self.config.fonts.footer.font_size, gfx.x1, gfx.y1, 0, self.config.fonts.footer, halign="right", valign="bottom")
 		self.item_number += 1
