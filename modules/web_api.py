@@ -80,6 +80,7 @@ class WebApi(PMModule):
 
 	def render(self, force: bool = False) -> bool:
 		if not force and not self.display_timer.is_timedout(): return False
+		self.display_timer.set_timeout(self.config.cycle_seconds * 1000)
 		self.clear_region()
 		if self.item_number >= len(self.items):
 			self.item_number = 0
