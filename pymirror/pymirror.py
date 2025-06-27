@@ -3,7 +3,7 @@ import json
 import copy
 import os
 from dotenv import load_dotenv
-import queue
+from queue import queue, Empty
 
 from pymirror.pmscreen import PMScreen
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
@@ -72,8 +72,12 @@ class PyMirror:
 
 	def _read_server_queue(self):
 		## add any messages that have come from the web server
-		while event := self.event_queue.get(0):
-			self.add_event(event)
+		try:
+			while event := self.event_queue.get(0):
+				self.add_event(event)
+		except Empty:
+			# No new events in the queue
+			pass
 
 	def _send_events(self, module, events):
 		## send all events to the module
