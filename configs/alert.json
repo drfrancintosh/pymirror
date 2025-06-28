@@ -2,7 +2,7 @@
     "module": "alert",
     "moddef": {
         "name": "Alert",
-        "position": "middle_right",
+        "position": "bottom_left",
         "text_color": null,
         "text_bg_color": null,
         "font": "TNG_Title",

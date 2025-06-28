@@ -1,7 +1,7 @@
 {
     "module": "fps",
     "moddef": {
-        "disabled": false,
+        "disabled": true,
         "name": "fps",
         "position": "bottom_right",
         "font_size": 32

@@ -17,6 +17,12 @@
 
 17. add device drivers for display
 
+18. switch to JSON5 for easier JSON editing.
+
+19. add color palette to config.json
+
+20. add text animations, like fade in / fade out
+
 # DONE
 
 1. update gfx object so "set_font(font_name, font_size)" is 'permanent'

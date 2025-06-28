@@ -107,7 +107,8 @@ class PMScreen:
         elif valign == "top": text_y0 = y0 - gfx.font_baseline
         elif valign == "bottom": text_y0 = y1 - gfx.font_height * len(lines) - gfx.font_baseline
         else: print(f"Invalid valign '{type(valign), valign}' in text_box, using 'center' instead.")
-
+        if text_y0 < y0:
+            text_y0 = y0
         for line in lines:
             (x_min, baseline, width, font_height) = gfx.font.getbbox(line)
             if halign == "center": text_x0 = x0 + (_width(rect) - width) / 2

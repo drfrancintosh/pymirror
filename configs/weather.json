@@ -9,6 +9,9 @@
         "font_size": 64
     },
     "weather": {
+        "refresh_minutes": 15,
+        "degrees": "°F",
+        "datetime_format": "%I:%M:%S %p",
         "weather_data": {
             "lat": "37.50598",
             "lon": "-77.64916",
@@ -16,7 +19,26 @@
             "exclude": "minutely,hourly",
             "units": "imperial",
             "lang": "english"
+        }
+    },
+    "card": {
+        "header": {
+            "font_size": 48,
+            "text_color": "#000",
+            "text_bg_color": "#ff0"
         },
-        "body_color": "#c0c000"
+        "body": {
+            "font_size": 64,
+            "text_color": "#cc0",
+            "text_bg_color": "#000"
+        },
+        "footer": {
+            "font_size": 36,
+            "text_color": "#cc0",
+            "text_bg_color": "#000",
+            "valign": "top",
+            "height": 48
+        }
     }
+
 }

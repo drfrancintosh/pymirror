@@ -1,14 +1,13 @@
 # weather.py
 # https://openweathermap.org/api/one-call-3#current
 
-import os
 import requests
 import json
-import copy
+from datetime import datetime
 from types import SimpleNamespace
 from dataclasses import dataclass
-from pymirror.pmmodule import PMModule
-from events.alert_event import AlertEvent
+from pymirror import PMCard
+from events import AlertEvent
 
 @dataclass
 class WeatherData:
@@ -26,6 +25,7 @@ class OpenWeatherMap:
 	def fetch(self, args: WeatherData):
 		response = requests.get(self.base_url, params=args.__dict__)
 		if response.ok:
+			# Parse the JSON response into a dictionary
 			return response.json()
 		else:
 			print(f"Error fetching weather data: {response.status_code} - {response.text}")
@@ -40,59 +40,35 @@ def _paragraph_fix(text: str) -> str:
 		results.append(paragraph)
 	return "\n\n".join(results)
 
-class Weather(PMModule):
+class Weather(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._weather = config.weather
 		self.weather_data = WeatherData(**self._weather.weather_data.__dict__)
-		self.refresh_minutes = 5
+		self.refresh_minutes = self._weather.refresh_minutes
+		self.degrees = self._weather.degrees if hasattr(self._weather, 'degrees') else "\u00B0F"  # Default to Fahrenheit
+		self.datetime_format = self._weather.datetime_format if hasattr(self._weather, 'datetime_format') else "%I:%M:%S %p"
 		self.timer.set_timeout(1) # refresh right away
 		self.weather_response = None
 		self.weather_api = OpenWeatherMap()
 
-	def render(self, force: bool = False) -> int:
-		if not self.weather_response: return 0
-		gfx = copy.copy(self.gfx)
-		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
-		x = gfx.x0
-		y = gfx.y0
-		w = SimpleNamespace(**self.weather_response.get("current"))
-		if not w: return 0
-		text = self.screen.text
-		text_box = self.screen.text_box
-    	# text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
-		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y)
-		text_box(gfx, "Weather", gfx.rect, valign="top")
-		y += gfx.font_size / 2  # Offset for the text
-		gfx.text_color = self._weather.body_color or gfx.text_color
-		text_box(gfx, f"{w.temp}{degrees}", (x, y + gfx.font_size, gfx.x1, y + gfx.font_size * 2))
-		text_box(gfx, f"{w.humidity} %", (x, y + gfx.font_size * 2, gfx.x1, y + gfx.font_size * 3))
-		text_box(gfx, f"{w.feels_like}{degrees}", (x, y + gfx.font_size * 3, gfx.x1, y + gfx.font_size * 4))
-		self.weather_response = None  # Clear response after rendering
-		return 1
-
 	def exec(self) -> bool:
+		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
 		if not self.timer.is_timedout(): return False
 		self.weather_response = self.weather_api.fetch(self.weather_data)
 		self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
+		w = SimpleNamespace(**self.weather_response.get("current"))
+		# convert w.current.dt to a datetime object
+		dt_str = datetime.fromtimestamp(w.dt).strftime(self.datetime_format)
+		self.update("WEATHER", f"{w.temp}{self.degrees}\n{w.humidity} %\n{w.feels_like}{self.degrees}", dt_str)
+
 		if self.weather_response.get("alerts"):
 			alerts = self.weather_response["alerts"]
 			if alerts:
 				alert = alerts[0]
 				event = AlertEvent("alert", alert["event"], f"{_paragraph_fix(alert['description'])}", self.refresh_minutes * 60 * 1000)
 				self.pm.add_event(event)
+
+		self.weather_response = None  # Clear response after rendering
 		return True
-
-	def onEvent(self, event):
-		pass			
-			
-		
-def main():
-	parms = WeatherData(37.5037, -77.6428, "appid", "minutely,hourly,daily", "imperial", "english")	
-	weather = OpenWeatherMap()
-	current = weather.fetch(parms)
-	print(json.dumps(current, indent=2))
-
-if __name__ == "__main__":
-	main()
 
