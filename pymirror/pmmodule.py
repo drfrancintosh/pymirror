@@ -46,7 +46,6 @@ class PMModule(ABC):
 		self.subscribe(self.moddef.subscriptions or [])
 		if self.moddef.position:
 			dim_str = pm.config.positions[self.moddef.position]
-			print(f"Module {self.moddef.name} position: {self.moddef.position} with dimensions: {dim_str}")
 			dims = [float(x) for x in dim_str.split(",")]
 			## this is the bounding box for the module
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner

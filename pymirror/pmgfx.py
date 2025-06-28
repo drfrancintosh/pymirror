@@ -108,7 +108,14 @@ def tocolor(t):
             if t.startswith("#"):
                 # Convert hex color to RGB tuple
                 t = t.lstrip("#")
-                t = tuple(int(t[i:i+2], 16) for i in (0, 2, 4))
+                if len(t) == 3:
+                    s = t
+                    t = tuple(int(t[i]* 16, 16) for i in (0, 1, 2))
+                    print(f"Converting 3-digit hex color {s} to RGB tuple {t}")
+                elif len(t) == 6:
+                    t = tuple(int(t[i:i+2], 16) for i in (0, 2, 4))
+                else:
+                    raise ValueError(f"Invalid hex color format {t}, expected 3 or 6 hex digits.")
             elif t.startswith("(") and t.endswith(")"):
                 # Convert rgb() string to RGB tuple
                 t = t[1:-1].split(',')

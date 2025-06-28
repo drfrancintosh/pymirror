@@ -38,11 +38,11 @@ def expand_dict(config: dict, context: dict):
 ##
 class _NoneProxy:
     def __getattr__(self, name):
-        return None
+        return _NONE_PROXY
     def __getitem__(self, name):
-        return None
+        return _NONE_PROXY
     def __eq__(self, other):
-        return other is None
+        return (other is None) or (other is _NONE_PROXY)
     def __bool__(self):
         return False
     def __repr__(self):
