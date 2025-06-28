@@ -110,6 +110,27 @@ display_rotate=0    # Set rotation if needed (0 = no rotation, 1 = 90 degrees, e
 - The name of the module must be the snake-case version of the camel-case name of the module class
 - In the `config.json` you can call up a module multiple times with differet instances
 
+- alert.py
+  - displays header, body, and footer. Subscribed to AlertEvent which updates the alert
+- analog_clock.py
+  - Displays analog clock (round face)
+- cli.py
+  - Runs a CLI command on a timer and displays the results
+- clock.py
+  - Displays current time as strftime() format, 
+- cron.py
+  - no display, but runs on a timer and sends the defined event
+- fps.py
+  - Frames Per Second display
+- rainbow.py
+  - test pattern showing all colors in RGB Bands
+- text.py
+  - displays static text
+- weather.py
+  - Displays current temperature, humidity, and effective temperature
+- web_api.py
+  - sends a web request and displays the formatted payload
+
 ## config.json
 
 ```json
@@ -168,7 +189,10 @@ display_rotate=0    # Set rotation if needed (0 = no rotation, 1 = 90 degrees, e
         "text_bg_color": "#000000", // if specified, overrides the screen's default text_bgnd color
         "position": "middle_center", // the position on the screen - see "config.json/positions" above
         "font": "TOS_Title.ttf", // the default font, overrides the screen's default font name (see fontlist.txt)
-        "font_size": 48 // the default font_size, overrides the screen's default font dize (see fontlist.txt)
+        "font_size": 48, // the default font_size, overrides the screen's default font dize (see fontlist.txt)
+        "x_offset": 0, // x offset used by module, but otherwised ignored
+        "y_offset": 0, // y offset used by module, but otherwised ignored
+         "subscriptions": ["alert_event"] // list of events this module is subscribed to
     },
     "config": { // configurations specific to this module... could be anything. see specific module docs
         "hour_hand": "#ff0000",

@@ -1,0 +1,14 @@
+{
+    "module": "text",
+    "moddef": {
+        "name": "week_text",
+        "position": "top_center_left",
+        "x_offset": 0,
+        "y_offset": 0,
+        "font": "DejaVuSans",
+        "font_size": 96
+    },
+    "config": {
+        "text": "Week"
+    }
+}

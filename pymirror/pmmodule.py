@@ -46,6 +46,7 @@ class PMModule(ABC):
 		self.subscribe(self.moddef.subscriptions or [])
 		if self.moddef.position:
 			dim_str = pm.config.positions[self.moddef.position]
+			print(f"Module {self.moddef.name} position: {self.moddef.position} with dimensions: {dim_str}")
 			dims = [float(x) for x in dim_str.split(",")]
 			## this is the bounding box for the module
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
@@ -77,7 +78,7 @@ class PMModule(ABC):
 		self.screen.rect(gfx, gfx.rect, fill=gfx.bg_color)
 
 	def dispatchEvent(self, event) -> None:
-		method_name = f"on{event.name}Event"
+		method_name = f"on{event.event}"
 		method = getattr(self, method_name, None)
 		if method:
 			method(event)
@@ -99,10 +100,10 @@ class PMModule(ABC):
 		"""
 		pass
 
-	@abstractmethod
 	def onEvent(self, event) -> None:
 		""" Handle an event.
-		This method is called when an event is dispatched to the module.
-		you can dispatch with self.dispatchEvent(event)
+		This is called by the PM when an event is dispatched to the module.
+		Override this method to handle specific events.
 		"""
-		pass
+		print(f"onEvent {self.moddef.name} received event: {event.event}")
+		self.dispatchEvent(event)

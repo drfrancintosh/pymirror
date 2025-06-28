@@ -85,7 +85,7 @@ class PMGfx:
             if font_name in font_path:
                 self.font = ImageFont.truetype(font_path, size=pitch)
                 self.font_name = font_name
-                self.font_size = pitch
+                self.font_size = int(pitch)
                 self.font_metrics = self.font.getbbox("M")
                 self.font_offset = self.font_metrics[0]
                 self.font_baseline = self.font_metrics[1]

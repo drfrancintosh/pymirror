@@ -8,6 +8,7 @@ import queue
 from pymirror.pmscreen import PMScreen
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
+from events import * # get all events 
 
 class PyMirror:
 	def __init__(self, config_fname):
@@ -83,17 +84,27 @@ class PyMirror:
 		## send all events to the module
 		if not module.subscriptions: return
 		for event in events:
-			if event["name"] in module.subscriptions:
-				module.onEvent(event)
+			event_name = event.get("event")
+			print(f"Received event {event_name} for module {module.moddef.name}")
+			if event_name in module.subscriptions:
+				print(f"... to module {module.moddef.name}")
+				event_class = globals().get(event_name)
+			if event_class:
+				event_instance = event_class(**event) if isinstance(event, dict) else SafeNamespace(event)
+				print(f"... ... with data: {event_instance}")
+				module.onEvent(event_instance)
+			else:
+				print(f"Unknown event class: {event_name}")
 
 	def add_event(self, event):
 		self.new_events.append(event)
 
 	def _debug(self, module):
-		gfx = copy.copy(self.screen.gfx)
-		self.screen.rect(gfx, module.gfx.rect, fill=None)
-		gfx.set_font(gfx.font_name, 24)
-		self.screen.text(gfx, f"{module.moddef.name}", module.gfx.x0 + gfx.line_width, module.gfx.y0 + gfx.line_width)
+		scrn_gfx = copy.copy(self.screen.gfx)
+		self.screen.rect(scrn_gfx, module.gfx.rect, fill=None)
+		scrn_gfx.set_font(scrn_gfx.font_name, 24)
+		self.screen.text(scrn_gfx, f"{module.moddef.name}", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
+		self.screen.text_box(scrn_gfx, f"{module.moddef.position}", module.gfx.rect, halign="right", valign="top")
 
 	def full_render(self):
 		self.screen.clear()

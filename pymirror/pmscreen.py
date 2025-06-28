@@ -92,24 +92,28 @@ class PMScreen:
 
     def text_box(self, gfx: PMGfx, msg: str, rect: tuple, valign: str = "center", halign: str = "center") -> None:
         x0, y0, x1, y1 = rect
+        text_x0 = x0
+        text_y0 = y0
+
+        if valign == None: valign = "center"
+        if halign == None: halign = "center"
 
         if gfx.text_bg_color is not None: 
             self.draw.rectangle(rect, fill=gfx.text_bg_color)
         if msg is None:
             msg = ""
         lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
-
         if valign == "center": text_y0 = y0 + ( _height(rect) - gfx.font_height * len(lines)) / 2 - gfx.font_baseline / 2
         elif valign == "top": text_y0 = y0 - gfx.font_baseline
         elif valign == "bottom": text_y0 = y1 - gfx.font_height * len(lines) - gfx.font_baseline
-        else: print(f"Invalid valign '{valign}' in text_box, using 'center' instead.")
+        else: print(f"Invalid valign '{type(valign), valign}' in text_box, using 'center' instead.")
 
         for line in lines:
             (x_min, baseline, width, font_height) = gfx.font.getbbox(line)
             if halign == "center": text_x0 = x0 + (_width(rect) - width) / 2
             elif halign == "left": text_x0 = x0
             elif halign == "right": text_x0 = x1 - width
-            else: print(f"Invalid halign '{halign}' in text_box, using 'center' instead.")
+            else: print(f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead.")
 
             self.draw.text((text_x0, text_y0), line, fill=gfx.text_color, font=gfx.font)
             text_y0 += gfx.font_height

@@ -8,7 +8,7 @@ import copy
 from types import SimpleNamespace
 from dataclasses import dataclass
 from pymirror.pmmodule import PMModule
-from modules.alert import AlertEvent
+from events.alert_event import AlertEvent
 
 
 @dataclass
@@ -79,7 +79,7 @@ class Weather(PMModule):
 			alerts = self.weather_response["alerts"]
 			if alerts:
 				alert = alerts[0]
-				event = AlertEvent("weather_alert", alert["event"], f"{_paragraph_fix(alert['description'])}", self.refresh_minutes * 60 * 1000)
+				event = AlertEvent("alert", alert["event"], f"{_paragraph_fix(alert['description'])}", self.refresh_minutes * 60 * 1000)
 				self.pm.add_event(event)
 		return True
 

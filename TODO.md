@@ -22,6 +22,8 @@
 
 18. add try/catch surrounding PyMirror main loop to catch errors in module processing
 
+19. Better error handling
+
 # DONE
 
 1. update gfx object so "set_font(font_name, font_size)" is 'permanent'

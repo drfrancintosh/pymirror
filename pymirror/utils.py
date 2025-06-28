@@ -32,9 +32,28 @@ def expand_dict(config: dict, context: dict):
 				elif isinstance(value[i], dict):
 					expand_dict(value[i], context)
 
+##
+## This is a proxy class that returns None for any attribute or item access.
+## It is used to safely handle missing attributes in SafeNamespace.
+##
+class _NoneProxy:
+    def __getattr__(self, name):
+        return None
+    def __getitem__(self, name):
+        return None
+    def __eq__(self, other):
+        return other is None
+    def __bool__(self):
+        return False
+    def __repr__(self):
+        return "None"
+
+_NONE_PROXY = _NoneProxy()
+
+## This is a safe namespace class that returns None for any missing attributes.
+
 class SafeNamespace(SimpleNamespace):
     def __init__(self, **kwargs):
-        # Recursively convert dicts and lists to SafeNamespace
         for k, v in kwargs.items():
             if isinstance(v, dict):
                 kwargs[k] = SafeNamespace(**v)
@@ -46,9 +65,8 @@ class SafeNamespace(SimpleNamespace):
         self.__dict__.update(kwargs)
 
     def __getattr__(self, name):
-        # Override __getattr__ to return None for undefined attributes
-        return None
+        # Return _NONE_PROXY for missing attributes
+        return _NONE_PROXY
 
     def __getitem__(self, name):
-        # Implement __getitem__ to allow [] notation
-        return getattr(self, name, None)
+        return getattr(self, name, _NONE_PROXY)

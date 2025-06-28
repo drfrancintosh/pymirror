@@ -1,14 +1,6 @@
-import time
 import copy
 from pymirror.pmmodule import PMModule
-from pymirror.pmevent import PMEvent
-from dataclasses import dataclass
 
-@dataclass
-class AlertEvent(PMEvent):
-	heading: str
-	message: str
-	timeout: int
 
 class Alert(PMModule):
 	def __init__(self, pm, moddef, config):
@@ -63,12 +55,6 @@ class Alert(PMModule):
 			return True
 		return self._has_message_changed()	
 
-	def onEvent(self, event) -> None:
-		if isinstance(event, AlertEvent):
-			self._update_message(event.heading, event.message)
-			self.timer.set_timeout(event.timeout)
-		elif isinstance(event, dict):
-			self._update_message(event.get("heading", ""), event.get("message", ""))
-			self.timer.set_timeout(event.get("timeout", 0))
-		else:
-			print(f"Alert module received unexpected event: {event.name}")
+	def onAlertEvent(self, event) -> None:
+		self._update_message(event.header, event.body)
+		self.timer.set_timeout(event.timeout)
