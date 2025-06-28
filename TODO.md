@@ -8,21 +8,14 @@
 
 7. Some sort of full refresh. PyMirror would clear the screen and all render methods would be called with "force=True"
 
-10. handle exceptions
-
 12. Boundary clipping ?
 
-13. weather.py - error checking for bad api results
+1. Error Handling
+    1. weather.py - error checking for bad api results
+    1. add try/catch surrounding PyMirror main loop to catch errors in module processing
+    1. Better error handling
 
-14. Add generalized class for "window" that has header/body/footer
-
-16. shore-up event processing with "onEventName()" events
-
-17. add device drivers for display to include write-to-file and webserver
-
-18. add try/catch surrounding PyMirror main loop to catch errors in module processing
-
-19. Better error handling
+17. add device drivers for display
 
 # DONE
 
@@ -57,3 +50,9 @@
 14. Move configurations to separate files
 
 15. Add webserver to control modules via events
+
+14. Add generalized class for "window" that has header/body/footer (PMCard)
+
+16. shore-up event processing with "onEventName()" events (can be overridden by overriding onEvent())
+
+17.  display write-to-file and webserver
