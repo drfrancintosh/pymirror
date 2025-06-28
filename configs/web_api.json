@@ -15,7 +15,8 @@
         "params": {
             "apiKey": "$NEWSAPI_KEY",
             "country": "us",
-            "pageSize": 10
+            "pageSize": 10,
+            "category": "general"
         },
         "fonts":
         {

@@ -4,7 +4,7 @@
         "name": "Weather Alert",
         "position": "middle_right",
         "font": "TOS_Title.ttf",
-        "font_size": 32,
+        "font_size": 64,
         "color": "(0,0,0)",
         "bg_color": "(0,0,0)",
         "text_color": "(255,255,0)",

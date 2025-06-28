@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from threading import Thread
 
 class PMServer:
@@ -11,6 +11,17 @@ class PMServer:
         self._setup_routes()
 
     def _setup_routes(self):
+        @self.app.route("/")
+        def index():
+            return render_template("index.html")
+
+        @self.app.route("/<page>")
+        def render_page(page):
+            try:
+                return render_template(f"{page}.html")
+            except Exception:
+                return "Page not found", 404
+
         @self.app.route("/command", methods=["POST"])
         def command():
             data = request.get_json()

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Command Sender</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Send Test Command</h1>
+    <form id="commandForm">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="weather_alert" required>
+        </div>
+        <div class="mb-3">
+            <label for="heading" class="form-label">Heading</label>
+            <input type="text" class="form-control" id="heading" name="heading" value="WOWSA!" required>
+        </div>
+        <div class="mb-3">
+            <label for="message" class="form-label">Message</label>
+            <textarea class="form-control" id="message" name="message" rows="2" required>Hey Kayla, it is going to be 100 degrees today. Stay hydrated!</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="footer" class="form-label">Footer</label>
+            <input type="text" class="form-control" id="footer" name="footer" value="Stay safe!">
+        </div>
+        <div class="mb-3">
+            <label for="timeout" class="form-label">Timeout (ms)</label>
+            <input type="number" class="form-control" id="timeout" name="timeout" value="6000" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Command</button>
+    </form>
+    <div id="result" class="mt-3"></div>
+</div>
+<script>
+document.getElementById('commandForm').onsubmit = function(e) {
+    e.preventDefault();
+    const data = {
+        name: document.getElementById('name').value,
+        heading: document.getElementById('heading').value,
+        message: document.getElementById('message').value,
+        footer: document.getElementById('footer').value,
+        timeout: parseInt(document.getElementById('timeout').value)
+    };
+    fetch('/command', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('result').innerHTML =
+            '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+    })
+    .catch(error => {
+        document.getElementById('result').innerHTML =
+            '<span class="text-danger">Error: ' + error + '</span>';
+    });
+};
+</script>
+</body>
+</html>

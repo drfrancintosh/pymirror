@@ -16,8 +16,6 @@
 
 14. Add generalized class for "window" that has header/body/footer
 
-15. Add webserver to control modules via events
-
 16. shore-up event processing with "onEventName()" events
 
 17. add device drivers for display to include write-to-file and webserver
@@ -56,3 +54,4 @@
 
 14. Move configurations to separate files
 
+15. Add webserver to control modules via events
