@@ -2,15 +2,13 @@
     "module": "clock",
     "moddef": {
         "name": "time",
-        "text_color": "#c0c000",
-        "text_bg_color": "#000000",
+        "text_color": "#fff",
+        "text_bg_color": null,
         "position": "top_left",
-        "x_offset": 0,
-        "y_offset": 0,
         "font": "7segment.ttf",
         "font_size": 128
     },
-    "config": {
+    "clock": {
         "date_format": "%I:%M:%S"
     }
 }

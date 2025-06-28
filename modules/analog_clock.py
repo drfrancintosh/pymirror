@@ -32,11 +32,12 @@ def _compute_hand_posn(x0, y0, r, value, divisor, offset):
 	return (x0 + r * math.cos(angle), y0 + r * math.sin(angle))
 
 class AnalogClock(PMModule):
-	def __init__(self, pm, moddef, config):
-		super().__init__(pm, moddef, config)
-		self.second_hand = config.second_hand
-		self.minute_hand = config.minute_hand
-		self.hour_hand = config.hour_hand
+	def __init__(self, pm, config):
+		super().__init__(pm, config)
+		self._analog_clock = config.analog_clock
+		self.second_hand = self._analog_clock.second_hand
+		self.minute_hand = self._analog_clock.minute_hand
+		self.hour_hand = self._analog_clock.hour_hand
 		self._render_clock_face()
 		self.hour = 0
 		self.minute = 0

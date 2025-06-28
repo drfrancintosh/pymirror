@@ -10,7 +10,6 @@ from dataclasses import dataclass
 from pymirror.pmmodule import PMModule
 from events.alert_event import AlertEvent
 
-
 @dataclass
 class WeatherData:
 	lat: str = "37.5050"
@@ -42,9 +41,10 @@ def _paragraph_fix(text: str) -> str:
 	return "\n\n".join(results)
 
 class Weather(PMModule):
-	def __init__(self, pm, moddef, config):
-		super().__init__(pm, moddef, config)
-		self.weather_data = WeatherData(**config.weather_data.__dict__)
+	def __init__(self, pm, config):
+		super().__init__(pm, config)
+		self._weather = config.weather
+		self.weather_data = WeatherData(**self._weather.weather_data.__dict__)
 		self.refresh_minutes = 5
 		self.timer.set_timeout(1) # refresh right away
 		self.weather_response = None
@@ -64,7 +64,7 @@ class Weather(PMModule):
 		# text(gfx, f"Temp: {w.temp}F\nHumidity: {w.humidity}\nFeels Like: {w.feels_like}F\n{w.weather[0].descripition}", x, y)
 		text_box(gfx, "Weather", gfx.rect, valign="top")
 		y += gfx.font_size / 2  # Offset for the text
-		gfx.text_color = self.config.body_color or gfx.text_color
+		gfx.text_color = self._weather.body_color or gfx.text_color
 		text_box(gfx, f"{w.temp}{degrees}", (x, y + gfx.font_size, gfx.x1, y + gfx.font_size * 2))
 		text_box(gfx, f"{w.humidity} %", (x, y + gfx.font_size * 2, gfx.x1, y + gfx.font_size * 3))
 		text_box(gfx, f"{w.feels_like}{degrees}", (x, y + gfx.font_size * 3, gfx.x1, y + gfx.font_size * 4))

@@ -8,7 +8,7 @@
         "font": "DejaVuSans",
         "font_size": 64
     },
-    "config": {
+    "weather": {
         "weather_data": {
             "lat": "37.50598",
             "lon": "-77.64916",

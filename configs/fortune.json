@@ -3,12 +3,10 @@
     "moddef": {
         "name": "FORTUNE COOKIES",
         "position": "top_strip",
-        "text_color": "#f00",
-        "text_bg_color": "#ccc",
         "font": "DejaVuSans",
         "font_size": 24
     },
-    "config": {
+    "cli": {
         "cycle_seconds": 60,
         "command": "fortune",
         "header": "{{title}}",

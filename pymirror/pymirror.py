@@ -66,7 +66,7 @@ class PyMirror:
 			## create an instance of the class (module)
 			## and pass the PyMirror instance and the module config to it
 			## See pymirror.PMMModule for the expected constructor
-			obj = clazz(self, module_config.moddef, module_config.config)
+			obj = clazz(self, module_config)
 
 			## add the module to the list of modules
 			self.modules.append(obj)
@@ -86,6 +86,7 @@ class PyMirror:
 		for event in events:
 			event_name = event.get("event")
 			print(f"Received event {event_name} for module {module.moddef.name}")
+			event_class = None
 			if event_name in module.subscriptions:
 				print(f"... to module {module.moddef.name}")
 				event_class = globals().get(event_name)

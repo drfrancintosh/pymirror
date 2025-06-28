@@ -3,12 +3,10 @@
     "moddef": {
         "name": "day_of_week",
         "position": "bottom_center",
-        "x_offset": 0,
-        "y_offset": 0,
         "font": "TNG_Credits",
         "font_size": 128
     },
-    "config": {
+    "clock": {
         "date_format": "%A"
     }
 }

@@ -2,13 +2,14 @@ import time
 from pymirror.pmmodule import PMModule
 
 class Cron(PMModule):
-	def __init__(self, pm, moddef, config):
-		super().__init__(pm, moddef, config)
-		self.name = config.name
-		self.event = config.event
-		self.repeat = config.repeat ## number of times to repeat, -1 = forever
-		self.delay = config.delay
-		if config.first_delay: self.timer.set_timeout(config.first_delay) ## emit event immediately
+	def __init__(self, pm, config):
+		super().__init__(pm, config)
+		self._cron = config.cron
+		self.name = self._cron.name
+		self.event = self._cron.event
+		self.repeat = self._cron.repeat ## number of times to repeat, -1 = forever
+		self.delay = self._cron.delay
+		if self._cron.first_delay: self.timer.set_timeout(self._cron.first_delay) ## emit event immediately
 		else: self.timer.set_timeout(self.delay)
 
 	def render(self):

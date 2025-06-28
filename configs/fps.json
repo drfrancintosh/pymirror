@@ -6,7 +6,7 @@
         "position": "bottom_right",
         "font_size": 32
     },
-    "config": {
+    "fps": {
         "valign": "bottom",
         "halign": "right"
     }

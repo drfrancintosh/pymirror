@@ -10,7 +10,7 @@
         "font": "TOS_Title.ttf",
         "font_size": 48
     },
-    "config": {
+    "analog_clock": {
         "hour_hand": "#ff0000",
         "minute_hand": "#00ff00",
         "second_hand": "#2020ff"

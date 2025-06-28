@@ -10,11 +10,9 @@ from pymirror.utils import SafeNamespace
 class PMModuleDef(ABC):
 	name: str = None
 	position: str = "None"
-	x_offset: int = 0
-	y_offset: int = 0
-	color: str = "(255,255,255)"
+	color: str = "#fff"
 	bg_color: str = None
-	text_color: str = "(255,255,255)"
+	text_color: str = "#fff"
 	text_bg_color: str = None
 	font: str = "DejaVuSans.ttf"
 	font_size: int = 64
@@ -22,15 +20,10 @@ class PMModuleDef(ABC):
 	disabled: bool = False
 
 class PMModule(ABC):
-	def __init__(self, pm, moddef: PMModuleDef, config: SafeNamespace):
-		## Initialize the module based on moddef
-		## NOTE: config is often moddef.config, but not always
-		## NOTE: we only init the module on moddef, not on config
-		##	   this is because moddef is the generic module definition, 
-		##     and config is the module "child" instance configuration
+	def __init__(self, pm, config: SafeNamespace):
 		self.pm = pm
 		self.screen = pm.screen
-		self.moddef = PMModuleDef(**moddef.__dict__) if moddef else PMModuleDef(name=self.__class__.__name__, position="None")
+		self.moddef = PMModuleDef(**config.moddef.__dict__) if config.moddef else PMModuleDef(name=self.__class__.__name__, position="None")
 		if not self.moddef.name: self.moddef.name = self.__class__.__name__
 		self.config = config
 		self.timer = PMTimer(0)
@@ -51,8 +44,6 @@ class PMModule(ABC):
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
 			## these are in percentages of the screen size
 			## so we need to multiply to get the actual pixel values
-			## NOTE: self.x_offset and self.y_offset are used by the render() method
-			## 		 to offset the text position within the bounding box
 			self.gfx.rect = (
 				int((self.pm.screen.gfx.width - 1) * dims[0]),
 				int((self.pm.screen.gfx.height - 1) * dims[1]),

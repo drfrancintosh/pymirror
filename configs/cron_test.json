@@ -1,6 +1,6 @@
 {
     "module": "cron",
-    "config": {
+    "cron": {
         "name": "example_cron",
         "first_delay": 4000,
         "delay": 2000,

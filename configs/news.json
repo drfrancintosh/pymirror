@@ -8,7 +8,7 @@
         "font": "DejaVuSans",
         "font_size": 24
     },
-    "config": {
+    "web_api": {
         "update_mins": 60,
         "cycle_seconds": 15,
         "url": "https://newsapi.org/v2/top-headlines",
@@ -18,33 +18,34 @@
             "pageSize": 10,
             "category": "general"
         },
-        "fonts":
-        {
-            "header": {
-                "font": "DejaVuSans",
-                "font_size": 24,
-                "color": "#000000",
-                "bg_color": "#c0c0c0"
-            },
-            "body": {
-                "font": "DejaVuSans",
-                "font_size": 24,
-                "color": "#000000",
-                "bg_color": "#f0f0f0"
-            },
-            "footer": {
-                "font": "DejaVuSans",
-                "font_size": 24,
-                "color": "#000000",
-                "bg_color": "#c0c0c0"
-            }
-        },
         "display": {
             "total": "{{payload.totalResults}}",
             "max": "10",
             "header": "{{payload.articles[_n_].title}}",
             "body": "{{payload.articles[_n_].description}}",
             "footer": "{{payload.articles[_n_].source.name}} @ {{payload.articles[_n_].publishedAt}}"
+        }
+    },
+    "card": {
+        "header": {
+            "font": "DejaVuSans",
+            "font_size": 24,
+            "color": "#000",
+            "bg_color": "#ccc",
+            "valign": "top"
+        },
+        "body": {
+            "font": "DejaVuSans",
+            "font_size": 24,
+            "color": "#000",
+            "bg_color": "#fff"
+        },
+        "footer": {
+            "font": "DejaVuSans",
+            "font_size": 24,
+            "color": "#000000",
+            "bg_color": "#c0c0c0",
+            "valign": "top"
         }
     }
 }

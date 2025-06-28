@@ -9,28 +9,26 @@ from pymirror.utils import expand_dict
 from pymirror.pmcard import PMCard
 
 class Cli(PMCard):
-	def __init__(self, pm, moddef, config):
-		super().__init__(pm, moddef, config)
+	def __init__(self, pm, config):
+		super().__init__(pm, config)
+		self._cli = config.cli
 		self.timer.set_timeout(1)  # refresh right away
+		print(f"cli: {self._card.header}, {self._card.body}, {self._card.footer}")
 
 	def exec(self) -> bool:
 		if self.timer.is_timedout():
-			self.stdout = subprocess.check_output(self.config.command, shell=True, text=True).strip()
-			print(f"CLI command '{self.config.command}' executed, output: {self.stdout}")
+			self.stdout = subprocess.check_output(self._cli.command, shell=True, text=True).strip()
 			context = {
 				"title": self.moddef.name,
 				"stdout": self.stdout,
-				"command": self.config.command,
+				"command": self._cli.command,
 			}
-			print(f"CLI context: {context}")
 			dict = {
-				"header": self.config.header,
-				"body": self.config.body,
-				"footer": self.config.footer,
+				"header": self._cli.header,
+				"body": self._cli.body,
+				"footer": self._cli.footer,
 			}
-			print(f"CLI dict before expansion: {dict}")
 			expand_dict(dict, context)
-			print(f"CLI dict after expansion: {dict}")
 			self.header = dict.get('header')
 			self.body = dict.get('body')
 			self.footer = dict.get('footer')

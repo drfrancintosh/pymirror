@@ -2,9 +2,10 @@ from datetime import datetime
 from pymirror.pmmodule import PMModule
 
 class Fps(PMModule):
-	def __init__(self, pm, moddef, config):
-		super().__init__(pm, moddef, config)
+	def __init__(self, pm, config):
+		super().__init__(pm, config)
 		self.last_time = datetime.now()
+		self._fps = config.fps
 
 	def render(self, force: bool = False) -> bool:
 		now = datetime.now()
@@ -13,7 +14,7 @@ class Fps(PMModule):
 		fps = 1 / delta.total_seconds() if delta.total_seconds() > 0 else 0
 		text_box = self.screen.text_box
 		self.clear_region()
-		text_box(self.gfx, f"FPS: {fps:.2f}", self.gfx.rect, valign=self.config.valign, halign=self.config.halign)
+		text_box(self.gfx, f"FPS: {fps:.2f}", self.gfx.rect, valign=self._fps.valign, halign=self._fps.halign)
 		return True
 
 	def exec(self):

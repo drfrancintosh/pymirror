@@ -3,10 +3,11 @@ from pymirror.pmmodule import PMModule, PMModuleDef
 from pymirror.utils import SafeNamespace
 
 class Clock(PMModule):
-	def __init__(self, pm, moddef: PMModuleDef, config: SafeNamespace):
-		super().__init__(pm, moddef, config)
+	def __init__(self, pm, config: SafeNamespace):
+		super().__init__(pm, config)
+		self._clock = config.clock
 		self.date_format = "%I:%M:%S %p"
-		self.date_format = config.date_format if config.date_format else "%I:%M:%S %p"
+		self.date_format = self._clock.date_format if self._clock.date_format else "%I:%M:%S %p"
 		self.last_time = None
 		self.curr_time = datetime.now().strftime(self.date_format)
 	
@@ -15,8 +16,9 @@ class Clock(PMModule):
 		gfx = self.gfx
 		self.clear_region()
 		self.screen.text_box(gfx, self.curr_time,
-			(gfx.x0 + self.moddef.x_offset, gfx.y0 + self.moddef.y_offset,
-			gfx.x1 + self.moddef.x_offset, gfx.y1 + self.moddef.y_offset))
+			(gfx.x0, gfx.y0, gfx.x1, gfx.y1),
+			halign=self._clock.halign,
+			valign=self._clock.valign)
 		self.last_time = self.curr_time
 		return 1
 

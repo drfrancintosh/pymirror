@@ -10,16 +10,16 @@
     <h1 class="mb-4">Send Test Command</h1>
     <form id="commandForm">
         <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="weather_alert" required>
+            <label for="event" class="form-label">Event</label>
+            <input type="text" class="form-control" id="event" name="event" value="AlertEvent" required>
         </div>
         <div class="mb-3">
-            <label for="heading" class="form-label">Heading</label>
-            <input type="text" class="form-control" id="heading" name="heading" value="WOWSA!" required>
+            <label for="header" class="form-label">Header</label>
+            <input type="text" class="form-control" id="header" name="header" value="WOWSA!" required>
         </div>
         <div class="mb-3">
-            <label for="message" class="form-label">Message</label>
-            <textarea class="form-control" id="message" name="message" rows="2" required>Hey Kayla, it is going to be 100 degrees today. Stay hydrated!</textarea>
+            <label for="body" class="form-label">Body</label>
+            <textarea class="form-control" id="body" name="body" rows="2" required>Hey Kayla, it is going to be 100 degrees today. Stay hydrated!</textarea>
         </div>
         <div class="mb-3">
             <label for="footer" class="form-label">Footer</label>
@@ -37,9 +37,9 @@
 document.getElementById('commandForm').onsubmit = function(e) {
     e.preventDefault();
     const data = {
-        name: document.getElementById('name').value,
-        heading: document.getElementById('heading').value,
-        message: document.getElementById('message').value,
+        event: document.getElementById('event').value,
+        header: document.getElementById('header').value,
+        body: document.getElementById('body').value,
         footer: document.getElementById('footer').value,
         timeout: parseInt(document.getElementById('timeout').value)
     };

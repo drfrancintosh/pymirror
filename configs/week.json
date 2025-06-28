@@ -3,12 +3,12 @@
     "moddef": {
         "name": "week_text",
         "position": "top_center_left",
-        "x_offset": 0,
-        "y_offset": 0,
         "font": "DejaVuSans",
-        "font_size": 96
+        "font_size": 128
     },
-    "config": {
-        "text": "Week"
+    "text": {
+        "text": "Week:",
+        "halign": "right",
+        "valign": "center"
     }
 }

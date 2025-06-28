@@ -190,8 +190,6 @@ display_rotate=0    # Set rotation if needed (0 = no rotation, 1 = 90 degrees, e
         "position": "middle_center", // the position on the screen - see "config.json/positions" above
         "font": "TOS_Title.ttf", // the default font, overrides the screen's default font name (see fontlist.txt)
         "font_size": 48, // the default font_size, overrides the screen's default font dize (see fontlist.txt)
-        "x_offset": 0, // x offset used by module, but otherwised ignored
-        "y_offset": 0, // y offset used by module, but otherwised ignored
          "subscriptions": ["alert_event"] // list of events this module is subscribed to
     },
     "config": { // configurations specific to this module... could be anything. see specific module docs

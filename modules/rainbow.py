@@ -3,8 +3,9 @@ from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMGfx
 
 class Rainbow(PMModule):
-	def __init__(self, pm, moddef, config):
-		super().__init__(pm, moddef, config)
+	def __init__(self, pm, config):
+		super().__init__(pm, config)
+		self._rainbow = config.rainbow
 		self.first_time = True
 
 	def render(self, force: bool = False) -> bool:

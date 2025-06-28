@@ -1,30 +1,40 @@
 {
     "module": "alert",
     "moddef": {
-        "name": "alert",
+        "name": "Alert",
         "position": "middle_right",
-        "font": "TOS_Title.ttf",
-        "font_size": 64,
-        "color": "(0,0,0)",
-        "bg_color": "(0,0,0)",
-        "text_color": "(255,255,0)",
-        "text_bg_color": "(0,0,0)",
-        "subscriptions": [
-            "AlertEvent"
-        ]
+        "text_color": null,
+        "text_bg_color": null,
+        "font": "TNG_Title",
+        "font_size": 24,
+        "subscriptions": ["AlertEvent"]
     },
-    "config": {
-        "effect": "None",
-        "alert_effect": "None",
-        "display_time": 3500,
-        "position": "center",
-        "welcome_message": "Welcome to PyMirror",
-        "heading": {
-            "text": "ALERT",
-            "font": "TNG_Credits.ttf",
-            "font_size": 48,
-            "text_color": "(255,255,0)",
-            "text_bg_color": "(255,0,0)"
+    "alert": {
+        "header": "Alert",
+        "body": "This is an alert message.",
+        "footer": "Alert Footer",
+        "timeout": 5000
+    },
+    "card": {
+        "header": {
+            "font": "TNG_Credits",
+            "font_size": 24,
+            "text_color": "#000",
+            "text_bg_color": "#f00",
+            "height": 48
+        },
+        "body": {
+            "font": "TNG_Credits",
+            "font_size": 24,
+            "text_color": "#ff0",
+            "text_bg_color": "#000"
+        },
+        "footer": {
+            "font": "DejaVuSans",
+            "font_size": 24,
+            "text_color": "#000",
+            "text_bg_color": "#fff",
+            "height": 48
         }
     }
 }
