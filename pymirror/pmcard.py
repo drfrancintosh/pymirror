@@ -10,7 +10,7 @@ class PMCardText:
 		font_name: str = None
 		font_size: int = 24
 		start_color: str = "#fff"
-		text_color: str = "#fff"
+		text_color: str = "#000"
 		text_bg_color: str = "#000"
 		height: int = 48
 		width: int = 0
@@ -76,8 +76,8 @@ class PMCard(PMModule):
 		gfx = self.gfx
 		gfx2 = copy.copy(self.gfx)
 		gfx2.set_font(card_text.font_name or gfx.font_name, card_text.font_size or gfx.font_size)
-		gfx2.text_color = card_text.text_color or gfx.text_color
-		gfx2.text_bg_color = card_text.text_bg_color or gfx.text_bg_color
+		gfx2.text_color = card_text.text_color
+		gfx2.text_bg_color = card_text.text_bg_color
 
 		if maybe_invert_colors:
 			if card_text.text_color == None and card_text.text_bg_color == None:
