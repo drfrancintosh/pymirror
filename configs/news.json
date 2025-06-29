@@ -5,7 +5,7 @@
         "position": "middle_right",
         "text_color": "#000000",
         "text_bg_color": "#c0c0c0",
-        "font": "DejaVuSans",
+        "font_name": "DejaVuSans",
         "font_size": 24
     },
     "web_api": {
@@ -28,7 +28,7 @@
     },
     "card": {
         "header": {
-            "font": "DejaVuSans",
+            "font_name": "DejaVuSans",
             "font_size": 36,
             "text_color": "#000",
             "text_bg_color": "#088",
@@ -36,13 +36,13 @@
             "height": 72
         },
         "body": {
-            "font": "DejaVuSans",
+            "font_name": "DejaVuSans",
             "font_size": 64,
             "text_color": "#0ff",
             "text_bg_color": "#000"
         },
         "footer": {
-            "font": "DejaVuSans",
+            "font_name": "DejaVuSans",
             "font_size": 36,
             "text_color": "#000",
             "text_bg_color": "#088",

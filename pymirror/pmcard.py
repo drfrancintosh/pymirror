@@ -2,23 +2,26 @@ import copy
 
 from pymirror.pmmodule import PMModule
 from pymirror.utils import SafeNamespace
+from dataclasses import dataclass
 
 @dataclass
 class PMCardText:
-		font_name: str = None,
-		font_size: int = 24,
-		text_color: str = "#000",
-		text_bg_color: str = "#f00",
-		height: int = 48,
+		font_name: str = None
+		font_size: int = 24
+		text_color: str = "#000"
+		text_bg_color: str = "#f00"
+		height: int = 48
 		width: int = 0
+		halign: str = "center"
+		valign: str = "center"
 
 class PMCard(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._card = self.config.card
-		self._card.header = PMCardText(**self._card.header)
-		self._card.body = PMCardText(**self._card.body)
-		self._card.footer = PMCardText(**self._card.footer)
+		self._card.header = PMCardText(**self._card.header.__dict__) if self._card.header else PMCardText()
+		self._card.body = PMCardText(**self._card.body.__dict__) if self._card.body else PMCardText()
+		self._card.footer = PMCardText(**self._card.footer.__dict__) if self._card.footer else PMCardText()
 		self.header = None
 		self.body = None
 		self.footer = None
@@ -40,7 +43,7 @@ class PMCard(PMModule):
 	def _render_text(self, msg, rect, font_info, maybe_invert_colors=False) -> int: # returns next y position
 		gfx = self.gfx
 		gfx2 = copy.copy(self.gfx)
-		gfx2.set_font(font_info.font or gfx.font_name, font_info.font_size or gfx.font_size)
+		gfx2.set_font(font_info.font_name or gfx.font_name, font_info.font_size or gfx.font_size)
 		gfx2.text_color = font_info.text_color or gfx.text_color
 		gfx2.text_bg_color = font_info.text_bg_color or gfx.text_bg_color
 

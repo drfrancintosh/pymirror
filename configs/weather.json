@@ -5,7 +5,7 @@
         "position": "middle_left",
         "text_color": "#c0c000",
         "text_bg_color": "#000000",
-        "font": "DejaVuSans",
+        "font_name": "DejaVuSans",
         "font_size": 64
     },
     "weather": {

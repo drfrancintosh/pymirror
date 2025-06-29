@@ -14,7 +14,7 @@ class PMModuleDef(ABC):
 	bg_color: str = None
 	text_color: str = "#fff"
 	text_bg_color: str = None
-	font: str = "DejaVuSans.ttf"
+	font_name: str = "DejaVuSans.ttf"
 	font_size: int = 64
 	subscriptions: list[str] = None
 	disabled: bool = False
@@ -33,7 +33,7 @@ class PMModule(ABC):
 		self.gfx.bg_color = self.moddef.bg_color or self.screen.gfx.bg_color
 		self.gfx.text_color = self.moddef.text_color or self.screen.gfx.text_color
 		self.gfx.text_bg_color = self.moddef.text_bg_color or self.screen.gfx.text_bg_color
-		self.gfx.font_name = self.moddef.font or self.screen.gfx.font_name or "DejaVuSans.ttf"
+		self.gfx.font_name = self.moddef.font_name or self.screen.gfx.font_name or "DejaVuSans.ttf"
 		self.gfx.font_size = self.moddef.font_size or 64
 		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
 		self.subscribe(self.moddef.subscriptions or [])

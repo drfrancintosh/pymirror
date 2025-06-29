@@ -7,7 +7,7 @@
         "text_color": "#c0c000",
         "text_bg_color": "#000000",
         "position": "middle_center",
-        "font": "TOS_Title.ttf",
+        "font_name": "TOS_Title.ttf",
         "font_size": 48
     },
     "analog_clock": {

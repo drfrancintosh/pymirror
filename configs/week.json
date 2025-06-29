@@ -3,7 +3,7 @@
     "moddef": {
         "name": "week_text",
         "position": "top_center_left",
-        "font": "DejaVuSans",
+        "font_name": "DejaVuSans",
         "font_size": 128
     },
     "text": {

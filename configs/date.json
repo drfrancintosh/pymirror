@@ -3,7 +3,7 @@
     "moddef": {
         "name": "date",
         "position": "top_right",
-        "font": "7segment.ttf",
+        "font_name": "7segment.ttf",
         "font_size": 128
     },
     "clock": {

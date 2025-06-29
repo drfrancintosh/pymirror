@@ -5,7 +5,7 @@
         "text_color": "#fff",
         "text_bg_color": null,
         "position": "top_left",
-        "font": "7segment.ttf",
+        "font_name": "7segment.ttf",
         "font_size": 128
     },
     "clock": {

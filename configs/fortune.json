@@ -3,7 +3,7 @@
     "moddef": {
         "name": "FORTUNE COOKIES",
         "position": "top_strip",
-        "font": "DejaVuSans",
+        "font_name": "DejaVuSans",
         "font_size": 24
     },
     "cli": {
