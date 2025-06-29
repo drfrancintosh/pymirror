@@ -1,11 +1,24 @@
 import copy
 
 from pymirror.pmmodule import PMModule
+from pymirror.utils import SafeNamespace
+
+@dataclass
+class PMCardText:
+		font_name: str = None,
+		font_size: int = 24,
+		text_color: str = "#000",
+		text_bg_color: str = "#f00",
+		height: int = 48,
+		width: int = 0
 
 class PMCard(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._card = self.config.card
+		self._card.header = PMCardText(**self._card.header)
+		self._card.body = PMCardText(**self._card.body)
+		self._card.footer = PMCardText(**self._card.footer)
 		self.header = None
 		self.body = None
 		self.footer = None

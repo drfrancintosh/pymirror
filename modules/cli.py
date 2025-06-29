@@ -13,7 +13,6 @@ class Cli(PMCard):
 		super().__init__(pm, config)
 		self._cli = config.cli
 		self.timer.set_timeout(1)  # refresh right away
-		print(f"cli: {self._card.header}, {self._card.body}, {self._card.footer}")
 
 	def exec(self) -> bool:
 		if self.timer.is_timedout():
