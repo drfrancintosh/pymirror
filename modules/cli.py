@@ -13,6 +13,7 @@ class Cli(PMCard):
 		super().__init__(pm, config)
 		self._cli = config.cli
 		self.timer.set_timeout(1)  # refresh right away
+		self.update("", "", "")  # Initialize with empty strings
 
 	def exec(self) -> bool:
 		is_dirty = super().exec()
