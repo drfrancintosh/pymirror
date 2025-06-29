@@ -18,8 +18,8 @@ class PMCardText:
 		fade_in: float = 0.0
 		fade_out: float = 0.0
 		fader: PMFader = None
-		text: str = ""
-		last_text: str = ""
+		text: str = "--starting text--"
+		last_text: str = "--starting text--"
 		mode: str = None
 
 		def is_dirty(self) -> bool:
@@ -97,17 +97,7 @@ class PMCard(PMModule):
 		""" Check if the card has changed and needs to be re-rendered. """
 		is_dirty = False
 		card = self._card.body
-		if card.is_dirty():
-			card.mode = "fade_out"
-		if card.mode == "fade_out":
-			if card.is_fading_out():
-				is_dirty = True
-			else:
-				card.mode = "fade_in"
-				card.last_text = card.text
-		if card.mode == "fade_in":
+		if not card.is_dirty():
 			if card.is_fading_in():
 				is_dirty = True
-			else:
-				card.mode = None
 		return is_dirty
