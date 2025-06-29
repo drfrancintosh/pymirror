@@ -8,7 +8,6 @@ class Text(PMModule):
 		self._text = config.text
 		self.text = self._text.text
 		self.last_text = None
-		self.direction = 0.10
 		self.fader = PMFader("#000", "#fff", 5.0)
 		self.gfx.text_color = self.fader.start()
 
@@ -20,5 +19,8 @@ class Text(PMModule):
 		return True
 
 	def exec(self):
+		if not self.fader.is_done():
+			self.gfx.text_color = self.fader.next(self.gfx.text_color)
+			return True
 		return self.text != self.last_text
 
