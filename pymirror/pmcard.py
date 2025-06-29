@@ -20,6 +20,7 @@ class PMCardText:
 		fader: PMFader = None
 		text: str = ""
 		last_text: str = ""
+		mode: str = None
 
 		def is_dirty(self) -> bool:
 			""" Check if the text has changed. """
@@ -84,12 +85,12 @@ class PMCard(PMModule):
 		footer_height = self._card.footer.height or self._card.footer.font_size or gfx.font_size
 		next_y0 = gfx.y0
 		if (self._card.header):
-			next_y0 = self._render_text(self._card.header.text, (gfx.x0, gfx.y0, gfx.x1, gfx.y0 + header_height), self._card.header, maybe_invert_colors=True)
+			next_y0 = self._render_text(self._card.header.last_text, (gfx.x0, gfx.y0, gfx.x1, gfx.y0 + header_height), self._card.header, maybe_invert_colors=True)
 		if (self._card.footer):
-			next_y0 = self._render_text(self._card.body.text, (gfx.x0, next_y0, gfx.x1, gfx.y1 - footer_height), self._card.body, maybe_invert_colors=False)
-			next_y0 =self._render_text(self._card.footer.text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.footer, maybe_invert_colors=True)
+			next_y0 = self._render_text(self._card.body.last_text, (gfx.x0, next_y0, gfx.x1, gfx.y1 - footer_height), self._card.body, maybe_invert_colors=False)
+			next_y0 =self._render_text(self._card.footer.last_text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.footer, maybe_invert_colors=True)
 		else:
-			self._render_text(self._card.body.text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.body, maybe_invert_colors=False)
+			self._render_text(self._card.body.last_text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.body, maybe_invert_colors=False)
 		return True
 	
 	def exec(self):
@@ -97,16 +98,16 @@ class PMCard(PMModule):
 		is_dirty = False
 		card = self._card.body
 		if card.is_dirty():
-			print(f"Card text changed: {card.text} != {card.last_text}")
+			card.mode = "fade_out"
+		if card.mode == "fade_out":
 			if card.is_fading_out():
 				is_dirty = True
 			else:
-				print(f"Card is not fading out: {card.text} != {card.last_text}")
+				card.mode = "fade_in"
 				card.last_text = card.text
+		elif card.mode == "fade_in":
+			if card.is_fading_out():
 				is_dirty = True
-		else:
-			print(f"Card text is not dirty: {card.text} == {card.last_text}")
-			if card.is_fading_in():
-				print(f"Card is fading in: {card.text} != {card.last_text}")
-				is_dirty = True
+			else:
+				card.mode = None
 		return is_dirty
