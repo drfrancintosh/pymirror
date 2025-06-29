@@ -53,6 +53,7 @@ class Weather(PMCard):
 		self.weather_api = OpenWeatherMap()
 
 	def exec(self) -> bool:
+		super().exec()
 		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
 		if not self.timer.is_timedout(): return False
 		self.weather_response = self.weather_api.fetch(self.weather_data)

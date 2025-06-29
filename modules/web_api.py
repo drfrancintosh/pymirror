@@ -82,4 +82,4 @@ class WebApi(PMCard):
 			self.display_timer.set_timeout(self._web_api.cycle_seconds * 1000)
 			update = True
 
-		return update
+		return update or super().exec()
