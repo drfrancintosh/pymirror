@@ -54,6 +54,7 @@ class Weather(PMCard):
 		self.update("", "", "")  # Initialize with empty strings
 
 	def exec(self) -> bool:
+		super().exec()
 		if not self.timer.is_timedout(): return False
 		self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
 		self.weather_response = self.weather_api.fetch(self.weather_data)
@@ -71,6 +72,6 @@ class Weather(PMCard):
 				self.pm.add_event(event)
 
 		self.weather_response = None  # Clear response after rendering
-		return super().exec()
+		return True
 
 
