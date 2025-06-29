@@ -15,8 +15,9 @@ class Cli(PMCard):
 		self.timer.set_timeout(1)  # refresh right away
 
 	def exec(self) -> bool:
-		# super().exec()
+		is_dirty = super().exec()
 		if self.timer.is_timedout():
+			print(f"Executing CLI command: {self._cli.command}")
 			self.stdout = subprocess.check_output(self._cli.command, shell=True, text=True).strip()
 			context = {
 				"title": self.moddef.name,
@@ -32,8 +33,8 @@ class Cli(PMCard):
 			self._card.header.text = dict.get('header') if self._card.header else None
 			self._card.body.text = dict.get('body') if self._card.body else None
 			self._card.footer.text = dict.get('footer') if self._card.footer else None
-			return True
-		return False
-	
+			is_dirty = True
+		return is_dirty
+
 	def onEvent(self, event):
 		pass			
