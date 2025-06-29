@@ -55,11 +55,10 @@ class Weather(PMCard):
 	def exec(self) -> bool:
 		super().exec()
 		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
-		if not self.timer.is_timedout(): return False
+		if not self.timer.is_timedout(): return True
 		self.weather_response = self.weather_api.fetch(self.weather_data)
 		self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
 		w = SimpleNamespace(**self.weather_response.get("current"))
-		print(f"Weather response: {self.weather_response}")
 		# convert w.current.dt to a datetime object
 		dt_str = datetime.fromtimestamp(w.dt).strftime(self.datetime_format)
 		self.update("WEATHER", f"{w.temp}{self.degrees}\n{w.humidity} %\n{w.feels_like}{self.degrees}", dt_str)
