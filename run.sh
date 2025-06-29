@@ -1,1 +1,1 @@
-python3 -m pymirror.pymirror
+python3 -m pymirror.pymirror "$@"

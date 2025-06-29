@@ -4,6 +4,7 @@ import copy
 import os
 from dotenv import load_dotenv
 import queue
+import argparse
 
 from pymirror.pmscreen import PMScreen
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
@@ -135,8 +136,15 @@ class PyMirror:
 				self.screen.flush()
 
 def main():
-	pm = PyMirror("config.json")
-	pm.run()
+    parser = argparse.ArgumentParser(description="PyMirror")
+    parser.add_argument(
+        "-c", "--config",
+        default="config.json",
+        help="Path to config JSON file (default: config.json)"
+    )
+    args = parser.parse_args()
+    pm = PyMirror(args.config)
+    pm.run()
 
 if __name__ == "__main__":
 	main()

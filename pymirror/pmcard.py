@@ -8,8 +8,8 @@ from dataclasses import dataclass
 class PMCardText:
 		font_name: str = None
 		font_size: int = 24
-		text_color: str = "#000"
-		text_bg_color: str = "#f00"
+		text_color: str = "#fff"
+		text_bg_color: str = "#000"
 		height: int = 48
 		width: int = 0
 		halign: str = "center"
@@ -40,20 +40,22 @@ class PMCard(PMModule):
 	def has_changed(self) -> bool:
 		return self.header != self.last_header or self.body != self.last_body or self.footer != self.last_footer
 
-	def _render_text(self, msg, rect, font_info, maybe_invert_colors=False) -> int: # returns next y position
+	def _render_text(self, msg, rect, card_text, maybe_invert_colors=False) -> int: # returns next y position
 		gfx = self.gfx
 		gfx2 = copy.copy(self.gfx)
-		gfx2.set_font(font_info.font_name or gfx.font_name, font_info.font_size or gfx.font_size)
-		gfx2.text_color = font_info.text_color or gfx.text_color
-		gfx2.text_bg_color = font_info.text_bg_color or gfx.text_bg_color
+		gfx2.set_font(card_text.font_name or gfx.font_name, card_text.font_size or gfx.font_size)
+		gfx2.text_color = card_text.text_color or gfx.text_color
+		gfx2.text_bg_color = card_text.text_bg_color or gfx.text_bg_color
+		if (self.moddef.name == "FORTUNE COOKIES"):
+			print(f"Rendering card: {self.moddef.name} at {card_text.__dict__}  {gfx.text_bg_color}")
 
 		if maybe_invert_colors:
-			if font_info.text_color == None and font_info.text_bg_color == None:
+			if card_text.text_color == None and card_text.text_bg_color == None:
 				## no colors were specified for the text
 				## so use the default screen colors but invert them
 				gfx2.text_color = gfx.text_bg_color
 				gfx2.text_bg_color = gfx.text_color
-		self.screen.text_box(gfx2, msg, rect, halign=font_info.halign, valign=font_info.valign)
+		self.screen.text_box(gfx2, msg, rect, halign=card_text.halign, valign=card_text.valign)
 		return rect[3] + 1 # next y position after rendering the text box
 
 	def render(self, force: bool = False) -> bool:
