@@ -15,7 +15,7 @@ class Cli(PMCard):
 		self.timer.set_timeout(1)  # refresh right away
 
 	def exec(self) -> bool:
-		super().exec()
+		# super().exec()
 		if self.timer.is_timedout():
 			self.stdout = subprocess.check_output(self._cli.command, shell=True, text=True).strip()
 			context = {
