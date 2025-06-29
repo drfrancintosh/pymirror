@@ -1,6 +1,6 @@
 import time
 from PIL import Image, ImageDraw
-from pymirror.pmgfx import PMGfx, tocolor
+from pymirror.pmgfx import PMGfx, tocolor, color_to_tuple, color_from_tuple
 
 class PMScreen:
     def __init__(self, config):

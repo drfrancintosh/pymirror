@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 import copy
-from pymirror.pmscreen import PMGfx
 from dataclasses import dataclass
 
 from pymirror.pmtimer import PMTimer
+from pymirror.pmgfx import PMGfx
 from pymirror.utils import SafeNamespace
 
 @dataclass

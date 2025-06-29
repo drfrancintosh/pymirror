@@ -1,6 +1,6 @@
-from pymirror import PMModule, PMFader
-from pymirror import SafeNamespace
-from pymirror.pmgfx import color_from_tuple, color_to_tuple
+from pymirror.pmmodule import PMModule
+from pymirror.utils import SafeNamespace
+from pymirror.pmgfx import PMFader
 
 class Text(PMModule):
 	def __init__(self, pm, config: SafeNamespace):

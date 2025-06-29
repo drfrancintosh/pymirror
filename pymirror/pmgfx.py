@@ -1,7 +1,6 @@
-from PIL import ImageFont
-from pymirror.utils import _sub, _add, _norm, _scale, _div, _mul
-from dataclasses import dataclass
 import time
+from PIL import ImageFont
+from pymirror.utils import _sub, _add, _norm, _scale
 
 class PMFader:
     """Class to handle color fading in PMGfx."""

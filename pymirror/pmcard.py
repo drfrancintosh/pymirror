@@ -1,8 +1,8 @@
 import copy
-
-from pymirror import PMModule, PMFader
-from pymirror.utils import SafeNamespace
 from dataclasses import dataclass
+
+from pymirror.pmmodule import PMModule
+from pymirror.pmgfx import PMFader
 
 @dataclass
 class PMCardText:
@@ -16,7 +16,7 @@ class PMCardText:
 		valign: str = "center"
 		fade_in: float = 0.0
 		fade_out: float = 0.0
-		fader: PMFader
+		fader: PMFader = None
 		text: str = ""
 		last_text: str = ""
 
@@ -88,13 +88,13 @@ class PMCard(PMModule):
 		header_height = self._card.header.height or self._card.header.font_size or gfx.font_size
 		footer_height = self._card.footer.height or self._card.footer.font_size or gfx.font_size
 		next_y0 = gfx.y0
-		if (self.header):
-			next_y0 = self._render_text(self.header, (gfx.x0, gfx.y0, gfx.x1, gfx.y0 + header_height), self._card.header, maybe_invert_colors=True)
-		if (self.footer):
-			next_y0 = self._render_text(self.body, (gfx.x0, next_y0, gfx.x1, gfx.y1 - footer_height), self._card.body, maybe_invert_colors=False)
-			next_y0 =self._render_text(self.footer, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.footer, maybe_invert_colors=True)
+		if (self._card.header):
+			next_y0 = self._render_text(self._card.header.text, (gfx.x0, gfx.y0, gfx.x1, gfx.y0 + header_height), self._card.header, maybe_invert_colors=True)
+		if (self._card.footer):
+			next_y0 = self._render_text(self._card.body.text, (gfx.x0, next_y0, gfx.x1, gfx.y1 - footer_height), self._card.body, maybe_invert_colors=False)
+			next_y0 =self._render_text(self._card.footer.text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.footer, maybe_invert_colors=True)
 		else:
-			self._render_text(self.body, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.body, maybe_invert_colors=False)
+			self._render_text(self._card.body.text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.body, maybe_invert_colors=False)
 		return True
 	
 	def exec(self):

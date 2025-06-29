@@ -1,4 +1,4 @@
-from pymirror import PMCard
+from pymirror.pmcard import PMCard
 
 class Alert(PMCard):
 	def __init__(self, pm, config):
@@ -17,7 +17,7 @@ class Alert(PMCard):
 		if self.timer.is_timedout(): 
 			self.update(None, None, None)
 			return True
-		return self.has_changed()	
+		return self.is_dirty()	
 
 	def onAlertEvent(self, event) -> None:
 		self.update(event.header, event.body, event.footer)
