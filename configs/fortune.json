@@ -16,9 +16,7 @@
     "card": {
         "body": {
             "text_color": "#0cc",
-            "font_size": 48,
-            "fade_in": 1.0,
-            "fade_out": 0.0
+            "font_size": 48
         }
     }
 }
