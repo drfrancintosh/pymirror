@@ -56,7 +56,6 @@ class WebApi(PMCard):
 	
 	def _read_api(self):
 		self.response = self.api.fetch()
-		print(f"WebApi response: {json.dumps(self.response, indent=2)}")
 		if self.response.get("error"):
 			print(f"Error fetching data: {self.response['error']}")
 			return False

@@ -1,6 +1,6 @@
-from datetime import datetime
-from pymirror.pmmodule import PMModule, PMModuleDef
-from pymirror.utils import SafeNamespace
+from pymirror import PMModule, PMFader
+from pymirror import SafeNamespace
+from pymirror.pmgfx import color_from_tuple, color_to_tuple
 
 class Text(PMModule):
 	def __init__(self, pm, config: SafeNamespace):
@@ -8,7 +8,10 @@ class Text(PMModule):
 		self._text = config.text
 		self.text = self._text.text
 		self.last_text = None
-	
+		self.direction = 0.10
+		self.fader = PMFader("#000", "#fff", 5.0)
+		self.gfx.text_color = self.fader.start()
+
 	def render(self, force: bool = False) -> int:
 		gfx = self.gfx
 		self.clear_region()
@@ -17,8 +20,12 @@ class Text(PMModule):
 		return True
 
 	def exec(self):
-		return self.last_text != self.text
-
-	def onEvent(self, event):
-		pass
+		if not self.fader.is_done(): 
+			self.gfx.text_color = self.fader.next(self.gfx.text_color)
+			return True
+		else:
+			self.fader = PMFader("#fff", "#000", 5.0)
+			self.gfx.text_color = self.fader.start()
+			return True
+		return False
 

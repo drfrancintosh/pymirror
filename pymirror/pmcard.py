@@ -26,8 +26,6 @@ class PMCard(PMModule):
 
 	def _render_text(self, msg, rect, font_info, maybe_invert_colors=False) -> int: # returns next y position
 		gfx = self.gfx
-		if self.moddef.name == "newsapi.com":
-			print(f"News: {msg} rect={rect} font_info={font_info}")
 		gfx2 = copy.copy(self.gfx)
 		gfx2.set_font(font_info.font or gfx.font_name, font_info.font_size or gfx.font_size)
 		gfx2.text_color = font_info.text_color or gfx.text_color
