@@ -15,6 +15,7 @@ class Cli(PMCard):
 		self.timer.set_timeout(1)  # refresh right away
 
 	def exec(self) -> bool:
+		super().exec()
 		if self.timer.is_timedout():
 			self.stdout = subprocess.check_output(self._cli.command, shell=True, text=True).strip()
 			context = {
@@ -28,9 +29,9 @@ class Cli(PMCard):
 				"footer": self._cli.footer,
 			}
 			expand_dict(dict, context)
-			self.header = dict.get('header')
-			self.body = dict.get('body')
-			self.footer = dict.get('footer')
+			self._card.header.text = dict.get('header')
+			self._card.body.text = dict.get('body')
+			self._card.footer.text = dict.get('footer')
 			return True
 		return False
 	
