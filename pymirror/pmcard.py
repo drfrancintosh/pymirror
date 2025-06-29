@@ -101,11 +101,15 @@ class PMCard(PMModule):
 		is_dirty = False
 		card = self._card.body
 		if card.is_dirty():
+			print(f"Card text changed: {card.text} != {card.last_text}")
 			if card.is_fading_out():
+				print(f"Card is fading out: {card.text} != {card.last_text}")
 				card.last_text = card.text
 			is_dirty = True
 		else:
+			print(f"Card text is not dirty: {card.text} == {card.last_text}")
 			if card.is_fading_in():
+				print(f"Card is fading in: {card.text} != {card.last_text}")
 				card.last_text = card.text
 				is_dirty = True
 		return is_dirty
