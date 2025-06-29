@@ -107,12 +107,11 @@ class PMCard(PMModule):
 	
 	def exec(self):
 		""" Check if the card has changed and needs to be re-rendered. """
-		is_dirty = False
+		is_dirty = True
 		card = self._card.body
 		if card.last_text == None:
 			card.last_text = card.text
-		if card.text:
-			card.last_text = card.text
+		if card.last_text:
 			if card.is_fading_in():
 				is_dirty = True
 		return is_dirty
