@@ -20,12 +20,21 @@ class Text(PMModule):
 		return True
 
 	def exec(self):
+		if self.text != self.last_text:
+			self.fader = PMFader("#000", "#fff", 5.0)
+			self.gfx.text_color = self.fader.start()
+			return True
 		if not self.fader.is_done(): 
 			self.gfx.text_color = self.fader.next(self.gfx.text_color)
 			return True
 		else:
-			self.fader = PMFader("#fff", "#000", 5.0)
-			self.gfx.text_color = self.fader.start()
+			print(f"Fader done, switching text color {self.gfx.text_color}")
+			if self.gfx.text_color == 0:
+				self.fader = PMFader("#fff", "#000", 5.0)
+				self.gfx.text_color = self.fader.start()
+			else:
+				self.fader = PMFader("#000", "#fff", 5.0)
+				self.gfx.text_color = self.fader.start()
 			return True
 		return False
 
