@@ -70,8 +70,6 @@ class PMCard(PMModule):
 		gfx2.set_font(card_text.font_name or gfx.font_name, card_text.font_size or gfx.font_size)
 		gfx2.text_color = card_text.text_color or gfx.text_color
 		gfx2.text_bg_color = card_text.text_bg_color or gfx.text_bg_color
-		if (self.moddef.name == "FORTUNE COOKIES"):
-			print(f"Rendering card: {self.moddef.name} at {card_text.__dict__}  {gfx.text_bg_color}")
 
 		if maybe_invert_colors:
 			if card_text.text_color == None and card_text.text_bg_color == None:
