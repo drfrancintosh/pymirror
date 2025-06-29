@@ -34,6 +34,15 @@ class PMCardText:
 					self.text_color = self.fader.next(self.text_color)
 			return not self.fader or self.fader.is_done() ## returns True if the fade in is done
 
+		def is_fading(self, fade_value: float) -> bool:
+			if fade_value > 0.0:
+				if not self.fader or self.fader.is_done():
+					self.fader = PMFader(self.text_bg_color, self.text_color, fade_value)
+					self.text_color = self.fader.start()
+				else:
+					self.text_color = self.fader.next(self.text_color)
+			return not self.fader or self.fader.is_done() ## returns True if the fade in is done
+
 		def is_fading_out(self) -> bool:
 			if self.fade_out > 0.0:
 				if not self.fader or self.fader.is_done():
@@ -102,13 +111,13 @@ class PMCard(PMModule):
 		card = self._card.body
 		if card.is_dirty():
 			print(f"Card text changed: {card.text} != {card.last_text}")
-			if card.is_fading_out():
+			if card.is_fading(card.fade_out):
 				print(f"Card is fading out: {card.text} != {card.last_text}")
 				card.last_text = card.text
 			is_dirty = True
 		else:
 			print(f"Card text is not dirty: {card.text} == {card.last_text}")
-			if card.is_fading_in():
+			if card.is_fading(card.fade_in):
 				print(f"Card is fading in: {card.text} != {card.last_text}")
 				card.last_text = card.text
 				is_dirty = True
