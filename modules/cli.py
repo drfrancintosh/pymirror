@@ -30,9 +30,7 @@ class Cli(PMCard):
 				"footer": self._cli.footer,
 			}
 			expand_dict(dict, context)
-			self._card.header.text = dict.get('header') if self._card.header else None
-			self._card.body.text = dict.get('body') if self._card.body else None
-			self._card.footer.text = dict.get('footer') if self._card.footer else None
+			self.update(dict.get('header'), dict.get('body'), dict.get('footer'))
 			is_dirty = True
 		return is_dirty
 
