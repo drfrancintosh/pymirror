@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from pymirror.pmmodule import PMModule
 from pymirror.pmgfx import PMFader
-from pymirror.utils import SafeNamespace
+from pymirror.utils import _NONE_PROXY
 
 @dataclass
 class PMCardText:
@@ -48,9 +48,9 @@ class PMCard(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._card = self.config.card
-		self._card.header = PMCardText(**self._card.header.__dict__) if self._card.header else SafeNamespace()
-		self._card.body = PMCardText(**self._card.body.__dict__) if self._card.body else SafeNamespace()
-		self._card.footer = PMCardText(**self._card.footer.__dict__) if self._card.footer else SafeNamespace()
+		self._card.header = PMCardText(**self._card.header.__dict__) if self._card.header else _NONE_PROXY
+		self._card.body = PMCardText(**self._card.body.__dict__) if self._card.body else _NONE_PROXY
+		self._card.footer = PMCardText(**self._card.footer.__dict__) if self._card.footer else _NONE_PROXY
 
 	def update(self, header: str, body: str, footer: str) -> None:
 		self._card.header.last_text = self._card.header.text
