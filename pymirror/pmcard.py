@@ -109,15 +109,18 @@ class PMCard(PMModule):
 		card = self._card.body
 		if card.last_text == None:
 			card.last_text = card.text
+		print(f"Card text: {card.text}, last_text: {card.last_text}")
 		if card.text != card.last_text:
+			print(f"Card text changed: {card.text} != {card.last_text}")
 			if card.is_fading_out():
 				is_dirty = True
 			else:
 				card.last_text = card.text
 				is_dirty = True
 				card.in_fader = None
-		if card.last_text:
+		else:
 			if card.is_fading_in():
+				print(f"Card text changed: {card.text} != {card.last_text}")
 				is_dirty = True
 			else:
 				is_dirty = True
