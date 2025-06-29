@@ -27,7 +27,7 @@ class WebApi(PMCard):
 		super().__init__(pm, config)
 		self._web_api = config.web_api
 		self.api = Api(self._web_api)
-		self.timer.set_timeout(1) # refresh right away
+		self.timer.set_timeout(0) # refresh right away
 		self.display_timer = PMTimer(0)
 		self.response = None
 		self.items = []
