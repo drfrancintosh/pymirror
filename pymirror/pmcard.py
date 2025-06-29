@@ -109,7 +109,7 @@ class PMCard(PMModule):
 		""" Check if the card has changed and needs to be re-rendered. """
 		is_dirty = False
 		card = self._card.body
-		if card.is_dirty():
+		if card.last_text and card.is_dirty():
 			if card.is_fading_out():
 				is_dirty = True
 			else:
