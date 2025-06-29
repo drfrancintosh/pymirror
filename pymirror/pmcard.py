@@ -107,7 +107,7 @@ class PMCard(PMModule):
 	def _update_fader(self, card) -> bool:
 		""" Check if the card has changed and needs to be re-rendered. """
 		if not card: return False
-		is_dirty = True
+		is_dirty = False
 		if card.last_text == None:
 			card.last_text = card.text
 		if card.text != card.last_text:
