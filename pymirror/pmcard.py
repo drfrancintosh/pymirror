@@ -9,7 +9,7 @@ from pymirror.utils import _NONE_PROXY
 class PMCardText:
 		font_name: str = None
 		font_size: int = 24
-		start_color: str = "#fff"
+		start_color: str = None
 		text_color: str = "#000"
 		text_bg_color: str = "#000"
 		height: int = 48
@@ -28,6 +28,8 @@ class PMCardText:
 			return self.text != self.last_text
 
 		def is_fading_in(self) -> bool:
+			if self.start_color == None:
+				self.start_color = self.text_color
 			if self.fade_in == 0.0:
 				return False
 			if self.in_fader is None:
@@ -40,6 +42,8 @@ class PMCardText:
 			return True
 
 		def is_fading_out(self) -> bool:
+			if self.start_color == None:
+				self.start_color = self.text_color
 			if self.fade_out == 0.0:
 				return False
 			if self.out_fader is None:
@@ -107,8 +111,8 @@ class PMCard(PMModule):
 		""" Check if the card has changed and needs to be re-rendered. """
 		is_dirty = True
 		card = self._card.body
-		# if card.last_text == None:
-		# 	card.last_text = card.text
+		if card.last_text == None:
+			card.last_text = card.text
 		print(f"Card text: {card.text}, last_text: {card.last_text}")
 		if card.text != card.last_text:
 			print(f"Card text changed: {card.text} != {card.last_text}")
