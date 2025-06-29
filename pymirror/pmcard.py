@@ -111,6 +111,12 @@ class PMCard(PMModule):
 		card = self._card.body
 		if card.last_text == None:
 			card.last_text = card.text
+		if card.text != card.last_text:
+			if card.is_fading_out():
+				is_dirty = True
+			else:
+				card.last_text = card.text
+				is_dirty = True
 		if card.last_text:
 			if card.is_fading_in():
 				is_dirty = True
