@@ -64,9 +64,6 @@ class PMCard(PMModule):
 		self._card.footer = PMCardText(**self._card.footer.__dict__) if self._card.footer else _NONE_PROXY
 
 	def update(self, header: str, body: str, footer: str) -> None:
-		self._card.header.last_text = self._card.header.text
-		self._card.body.last_text = self._card.body.text
-		self._card.footer.last_text = self._card.footer.text
 		self._card.header.text = header
 		self._card.body.text = body
 		self._card.footer.text = footer
