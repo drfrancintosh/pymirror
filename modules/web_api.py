@@ -76,7 +76,7 @@ class WebApi(PMCard):
 		if self.timer.is_timedout():
 			self._read_api()
 			self.timer.set_timeout(self._web_api.update_mins * 60 * 1000)
-			self.display_timer.set_timeout(1)
+			self.display_timer.set_timeout(0.1)
 			update = True
 
 		if self.display_timer.is_timedout():
