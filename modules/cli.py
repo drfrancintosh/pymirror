@@ -20,6 +20,7 @@ class Cli(PMCard):
 			self.timer.set_timeout(self._cli.cycle_seconds * 1000)  # refresh right away
 			print(f"Executing CLI command: {self._cli.command}")
 			self.stdout = subprocess.check_output(self._cli.command, shell=True, text=True).strip()
+			print(f"...: {self.stdout}")
 			context = {
 				"title": self.moddef.name,
 				"stdout": self.stdout,
