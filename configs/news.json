@@ -37,9 +37,11 @@
         },
         "body": {
             "font_name": "DejaVuSans",
-            "font_size": 64,
+            "font_size": 48,
             "text_color": "#0ff",
-            "text_bg_color": "#000"
+            "text_bg_color": "#000",
+            "fade_in": 1.0,
+            "fade_out": 1.0
         },
         "footer": {
             "font_name": "DejaVuSans",
