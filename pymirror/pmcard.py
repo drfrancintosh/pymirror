@@ -1,6 +1,6 @@
 import copy
 
-from pymirror.pmmodule import PMModule
+from pymirror import PMModule, PMFader
 from pymirror.utils import SafeNamespace
 from dataclasses import dataclass
 
@@ -14,6 +14,34 @@ class PMCardText:
 		width: int = 0
 		halign: str = "center"
 		valign: str = "center"
+		fade_in: float = 0.0
+		fade_out: float = 0.0
+		fader: PMFader
+		text: str = ""
+		last_text: str = ""
+
+		def is_dirty(self) -> bool:
+			""" Check if the text has changed. """
+			return self.text != self.last_text
+
+		def _fade_in(self) -> bool:
+			if self.fade_in > 0.0:
+				if not self.fader or self.fader.is_done():
+					self.fader = PMFader(self.text_bg_color, self.text_color, self.fade_in)
+					self.text_color = self.fader.start()
+				else:
+					self.text_color = self.fader.next(self.text_color)
+			return not self.fader or self.fader.is_done() ## returns True if the fade in is done
+
+		def _fade_out(self) -> bool:
+			if self.fade_out > 0.0:
+				if not self.fader or self.fader.is_done():
+					self.fader = PMFader(self.text_bg_color, self.text_color, self.fade_out)
+					self.text_color = self.fader.start()
+				else:
+					self.text_color = self.fader.next(self.text_color)
+			return not self.fader or self.fader.is_done() ## returns True if the fade out is done
+
 
 class PMCard(PMModule):
 	def __init__(self, pm, config):
@@ -22,23 +50,19 @@ class PMCard(PMModule):
 		self._card.header = PMCardText(**self._card.header.__dict__) if self._card.header else PMCardText()
 		self._card.body = PMCardText(**self._card.body.__dict__) if self._card.body else PMCardText()
 		self._card.footer = PMCardText(**self._card.footer.__dict__) if self._card.footer else PMCardText()
-		self.header = None
-		self.body = None
-		self.footer = None
-		self.last_header = None
-		self.last_body = None
-		self.last_footer = None
 
 	def update(self, header: str, body: str, footer: str) -> None:
-		self.last_header = self.header
-		self.last_body = self.body 
-		self.last_footer = self.footer
-		self.header = header
-		self.body = body
-		self.footer = footer
+		self._card.header.last_text = self._card.header.text
+		self._card.body.last_text = self._card.body.text
+		self._card.footer.last_text = self._card.footer.text
+		self._card.header.text = header
+		self._card.body.text = body
+		self._card.footer.text = footer
 
-	def has_changed(self) -> bool:
-		return self.header != self.last_header or self.body != self.last_body or self.footer != self.last_footer
+	def is_dirty(self) -> bool:
+		return (self._card.header.is_dirty() or
+				self._card.body.is_dirty() or
+				self._card.footer.is_dirty())
 
 	def _render_text(self, msg, rect, card_text, maybe_invert_colors=False) -> int: # returns next y position
 		gfx = self.gfx
@@ -73,3 +97,16 @@ class PMCard(PMModule):
 			self._render_text(self.body, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.body, maybe_invert_colors=False)
 		return True
 	
+	def exec(self):
+		""" Check if the card has changed and needs to be re-rendered. """
+		is_dirty = False
+		card = self._card.body
+		if card.is_dirty():
+			if card.fade_out():
+				card.last_text = card.text
+			is_dirty = True
+		else:
+			if card.fade_in():
+				card.last_text = card.text
+				is_dirty = True
+		return is_dirty
