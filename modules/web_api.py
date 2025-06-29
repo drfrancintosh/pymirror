@@ -67,10 +67,11 @@ class WebApi(PMCard):
 		self.header = self.items[self.item_number].get("header", "")
 		self.body = self.items[self.item_number].get("body", "")
 		self.footer = self.items[self.item_number].get("footer", "")
+		self.update(self.header, self.body, self.footer)
 		self.item_number += 1
 	
 	def exec(self) -> bool:
-		update = False
+		update = super().exec()
 		if self.timer.is_timedout():
 			self._read_api()
 			self.timer.set_timeout(self._web_api.update_mins * 60 * 1000)
@@ -82,4 +83,4 @@ class WebApi(PMCard):
 			self.display_timer.set_timeout(self._web_api.cycle_seconds * 1000)
 			update = True
 
-		return update or super().exec()
+		return update

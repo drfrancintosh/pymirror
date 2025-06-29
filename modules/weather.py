@@ -53,9 +53,9 @@ class Weather(PMCard):
 		self.weather_api = OpenWeatherMap()
 
 	def exec(self) -> bool:
-		super().exec()
+		update = super().exec()
 		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
-		if not self.timer.is_timedout(): return True
+		if not self.timer.is_timedout(): return update
 		self.weather_response = self.weather_api.fetch(self.weather_data)
 		self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
 		w = SimpleNamespace(**self.weather_response.get("current"))
