@@ -29,9 +29,9 @@ class Cli(PMCard):
 				"footer": self._cli.footer,
 			}
 			expand_dict(dict, context)
-			self._card.header.text = dict.get('header')
-			self._card.body.text = dict.get('body')
-			self._card.footer.text = dict.get('footer')
+			self._card.header.text = dict.get('header') if self._card.header else None
+			self._card.body.text = dict.get('body') if self._card.body else None
+			self._card.footer.text = dict.get('footer') if self._card.footer else None
 			return True
 		return False
 	
