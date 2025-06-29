@@ -17,7 +17,8 @@ class PMCardText:
 		valign: str = "center"
 		fade_in: float = 0.0
 		fade_out: float = 0.0
-		fader: PMFader = None
+		in_fader: PMFader = None
+		out_fader: PMFader = None
 		text: str = None
 		last_text: str = None
 
@@ -25,20 +26,32 @@ class PMCardText:
 			""" Check if the text has changed. """
 			return self.text != self.last_text
 
-		def is_fading(self, fade_value: float, from_color, to_color) -> bool:
-			if fade_value > 0.0:
-				if not self.fader or self.fader.is_done():
-					self.fader = PMFader(from_color, to_color, fade_value)
-					self.text_color = self.fader.start()
-				else:
-					self.text_color = self.fader.next(self.text_color)
-			return self.fader and not self.fader.is_done() ## returns True while the fade in is still happening
-
 		def is_fading_in(self) -> bool:
-			return self.is_fading(self.fade_in, self.text_bg_color, self.text_color)
+			if self.fade_in == 0.0:
+				return False
+			if self.in_fader is None:
+					self.in_fader = PMFader(self.text_bg_color, self.text_color, self.fade_in)
+					self.text_color = self.in_fader.start()
+			else:
+				self.text_color = self.in_fader.next(self.text_color)
+			if self.in_fader.is_done():
+				self.text_color = self.text_color
+				return False
+			return True
 
 		def is_fading_out(self) -> bool:
-			return self.is_fading(self.fade_out, self.text_color, self.text_bg_color)
+			if self.fade_out == 0.0:
+				return False
+			if self.out_fader is None:
+					self.out_fader = PMFader(self.text_color, self.text_bg_color, self.fade_out)
+					self.text_color = self.out_fader.start()
+			else:
+				self.text_color = self.out_fader.next(self.text_color)
+			if self.out_fader.is_done():
+				self.out_fader = None
+				self.text_color = self.text_color
+				return False
+			return True
 
 class PMCard(PMModule):
 	def __init__(self, pm, config):
@@ -96,13 +109,12 @@ class PMCard(PMModule):
 		""" Check if the card has changed and needs to be re-rendered. """
 		is_dirty = False
 		card = self._card.body
-		if card.last_text == None:
-			card.last_text = card.text
 		if card.is_dirty():
 			if card.is_fading_out():
 				is_dirty = True
 			else:
 				card.last_text = card.text
+				card.out_fader = None
 				is_dirty = True
 		elif card.last_text:
 			if card.is_fading_in():
