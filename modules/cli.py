@@ -17,7 +17,7 @@ class Cli(PMCard):
 	def exec(self) -> bool:
 		is_dirty = super().exec()
 		if self.timer.is_timedout():
-			self.timer.set_timeout(self._cli.cycle_seconds)  # refresh right away
+			self.timer.set_timeout(self._cli.cycle_seconds * 1000)  # refresh right away
 			print(f"Executing CLI command: {self._cli.command}")
 			self.stdout = subprocess.check_output(self._cli.command, shell=True, text=True).strip()
 			context = {
