@@ -51,6 +51,7 @@ class Weather(PMCard):
 		self.timer.set_timeout(1) # refresh right away
 		self.weather_response = None
 		self.weather_api = OpenWeatherMap()
+		self.update("", "", "")  # Initialize with empty strings
 
 	def exec(self) -> bool:
 		if not self.timer.is_timedout(): return False
