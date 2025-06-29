@@ -117,7 +117,7 @@ class PMCard(PMModule):
 			else:
 				card.last_text = card.text
 				is_dirty = True
-				card.out_fader = None
+				card.in_fader = None
 		if card.last_text:
 			if card.is_fading_in():
 				is_dirty = True
