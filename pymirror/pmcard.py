@@ -37,7 +37,7 @@ class PMCardText:
 		def is_fading_out(self) -> bool:
 			if self.fade_out > 0.0:
 				if not self.fader or self.fader.is_done():
-					self.fader = PMFader(self.text_bg_color, self.text_color, self.fade_out)
+					self.fader = PMFader(self.text_color, self.text_bg_color, self.fade_out)
 					self.text_color = self.fader.start()
 				else:
 					self.text_color = self.fader.next(self.text_color)
