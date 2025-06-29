@@ -53,8 +53,7 @@ class Weather(PMCard):
 		self.weather_api = OpenWeatherMap()
 
 	def exec(self) -> bool:
-		update = super().exec()
-		if not self.timer.is_timedout(): return update
+		if not self.timer.is_timedout(): return False
 		self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
 		self.weather_response = self.weather_api.fetch(self.weather_data)
 		print(f"Weather response: {self.weather_response}")  # Debugging output
@@ -71,5 +70,6 @@ class Weather(PMCard):
 				self.pm.add_event(event)
 
 		self.weather_response = None  # Clear response after rendering
-		return True
+		return super().exec()
+
 
