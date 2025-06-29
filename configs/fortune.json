@@ -17,8 +17,8 @@
         "body": {
             "text_color": "#0cc",
             "font_size": 48,
-            "fade_in": 2.0,
-            "fade_out": 2.0
+            "fade_in": 1.0,
+            "fade_out": 0.0
         }
     }
 }

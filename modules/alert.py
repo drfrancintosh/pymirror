@@ -11,7 +11,7 @@ class Alert(PMCard):
 	def exec(self) -> bool:
 		is_dirty = super().exec()
 		if self.timer.is_timedout(): 
-			self.update(None, None, None)
+			self.update("", "", "")
 			return True
 		return is_dirty or self.is_dirty()	
 

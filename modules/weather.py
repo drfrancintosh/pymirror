@@ -54,10 +54,10 @@ class Weather(PMCard):
 
 	def exec(self) -> bool:
 		update = super().exec()
-		degrees = "\u00B0F"  # Degree symbol for Fahrenheit
 		if not self.timer.is_timedout(): return update
-		self.weather_response = self.weather_api.fetch(self.weather_data)
 		self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
+		self.weather_response = self.weather_api.fetch(self.weather_data)
+		print(f"Weather response: {self.weather_response}")  # Debugging output
 		w = SimpleNamespace(**self.weather_response.get("current"))
 		# convert w.current.dt to a datetime object
 		dt_str = datetime.fromtimestamp(w.dt).strftime(self.datetime_format)
