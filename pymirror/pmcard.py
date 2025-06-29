@@ -95,9 +95,9 @@ class PMCard(PMModule):
 		header_height = self._card.header.height or self._card.header.font_size or gfx.font_size
 		footer_height = self._card.footer.height or self._card.footer.font_size or gfx.font_size
 		next_y0 = gfx.y0
-		if (self._card.header):
+		if (self._card.header.text):
 			next_y0 = self._render_text(self._card.header.text, (gfx.x0, gfx.y0, gfx.x1, gfx.y0 + header_height), self._card.header, maybe_invert_colors=True)
-		if (self._card.footer):
+		if (self._card.footer.text):
 			next_y0 = self._render_text(self._card.body.text, (gfx.x0, next_y0, gfx.x1, gfx.y1 - footer_height), self._card.body, maybe_invert_colors=False)
 			next_y0 =self._render_text(self._card.footer.text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.footer, maybe_invert_colors=True)
 		else:
