@@ -2,8 +2,8 @@
   "debug": false,
   "secrets": ".secrets",
   "screen": {
-    "output_file": "output.jpg",
-    "frame_buffer": null,
+    "output_file": null,
+    "frame_buffer": "/dev/fb0",
     "font": "DejaVuSans.ttf",
     "font_size": 64,
     "color": "#fff",
