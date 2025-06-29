@@ -14,10 +14,11 @@ class Alert(PMCard):
 		self.last_footer = None
 
 	def exec(self) -> bool:
+		is_dirty = super().exec()
 		if self.timer.is_timedout(): 
 			self.update(None, None, None)
 			return True
-		return self.is_dirty()	
+		return is_dirty or self.is_dirty()	
 
 	def onAlertEvent(self, event) -> None:
 		self.update(event.header, event.body, event.footer)
