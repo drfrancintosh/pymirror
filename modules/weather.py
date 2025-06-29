@@ -59,6 +59,7 @@ class Weather(PMCard):
 		self.weather_response = self.weather_api.fetch(self.weather_data)
 		self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
 		w = SimpleNamespace(**self.weather_response.get("current"))
+		print(f"Weather response: {self.weather_response}")
 		# convert w.current.dt to a datetime object
 		dt_str = datetime.fromtimestamp(w.dt).strftime(self.datetime_format)
 		self.update("WEATHER", f"{w.temp}{self.degrees}\n{w.humidity} %\n{w.feels_like}{self.degrees}", dt_str)
