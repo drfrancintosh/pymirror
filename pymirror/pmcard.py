@@ -48,7 +48,6 @@ class PMCardText:
 			else:
 				self.text_color = self.out_fader.next(self.text_color)
 			if self.out_fader.is_done():
-				self.out_fader = None
 				self.text_color = self.text_color
 				return False
 			return True
@@ -122,6 +121,7 @@ class PMCard(PMModule):
 			if card.is_fading_in():
 				is_dirty = True
 			else:
+				card.last_text = card.text
 				is_dirty = True
 				card.out_fader = None
 		return is_dirty

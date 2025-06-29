@@ -7,7 +7,7 @@
         "font_size": 24
     },
     "cli": {
-        "cycle_seconds": 15,
+        "cycle_seconds": 10,
         "command": "fortune",
         "header": "",
         "body": "{{stdout}}",
