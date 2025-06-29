@@ -13,7 +13,7 @@ class Alert(PMCard):
 		if self.timer.is_timedout(): 
 			self.update("", "", "")
 			return True
-		return is_dirty or self.is_dirty()	
+		return True	
 
 	def onAlertEvent(self, event) -> None:
 		self.update(event.header, event.body, event.footer)
