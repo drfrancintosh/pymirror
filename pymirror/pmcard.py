@@ -9,6 +9,7 @@ from pymirror.utils import _NONE_PROXY
 class PMCardText:
 		font_name: str = None
 		font_size: int = 24
+		start_color: str = "#fff"
 		text_color: str = "#fff"
 		text_bg_color: str = "#000"
 		height: int = 48
@@ -30,12 +31,11 @@ class PMCardText:
 			if self.fade_in == 0.0:
 				return False
 			if self.in_fader is None:
-					self.in_fader = PMFader(self.text_bg_color, self.text_color, self.fade_in)
+					self.in_fader = PMFader(self.text_bg_color, self.start_color, self.fade_in)
 					self.text_color = self.in_fader.start()
 			else:
 				self.text_color = self.in_fader.next(self.text_color)
 			if self.in_fader.is_done():
-				self.text_color = self.text_color
 				return False
 			return True
 
@@ -43,12 +43,11 @@ class PMCardText:
 			if self.fade_out == 0.0:
 				return False
 			if self.out_fader is None:
-					self.out_fader = PMFader(self.text_color, self.text_bg_color, self.fade_out)
+					self.out_fader = PMFader(self.start_color, self.text_bg_color, self.fade_out)
 					self.text_color = self.out_fader.start()
 			else:
 				self.text_color = self.out_fader.next(self.text_color)
 			if self.out_fader.is_done():
-				self.text_color = self.text_color
 				return False
 			return True
 
