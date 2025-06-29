@@ -107,8 +107,8 @@ class PMCard(PMModule):
 		""" Check if the card has changed and needs to be re-rendered. """
 		is_dirty = True
 		card = self._card.body
-		if card.last_text == None:
-			card.last_text = card.text
+		# if card.last_text == None:
+		# 	card.last_text = card.text
 		print(f"Card text: {card.text}, last_text: {card.last_text}")
 		if card.text != card.last_text:
 			print(f"Card text changed: {card.text} != {card.last_text}")
