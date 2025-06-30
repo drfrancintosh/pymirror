@@ -1,10 +1,11 @@
 {
   "debug": true,
   "secrets": ".secrets",
+  "flush": false,
   "screen": {
     "output_file": null,
     "frame_buffer": "/dev/fb0",
-    "font": "DejaVuSans.ttf",
+    "font": "Roboto-Regular",
     "font_size": 64,
     "color": "#fff",
     "bg_color": "#000",

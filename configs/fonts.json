@@ -1,0 +1,17 @@
+{
+    "module": "fonts",
+    "moddef": {
+        "name": "Alert",
+        "position": "bottom_left",
+        "text_color": "#fff",
+        "text_bg_color": null,
+        "font_name": "TNG_Title",
+        "font_size": 48,
+        "subscriptions": [
+            "AlertEvent"
+        ]
+    },
+    "fonts": {
+        "delay_ms": 1000
+    }
+}

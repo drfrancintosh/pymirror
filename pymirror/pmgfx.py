@@ -1,72 +1,34 @@
+from dataclasses import dataclass
 import time
+from typing import Optional, Any
 from PIL import ImageFont
-from pymirror.utils import _sub, _add, _norm, _scale
 
-class PMFader:
-    """Class to handle color fading in PMGfx."""
-    def __init__(self, from_color: str, to_color: str, secs: float):
-        self.from_color = tocolor(from_color)
-        self.from_color_tuple = color_to_tuple(self.from_color)
-        self.to_color = tocolor(to_color)
-        self.to_color_tuple = color_to_tuple(self.to_color)
-        self.diff_color_tuple = _sub(self.to_color_tuple, self.from_color_tuple)
-        self.to_color_norm = _norm(self.to_color_tuple)
-        self.done = False
-        self.start_time = 0
-        self.secs = secs
+from pymirror.utils import tocolor, fromcolor
 
-    def start(self) -> int:
-        """Start the fading process by returning the initial color."""
-        self.done = False
-        self.start_time = time.time()
-        return self.from_color
+FONT_LIST = []  # List to hold font paths
 
-    def next(self, current_color: int) -> int:
-        if self.done: return current_color
-        now = time.time()
-        delta_time = now - self.start_time
-        # print(f"Delta time: {delta_time} seconds")
-        percent_fade = delta_time / self.secs
-        diff = _scale(self.diff_color_tuple, percent_fade)
-        t = _add(self.from_color_tuple, diff)
-        norm_t = _norm(t)
-        error = abs(norm_t - self.to_color_norm)
-        if error <= .1 or any(x < 0.0 for x in t) or any(x > 1.0 for x in t):
-            self.done = True
-            new_color = self.to_color
-        else:
-            new_color = color_from_tuple(t)
-        # print(f"Fading color: {t} error: {error}")
-        return new_color
-
-    def is_done(self) -> bool:
-        return self.done
-
-
+@dataclass
 class PMGfx:
-    _fontlist = None
+    rect: tuple = (0, 0, 0, 0)
+    ## colors are stored as integers for efficiency
+    ## use the accessors to convert to/from hex strings
+    _color: int = tocolor("#fff")  # default color
+    _bg_color: int = tocolor("#000")  # default background color
+    _text_color: int = tocolor("#fff")  # default text color
+    _text_bg_color: int = None  # default text background color
+    line_width: int = 1
+    font_name: str = "Roboto-Regular"
+    font_size: int = 64
+    antialias: bool = True
+    font: Optional[ImageFont.FreeTypeFont] = None
+    _font_metrics: tuple = (0, 0, 0, 0)  # (offset, baseline, width, height)
 
-    def __init__(self):
-        self.rect = (0, 0, 0, 0)  # x0, y0, x1, y1
-        self.width = 0
-        self.height = 0
-        self._color = "#ffffff"  # default white color
-        self._bg_color = None  # default is transparent
-        self._text_color = "#ffffff"  # default white text color
-        self._text_bg_color = None  # default is transparent
-        self.line_width = 1
-        self.font_name = None
-        self.font_size = None
-        self.font = None
-        self.font_height = 0
-        self.font_width = 0
-        self.antialias = True
-        self._read_fonts()
-        self.set_font("DejaVuSerif", 64)  # default font
+    def __post_init__(self):
+        self.set_font(self.font_name, self.font_size)
 
     @property
     def color(self):
-        return self._color
+        return fromcolor(self._color)
 
     @color.setter
     def color(self, value):
@@ -74,7 +36,7 @@ class PMGfx:
 
     @property
     def bg_color(self):
-        return self._bg_color
+        return fromcolor(self._bg_color)
 
     @bg_color.setter
     def bg_color(self, value):
@@ -82,7 +44,7 @@ class PMGfx:
 
     @property
     def text_color(self):
-        return self._text_color
+        return fromcolor(self._text_color)
 
     @text_color.setter
     def text_color(self, value):
@@ -90,7 +52,7 @@ class PMGfx:
 
     @property
     def text_bg_color(self):
-        return self._text_bg_color
+        return fromcolor(self._text_bg_color)
 
     @text_bg_color.setter
     def text_bg_color(self, value):
@@ -112,72 +74,62 @@ class PMGfx:
     def y1(self):
         return self.rect[3]
 
-    def _read_fonts(self) -> None:
-        if self.__class__._fontlist:
-            return  # already read fonts
-        self.__class__._fontlist = []
-        with open("./fontlist.txt", "r") as f:
-            fonts = f.read().splitlines()
-            for font_path in fonts:
-                # split line at # discard the rest
-                font_path = font_path.split("#")[0].strip()
-                if not font_path:
-                    continue  # skip empty lines
-                # split after the : # discard the rest
-                font_path = font_path.split(":")[0].strip()
-                if not font_path:
-                    continue  # skip empty lines
-                self.__class__._fontlist.append(font_path)
+    @property
+    def width(self):
+        return self.rect[2] - self.rect[0] + 1
+
+    @property
+    def height(self):
+        return self.rect[3] - self.rect[1] + 1
+
+    @property
+    def font_height(self) -> int:
+        return self._font_metrics[3]
+
+    @property
+    def font_width(self) -> int:
+        return self._font_metrics[2]
+
+    @property
+    def font_offset(self) -> int:
+        return self._font_metrics[0]
+
+    @property
+    def font_baseline(self) -> int:
+        return self._font_metrics[1]
+    
+    @property
+    def font_metrics(self) -> tuple:
+        return self._font_metrics
 
     def set_font(self, font_name: str, pitch: int = 64) -> bool:
         if not pitch:
             pitch = 64
-        for font_path in self.__class__._fontlist:
-            if font_name in font_path:
-                self.font = ImageFont.truetype(font_path, size=pitch)
-                self.font_name = font_name
-                self.font_size = int(pitch)
-                self.font_metrics = self.font.getbbox("M")
-                self.font_offset = self.font_metrics[0]
-                self.font_baseline = self.font_metrics[1]
-                self.font_width = self.font_metrics[2]
-                self.font_height = self.font_metrics[3]
-                return True  # successfully set the font
+        try:
+            for font_path in FONT_LIST:
+                if font_name in font_path:
+                    self.font = ImageFont.truetype(font_path, size=pitch)
+                    self.font_name = font_name
+                    self.font_size = int(pitch)
+                    self._font_metrics = self.font.getbbox("M")
+                    return True  # successfully set the font
+        except Exception as e:
+            print(f"Error setting font '{font_path}': {e}")
         print(f"Font '{font_name}' not found in system fonts. font unchanged.")
         return False
 
-def color_to_tuple(x):
-    if x == None: return (0, 0, 0)  # default to black if None
-    r = (x >> 19) & 0x1F
-    g1 = (x >> 16) & 0x07
-    g0 = (x >> 5) & 0x07
-    b = x & 0x1F
-    rgb = (r/31.0, (g1 << 3 | g0) / 63.0, b/31.0)
-    return rgb
+def _read_fonts() -> None:
+    with open("./fontlist.txt", "r") as f:
+        fonts = f.read().splitlines()
+        for font_path in fonts:
+            # split line at # discard the rest
+            font_path = font_path.split("#")[0].strip()
+            if not font_path:
+                continue  # skip empty lines
+            # split after the : # discard the rest
+            font_path = font_path.split(":")[0].strip()
+            if not font_path:
+                continue  # skip empty lines
+            FONT_LIST.append(font_path)
 
-def color_from_tuple(rgb):
-    ### convert RGB tuple to HTML #rrggbb format
-    return f"#{int(rgb[0]*255):02x}{int(rgb[1]*255):02x}{int(rgb[2]*255):02x}"
-
-def tocolor(t) -> int:
-    if t == None:
-        return None
-    if isinstance(t, int):
-        return t  # Already an integer
-    if not isinstance(t, str):
-        raise ValueError(f"Invalid color format {t}, expected RGB hex string.")
-    if t.startswith("#"):
-        t = t.lstrip("#")
-    if len(t) == 3:
-        t = tuple(int(t[i] * 16, 16) for i in (0, 1, 2))
-    elif len(t) == 6:
-        t = tuple(int(t[i : i + 2], 16) for i in (0, 2, 4))
-    else:
-        raise ValueError(f"Invalid hex color format '{t}', expected 3 or 6 hex digits.")
-    r, g, b = t
-    r = (r >> 3) & 0x1F  # Convert to 5 bits
-    g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
-    g1 = (g >> 5) & 0x07  # Convert to upper 3 bits
-    b = (b >> 3) & 0x1F  # Convert to 5 bits
-    x = r << 19 | (g1 << 16 | g0 << 5 | b)
-    return x
+_read_fonts()

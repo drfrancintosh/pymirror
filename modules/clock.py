@@ -14,8 +14,8 @@ class Clock(PMModule):
 	def render(self, force: bool = False) -> int:
 		if not force and self.last_time == self.curr_time: return 0
 		gfx = self.gfx
-		self.clear_region()
-		self.screen.text_box(gfx, self.curr_time,
+		self.bitmap.clear()
+		self.bitmap.text_box(gfx, self.curr_time,
 			(gfx.x0, gfx.y0, gfx.x1, gfx.y1),
 			halign=self._clock.halign,
 			valign=self._clock.valign)

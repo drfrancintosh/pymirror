@@ -2,7 +2,6 @@ import copy
 from dataclasses import dataclass
 
 from pymirror.pmmodule import PMModule
-from pymirror.pmgfx import PMFader
 from pymirror.utils import _NONE_PROXY
 
 @dataclass
@@ -16,10 +15,6 @@ class PMCardText:
 		width: int = 0
 		halign: str = "center"
 		valign: str = "center"
-		fade_in: float = 0.0
-		fade_out: float = 0.0
-		in_fader: PMFader = None
-		out_fader: PMFader = None
 		text: str = None
 		last_text: str = None
 
@@ -27,38 +22,10 @@ class PMCardText:
 			""" Check if the text has changed. """
 			return self.text != self.last_text
 
-		def is_fading_in(self) -> bool:
-			if self.start_color == None:
-				self.start_color = self.text_color
-			if self.fade_in == 0.0:
-				return False
-			if self.in_fader is None:
-					self.in_fader = PMFader(self.text_bg_color, self.start_color, self.fade_in)
-					self.text_color = self.in_fader.start()
-			else:
-				self.text_color = self.in_fader.next(self.text_color)
-			if self.in_fader.is_done():
-				return False
-			return True
-
-		def is_fading_out(self) -> bool:
-			if self.start_color == None:
-				self.start_color = self.text_color
-			if self.fade_out == 0.0:
-				return False
-			if self.out_fader is None:
-					self.out_fader = PMFader(self.start_color, self.text_bg_color, self.fade_out)
-					self.text_color = self.out_fader.start()
-			else:
-				self.text_color = self.out_fader.next(self.text_color)
-			if self.out_fader.is_done():
-				return False
-			return True
-
 class PMCard(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
-		self._card = self.config.card
+		self._card = self._config.card
 		self._card.header = PMCardText(**self._card.header.__dict__) if self._card.header else _NONE_PROXY
 		self._card.body = PMCardText(**self._card.body.__dict__) if self._card.body else _NONE_PROXY
 		self._card.footer = PMCardText(**self._card.footer.__dict__) if self._card.footer else _NONE_PROXY
@@ -86,11 +53,11 @@ class PMCard(PMModule):
 				## so use the default screen colors but invert them
 				gfx2.text_color = gfx.text_bg_color
 				gfx2.text_bg_color = gfx.text_color
-		self.screen.text_box(gfx2, msg, rect, halign=card_text.halign, valign=card_text.valign)
+		self.bitmap.text_box(gfx2, msg, rect, halign=card_text.halign, valign=card_text.valign)
 		return rect[3] + 1 # next y position after rendering the text box
 
 	def render(self, force: bool = False) -> bool:
-		self.clear_region()
+		self.bitmap.clear()
 		gfx = self.gfx
 		header_height = self._card.header.height or self._card.header.font_size or gfx.font_size
 		footer_height = self._card.footer.height or self._card.footer.font_size or gfx.font_size

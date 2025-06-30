@@ -13,19 +13,22 @@ from events import * # get all events
 
 class PyMirror:
 	def __init__(self, config_fname):
-		self._load_config(config_fname)
-		self.screen = PMScreen(self.config.screen)
-
-		self.screen.set_flush(False)
+		## by convention, all objects get a copy of the config
+		## so that they can access it without having to pass it around
+		## and they "pluck out" the values they need
+		self._config = self._load_config(config_fname)
+		self.screen = PMScreen(self._config)
+		self.force_flush = self._config.flush
+		self.debug = self._config.debug
 		self.modules = []
 		self.new_events = []
 		self.event_queue = queue.Queue()  # Use a queue to manage events
-		self.server = PMServer(self.config.server, self.event_queue)
+		self.server = PMServer(self._config.server, self.event_queue)
 
 		self._load_modules()
 		self.server.start()  # Start the server to handle incoming events
 
-	def _load_config(self, config_fname):
+	def _load_config(self, config_fname) -> SafeNamespace:
 		# read .env file if it exists
 		load_dotenv()
 		# Load the main configuration file
@@ -41,10 +44,10 @@ class PyMirror:
 		load_dotenv(dotenv_path=secrets_path)
 		# Expand environment variables in the config
 		expand_dict(config, os.environ)
-		self.config = SafeNamespace(**config)
+		return SafeNamespace(**config)
 
 	def _load_modules(self):
-		for module_config in self.config.modules:
+		for module_config in self._config.modules:
 			## load the module dynamically
 			if type(module_config) is str:
 				## if moddef is a string, it is the name of a module config file
@@ -86,10 +89,10 @@ class PyMirror:
 		if not module.subscriptions: return
 		for event in events:
 			event_name = event.get("event")
-			print(f"Received event {event_name} for module {module.moddef.name}")
+			print(f"Received event {event_name} for module {module._moddef.name}")
 			event_class = None
 			if event_name in module.subscriptions:
-				print(f"... to module {module.moddef.name}")
+				print(f"... to module {module._moddef.name}")
 				event_class = globals().get(event_name)
 			if event_class:
 				event_instance = event_class(**event) if isinstance(event, dict) else SafeNamespace(event)
@@ -103,32 +106,36 @@ class PyMirror:
 
 	def _debug(self, module):
 		scrn_gfx = copy.copy(self.screen.gfx)
-		self.screen.rect(scrn_gfx, module.gfx.rect, fill=None)
+		self.screen.bitmap.rect(scrn_gfx, module.gfx.rect, fill=None)
 		scrn_gfx.set_font(scrn_gfx.font_name, 24)
-		self.screen.text(scrn_gfx, f"{module.moddef.name}", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
-		self.screen.text_box(scrn_gfx, f"{module.moddef.position}", module.gfx.rect, halign="right", valign="top")
+		self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name}", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
+		self.screen.bitmap.text_box(scrn_gfx, f"{module._moddef.position}", module.gfx.rect, halign="right", valign="top")
 
 	def full_render(self):
-		self.screen.clear()
+		self.screen.bitmap.clear()
 		for module in self.modules:
-			if module.moddef.disabled: continue
-			module.render(self.screen, force=True)
-			if self.config.debug: self._debug(module)
+			if module.disabled: continue
+			module.render(force=True)
+			if self._config.debug: self._debug(module)
 
 	def run(self):
-		self.screen.clear()
+		self.screen.bitmap.clear()
 		while True:
 			self._read_server_queue() # read any new events from the server queue
 			events = self.new_events # get any new events from server or modules
 			self.new_events = [] # displose of the old events
 			is_dirty = 0
 			for module in self.modules:
-				if module.moddef.disabled: continue
+				if module.disabled: continue
 				self._send_events(module, events) # send all subscribed events to the module
 				do_update = module.exec() # update module state (returns True if the state has changed)
 				if do_update:
-					is_dirty += module.render(force=False) # render() returns True if new rendering occurred
-				if self.config.debug: self._debug(module) # draw boxes around each module if debug is enabled
+					module_dirty = module.render(self.force_flush) # render() returns True if new rendering occurred
+					if (module_dirty):
+						# Blit the module's image to the screen at the module's position
+						self.screen.bitmap.paste(module.bitmap, module.gfx.x0, module.gfx.y0)
+						is_dirty += 1
+				if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
 			if is_dirty:
 				# if any new rendering occurred, flush the screen
 				# otherwise, the screen will not be updated

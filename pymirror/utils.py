@@ -91,3 +91,65 @@ def _mul(t1, t2):
 def _norm(t1):
 	## take the norm of the tuple
 	return sum(x * x for x in t1) ** 0.5
+
+def color_to_tuple(x):
+    if x == None: return (0, 0, 0)  # default to black if None
+    r = (x >> 19) & 0x1F
+    g1 = (x >> 16) & 0x07
+    g0 = (x >> 5) & 0x07
+    b = x & 0x1F
+    rgb = (r/31.0, (g1 << 3 | g0) / 63.0, b/31.0)
+    return rgb
+
+def color_from_tuple(rgb):
+    ### convert RGB tuple to HTML #rrggbb format
+    return f"#{int(rgb[0]*255):02x}{int(rgb[1]*255):02x}{int(rgb[2]*255):02x}"
+
+def fromcolor(t) -> str:
+    """Convert a color integer to an RGB hex string."""
+    if t is None:
+        return None
+    print(f"fromcolor: t={t:04x}")
+    if isinstance(t, str):
+        return t  # Already a string
+    if not isinstance(t, int):
+        raise ValueError(f"Invalid color format {t}, expected integer.")
+    r = (t >> 19) & 0x1F
+    g1 = (t >> 16) & 0x07
+    g0 = (t >> 5) & 0x07
+    b = t & 0x1F
+    print(f"... r={r:02x}, g1={g1:02x}, g0={g0:02x}, b={b:02x}")
+    r = r << 3
+    g = (g1 << 3 | g0) << 2
+    b = b << 3
+    print(f"... r={r:02x}, g={g:02x}, b={b:02x}")
+    result = f"#{r:02x}{g:02x}{b:02x}"
+    print(f"... result={result}")
+    return result
+
+def tocolor(t) -> int:
+    print(f"tocolor: t={t}")
+    if t == None:
+        return None
+    if isinstance(t, int):
+        return t  # Already an integer
+    if not isinstance(t, str):
+        raise ValueError(f"Invalid color format {t}, expected RGB hex string.")
+    if t.startswith("#"):
+        t = t.lstrip("#")
+    if len(t) == 3:
+        t = tuple(int(t[i] * 16, 16) for i in (0, 1, 2))
+    elif len(t) == 6:
+        t = tuple(int(t[i : i + 2], 16) for i in (0, 2, 4))
+    else:
+        raise ValueError(f"Invalid hex color format '{t}', expected 3 or 6 hex digits.")
+    r, g, b = t
+    r = (r >> 3) & 0x1F  # Convert to 5 bits
+    g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
+    g1 = (g >> 5) & 0x07  # Convert to upper 3 bits
+    b = (b >> 3) & 0x1F  # Convert to 5 bits
+    print(f"... r={r:02x}, g1={g1:02x}, g0={g0:02x}, b={b:02x}")
+    print(f"... r={r:02x}, g={((g1 << 3) | g0):02x}, b={b:02x}")  # Fixed operator precedence
+    x = r << 19 | (g1 << 16 | g0 << 5 | b)
+    print(f"... x={x:032b}")
+    return x

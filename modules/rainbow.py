@@ -19,17 +19,17 @@ class Rainbow(PMModule):
 		x = int(dx)
 		for r in range(256):
 			gfx.color = (r, 0, 0)  # Red to black
-			self.screen.line(gfx, (x, y, x, y + height))
+			self.bitmap.line(gfx, (x, y, x, y + height))
 			dx += dw
 			x = int(dx)
 		for g in range(256):
 			gfx.color = (0, g, 0)  # Green to black
-			self.screen.line(gfx, (x, y, x, y + height))
+			self.bitmap.line(gfx, (x, y, x, y + height))
 			dx += dw
 			x = int(dx)
 		for b in range(256):
 			gfx.color = (0, 0, b)  # Blue to black
-			self.screen.line(gfx, (x, y, x, y + height))
+			self.bitmap.line(gfx, (x, y, x, y + height))
 			dx += dw
 			x = int(dx)
 		return True

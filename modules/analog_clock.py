@@ -52,13 +52,15 @@ class AnalogClock(PMModule):
 	def _render_clock_face(self, dx=0, dy=0, r=0):
 		"""Render the clock face with hour markers."""
 		gfx = self.gfx
-		self.screen.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
+		self.bitmap.circle(gfx, gfx.x0+dx, gfx.y0+dy, r, fill=gfx.bg_color)
 		for posn in _compute_clock_positions(gfx, dx, dy, r - gfx.font_height):
 			hrs, rect = posn
-			self.screen.text_box(gfx, hrs, rect, valign="center", halign="center")
+			self.bitmap.text_box(gfx, hrs, rect, valign="center", halign="center")
 
 	def render(self, force: bool = False) -> bool:
+		self.bitmap.clear()
 		save_color = self.gfx.color
+		print(f"AnalogClock.render() called, save_color={save_color}")
 		now = datetime.now()
 		gfx = self.gfx
 		dx = (gfx.x1 - gfx.x0)/2
@@ -72,21 +74,21 @@ class AnalogClock(PMModule):
 			hr_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*self.hour_length, now.hour + now.minute/60 + now.second/3600, 12.0, -3.0)
 			gfx.line_width = 10
 			gfx.color = self.hour_hand
-			self.screen.line(gfx, (gfx.x0+dx, gfx.y0+dy, hr_posn[0], hr_posn[1]))
+			self.bitmap.line(gfx, (gfx.x0+dx, gfx.y0+dy, hr_posn[0], hr_posn[1]))
 			self.last_hour = now.hour
 
 		if self.minute_hand is not None:
 			min_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*self.minute_length, now.minute + now.second/60, 60.0, -15.0)
 			gfx.line_width = 5
 			gfx.color = self.minute_hand
-			self.screen.line(gfx, (gfx.x0+dx, gfx.y0+dy, min_posn[0], min_posn[1]))
+			self.bitmap.line(gfx, (gfx.x0+dx, gfx.y0+dy, min_posn[0], min_posn[1]))
 			self.last_minute = now.minute
 
 		if self.second_hand is not None:
 			sec_posn = _compute_hand_posn(gfx.x0+dx, gfx.y0+dy, r*self.second_length, now.second, 60.0, -15.0)
 			gfx.line_width = 3
 			gfx.color = self.second_hand
-			self.screen.line(gfx, (gfx.x0+dx, gfx.y0+dy, sec_posn[0], sec_posn[1]))
+			self.bitmap.line(gfx, (gfx.x0+dx, gfx.y0+dy, sec_posn[0], sec_posn[1]))
 			self.last_second = now.second
 
 		self.gfx.color = save_color
