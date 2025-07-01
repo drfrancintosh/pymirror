@@ -6,8 +6,7 @@ class Alert(PMCard):
 		self._alert = config.alert
 		self.update(self._alert.header, self._alert.body, self._alert.footer)
 		self.timer.set_timeout(self._alert.timeout)
-		self.disabled = True
-		self.update("", "", "")  # Initialize with empty strings
+		self.disabled = self._alert.timeout <= 0
 
 
 	def exec(self) -> bool:
@@ -17,7 +16,7 @@ class Alert(PMCard):
 			return True
 		return True	
 
-	def onAlertEvent(self, event) -> None:
+	def onEvent(self, event) -> None:
 		self.disabled = False
 		self.update(event.header, event.body, event.footer)
 		self.timer.set_timeout(event.timeout)
