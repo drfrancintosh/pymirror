@@ -25,4 +25,5 @@ class Alert(PMCard):
 		self.disabled = False
 		self.update(event.header, event.body, event.footer)
 		self.render(force=True)
+		self.disabled = False
 		self.timer.set_timeout(self._alert.timeout)
