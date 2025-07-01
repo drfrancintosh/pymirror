@@ -117,7 +117,7 @@ class PyMirror:
 		self.screen.bitmap.clear()
 		for module in self.modules:
 			if module.disabled: continue
-			if not module.bitmap: continue
+			# if not module.bitmap: continue
 			module.render(force=True)
 			self.screen.bitmap.paste(module.gfx, module.bitmap)
 		if self.debug: self._debug(module)
