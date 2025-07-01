@@ -55,10 +55,10 @@ class PMModule(ABC):
 		## these are in percentages of the screen size
 		## so we need to multiply to get the actual pixel values
 		rect = (
-			int((self.pm.screen.gfx.width - 1) * dims[0]),
-			int((self.pm.screen.gfx.height - 1) * dims[1]),
-			int((self.pm.screen.gfx.width - 1) * dims[2]),
-			int((self.pm.screen.gfx.height - 1) * dims[3])
+			int((self.pm.screen.gfx.width) * dims[0]),
+			int((self.pm.screen.gfx.height) * dims[1]),
+			int((self.pm.screen.gfx.width) * dims[2]),
+			int((self.pm.screen.gfx.height) * dims[3])
 		)
 		return rect
 	

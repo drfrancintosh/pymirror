@@ -109,7 +109,6 @@ def fromcolor(t) -> str:
     """Convert a color integer to an RGB hex string."""
     if t is None:
         return None
-    print(f"fromcolor: t={t:04x}")
     if isinstance(t, str):
         return t  # Already a string
     if not isinstance(t, int):
@@ -118,17 +117,13 @@ def fromcolor(t) -> str:
     g1 = (t >> 16) & 0x07
     g0 = (t >> 5) & 0x07
     b = t & 0x1F
-    print(f"... r={r:02x}, g1={g1:02x}, g0={g0:02x}, b={b:02x}")
     r = r << 3
     g = (g1 << 3 | g0) << 2
     b = b << 3
-    print(f"... r={r:02x}, g={g:02x}, b={b:02x}")
     result = f"#{r:02x}{g:02x}{b:02x}"
-    print(f"... result={result}")
     return result
 
 def tocolor(t) -> int:
-    print(f"tocolor: t={t}")
     if t == None:
         return None
     if isinstance(t, int):
@@ -148,8 +143,5 @@ def tocolor(t) -> int:
     g0 = (g >> 2) & 0x07  # Convert to lower 3 bits
     g1 = (g >> 5) & 0x07  # Convert to upper 3 bits
     b = (b >> 3) & 0x1F  # Convert to 5 bits
-    print(f"... r={r:02x}, g1={g1:02x}, g0={g0:02x}, b={b:02x}")
-    print(f"... r={r:02x}, g={((g1 << 3) | g0):02x}, b={b:02x}")  # Fixed operator precedence
     x = r << 19 | (g1 << 16 | g0 << 5 | b)
-    print(f"... x={x:032b}")
     return x

@@ -33,7 +33,7 @@ class Fonts(PMModule):
 		for i in range(self.max_items):
 			n = (self.font_item + i) % len(self.font_list)
 			gfx.set_font(self.font_list[n], gfx.font_size)
-			text(gfx, self.font_list[n], gfx.x0, gfx.y0 + i * gfx.font_size)
+			text(gfx, self.font_list[n], 0, 0 + i * gfx.font_size)
 			# color = color_to_tuple(gfx.text_color)
 			# color = _mul(color, (0.90, 0.90, 0.90))
 			# gfx.text_color = color_from_tuple(color)

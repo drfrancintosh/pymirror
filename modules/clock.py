@@ -16,7 +16,7 @@ class Clock(PMModule):
 		gfx = self.gfx
 		self.bitmap.clear()
 		self.bitmap.text_box(gfx, self.curr_time,
-			(gfx.x0, gfx.y0, gfx.x1, gfx.y1),
+			(0, 0, gfx.width, gfx.height),
 			halign=self._clock.halign,
 			valign=self._clock.valign)
 		self.last_time = self.curr_time

@@ -115,7 +115,6 @@ class PMGfx:
                     return True  # successfully set the font
         except Exception as e:
             print(f"Error setting font '{font_path}': {e}")
-        print(f"Font '{font_name}' not found in system fonts. font unchanged.")
         return False
 
 def _read_fonts() -> None:

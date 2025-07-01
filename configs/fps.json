@@ -1,13 +1,13 @@
 {
     "module": "fps",
     "moddef": {
-        "disabled": true,
+        "disabled": false,
         "name": "fps",
-        "position": "bottom_right",
+        "position": "bottom_left",
         "font_size": 32
     },
     "fps": {
         "valign": "bottom",
-        "halign": "right"
+        "halign": "left"
     }
 }

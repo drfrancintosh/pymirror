@@ -11,7 +11,7 @@ class Text(PMModule):
 	def render(self, force: bool = False) -> int:
 		gfx = self.gfx
 		self.bitmap.clear()
-		self.bitmap.text_box(gfx, self.text, self.gfx.rect, valign=self._text.valign, halign=self._text.halign)
+		self.bitmap.text_box(gfx, self.text, (0, 0, gfx.width, gfx.height), valign=self._text.valign, halign=self._text.halign)
 		self.last_text = self.text
 		return True
 

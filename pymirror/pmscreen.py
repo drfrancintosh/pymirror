@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from PIL import Image
 from pymirror.pmgfx import PMGfx
 from pymirror.pmbitmap import PMBitmap
+import numpy as np
 
 @dataclass
 class PMScreenConfig:
@@ -48,12 +49,11 @@ class PMScreen:
             img = img.rotate(self._screen.rotate, expand=True) 
         # Write to framebuffer
         if self._screen.frame_buffer:
-            raw = self.img.tobytes("raw")
+            raw = img.tobytes("raw")
             with open(self._screen.frame_buffer, "wb") as f:
                 f.write(raw[0::2])  # Write every second byte for RGB565 format
         if self._screen.output_file:
-            import numpy as np
-            raw = self.bitmap.img.tobytes("raw")[0::2]
+            raw = img.tobytes("raw")[0::2]
             arr = np.frombuffer(raw, dtype=np.uint16).reshape((self.gfx.height, self.gfx.width))
 
             # Unpack RGB565 to 8-bit RGB

@@ -10,7 +10,7 @@
     },
     "web_api": {
         "update_mins": 60,
-        "cycle_seconds": 15,
+        "cycle_seconds": 5,
         "url": "https://newsapi.org/v2/top-headlines",
         "params": {
             "apiKey": "$NEWSAPI_KEY",

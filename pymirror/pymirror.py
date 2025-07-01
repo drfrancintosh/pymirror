@@ -89,14 +89,11 @@ class PyMirror:
 		if not module.subscriptions: return
 		for event in events:
 			event_name = event.get("event")
-			print(f"Received event {event_name} for module {module._moddef.name}")
 			event_class = None
 			if event_name in module.subscriptions:
-				print(f"... to module {module._moddef.name}")
 				event_class = globals().get(event_name)
 			if event_class:
 				event_instance = event_class(**event) if isinstance(event, dict) else SafeNamespace(event)
-				print(f"... ... with data: {event_instance}")
 				module.onEvent(event_instance)
 			else:
 				print(f"Unknown event class: {event_name}")
@@ -124,16 +121,16 @@ class PyMirror:
 			self._read_server_queue() # read any new events from the server queue
 			events = self.new_events # get any new events from server or modules
 			self.new_events = [] # displose of the old events
-			is_dirty = 0
+			is_dirty = 1
 			for module in self.modules:
 				if module.disabled: continue
 				self._send_events(module, events) # send all subscribed events to the module
 				do_update = module.exec() # update module state (returns True if the state has changed)
 				if do_update:
 					module_dirty = module.render(self.force_flush) # render() returns True if new rendering occurred
-					if (module_dirty):
+					if module_dirty:
 						# Blit the module's image to the screen at the module's position
-						self.screen.bitmap.paste(module.bitmap, module.gfx.x0, module.gfx.y0)
+						self.screen.bitmap.paste(module.gfx, module.bitmap)
 						is_dirty += 1
 				if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
 			if is_dirty:

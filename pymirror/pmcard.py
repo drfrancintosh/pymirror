@@ -61,14 +61,14 @@ class PMCard(PMModule):
 		gfx = self.gfx
 		header_height = self._card.header.height or self._card.header.font_size or gfx.font_size
 		footer_height = self._card.footer.height or self._card.footer.font_size or gfx.font_size
-		next_y0 = gfx.y0
+		next_y0 = 0
 		if (self._card.header.text):
-			next_y0 = self._render_text(self._card.header.text, (gfx.x0, gfx.y0, gfx.x1, gfx.y0 + header_height), self._card.header, maybe_invert_colors=True)
+			next_y0 = self._render_text(self._card.header.text, (0, 0, gfx.width, header_height), self._card.header, maybe_invert_colors=True)
 		if (self._card.footer.text):
-			next_y0 = self._render_text(self._card.body.text, (gfx.x0, next_y0, gfx.x1, gfx.y1 - footer_height), self._card.body, maybe_invert_colors=False)
-			next_y0 =self._render_text(self._card.footer.text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.footer, maybe_invert_colors=True)
+			next_y0 = self._render_text(self._card.body.text, (0, next_y0, gfx.width, gfx.height - footer_height), self._card.body, maybe_invert_colors=False)
+			next_y0 =self._render_text(self._card.footer.text, (0, next_y0, gfx.width, gfx.height), self._card.footer, maybe_invert_colors=True)
 		else:
-			self._render_text(self._card.body.text, (gfx.x0, next_y0, gfx.x1, gfx.y1), self._card.body, maybe_invert_colors=False)
+			self._render_text(self._card.body.text, (0, next_y0, gfx.width, gfx.height), self._card.body, maybe_invert_colors=False)
 		return True
 	
 	def _update_fader(self, card) -> bool:

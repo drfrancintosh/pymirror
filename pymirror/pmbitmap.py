@@ -67,10 +67,10 @@ class PMBitmap:
             self.draw.rectangle(rect, fill=gfx._text_bg_color)
         if msg == None:
             msg = ""
-        if wrap == "words":
-            lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
-        else:
+        if wrap == "chars":
             lines = _text_split(gfx, msg, rect, split_fn=_text_split_chars)
+        else:
+            lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
         if valign == "center": text_y0 = y0 + ( _height(rect) - gfx.font_height * len(lines)) / 2 - gfx.font_baseline / 2
         elif valign == "top": text_y0 = y0 - gfx.font_baseline
         elif valign == "bottom": text_y0 = y1 - gfx.font_height * len(lines) - gfx.font_baseline
@@ -87,8 +87,8 @@ class PMBitmap:
             self.draw.text((text_x0, text_y0), line, fill=gfx._text_color, font=gfx.font)
             text_y0 += gfx.font_height
 
-    def paste(self, src: 'PMBitmap', dest_x: int, dest_y: int) -> None:
-        self.img.paste(src.img, (dest_x, dest_y))
+    def paste(self, gfx, src: 'PMBitmap') -> None:
+        self.img.paste(src.img, (gfx.x0, gfx.y0))
 
 def _height(rect: tuple) -> int:
     return rect[3] - rect[1]
