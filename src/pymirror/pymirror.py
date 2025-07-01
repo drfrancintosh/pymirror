@@ -117,7 +117,7 @@ class PyMirror:
 		for module in self.modules:
 			if module.disabled: continue
 			module.render(force=True)
-			if self._config.debug: self._debug(module)
+			if self.debug: self._debug(module)
 
 	def run(self):
 		self.screen.bitmap.clear()
