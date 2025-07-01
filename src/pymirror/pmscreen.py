@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from PIL import Image
 from pymirror.pmgfx import PMGfx
@@ -43,15 +44,14 @@ class PMScreen:
             with open(self._screen.frame_buffer, "wb") as f:
                 f.write(b'\x00' * (1920 * 1080 * 2))  # Assuming RGB565 format, 2 bytes per pixel
 
-    def flush(self) -> None:
-        img = self.bitmap.img
-        if self._screen.rotate:
-            img = img.rotate(self._screen.rotate, expand=True) 
-        # Write to framebuffer
+    def _write_framebuffer(self, img: Image.Image) -> None:
+        """Write the image to the framebuffer."""
         if self._screen.frame_buffer:
             raw = img.tobytes("raw")
             with open(self._screen.frame_buffer, "wb") as f:
                 f.write(raw[0::2])  # Write every second byte for RGB565 format
+
+    def _atomic_write(self, img: Image.Image) -> None:
         if self._screen.output_file:
             raw = img.tobytes("raw")[0::2]
             arr = np.frombuffer(raw, dtype=np.uint16).reshape((self.gfx.height, self.gfx.width))
@@ -65,4 +65,13 @@ class PMScreen:
 
             # Create a PIL Image
             img = Image.fromarray(rgb, "RGB")
-            img.save(self._screen.output_file, "JPEG")
+            img.save(self._screen.output_file+".tmp", "JPEG")
+            os.rename(self._screen.output_file+".tmp", self._screen.output_file+".tmp")
+
+
+    def flush(self) -> None:
+        img = self.bitmap.img
+        if self._screen.rotate:
+            img = img.rotate(self._screen.rotate, expand=True) 
+        self._write_framebuffer(img)
+        self._atomic_write(img)
