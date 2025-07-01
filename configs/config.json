@@ -1,6 +1,7 @@
 {
   "debug": true,
   "secrets": ".secrets",
+  "force_render": true,
   "screen": {
     "output_file": null,
     "frame_buffer": "/dev/fb0",
@@ -9,8 +10,7 @@
     "color": "#fff",
     "bg_color": "#000",
     "text_color": "#fff",
-    "text_bg_color": null,
-    "force_render": true
+    "text_bg_color": null
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
