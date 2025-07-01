@@ -4,7 +4,7 @@ from threading import Thread
 class PMServer:
     def __init__(self, config, event_queue, host="0.0.0.0", port=8080):
         self.app = Flask(__name__)
-        self.app.config['DEBUG'] = True
+        # Enable template auto-reload
         self.app.config['TEMPLATES_AUTO_RELOAD'] = True
         self.app.jinja_env.auto_reload = True
         self.queue = event_queue
@@ -35,6 +35,6 @@ class PMServer:
 
     def start(self):
         def run():
-            self.app.run(host=self.host, port=self.port, threaded=True, debug=True)
+            self.app.run(host=self.host, port=self.port, threaded=True)
         Thread(target=run, daemon=True).start()
 
