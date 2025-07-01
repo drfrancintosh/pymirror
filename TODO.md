@@ -14,6 +14,9 @@
 
 19. add color palette to config.json
 
+20. Make Longer "card body" text scroll
+21. Add Blinking Text
+22. Make multiple alerts cycle
 
 # DONE
 

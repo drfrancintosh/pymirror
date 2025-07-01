@@ -86,7 +86,7 @@ class Weather(PMCard):
             if alerts:
                 alert = alerts[0]
                 event = {
-                    "event": "AlertEvent",
+                    "event": "WeatherAlertEvent",
                     "header": alert["event"],
                     "body": f"{_paragraph_fix(alert['description'])}",
                     "footer": "Expires: "
