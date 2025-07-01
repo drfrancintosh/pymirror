@@ -140,7 +140,6 @@ class PyMirror:
 						if module_dirty or module.force_render or self.force_render:
 							# Blit the module's image to the screen at the module's position
 							if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
-							print(f"Running module: {module._moddef.name} at {module.force_render} {self.force_render}")
 							is_dirty += 1
 					if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
 				if is_dirty:

@@ -73,4 +73,4 @@ class PMCard(PMModule):
 	
 		
 	def exec(self) -> bool:
-		return False
+		return self.is_dirty()
