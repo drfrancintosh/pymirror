@@ -152,11 +152,11 @@ class PyMirror:
 			tb_lines = traceback.format_exception(type(e), e, e.__traceback__)
 			error_lines = [line.split("\n")[0] for line in tb_lines if line.lstrip().startswith("File ")]
 			error_lines = "\n".join(error_lines)
-			error_lines = str(e) + "\n" + error_lines
+			error_lines = str(e) + "\n\n" + error_lines
 			self.screen.bitmap.clear()
-			self.screen.gfx.text_color = "#f00"
-			self.screen.gfx.text_bg_color = "#ff0"
-			self.screen.gfx.set_font(self.screen.gfx.font_name, 24)
+			self.screen.gfx.text_color = "#ccc"
+			self.screen.gfx.text_bg_color = "#00f"
+			self.screen.gfx.set_font(self.screen.gfx.font_name, 32)
 			self.screen.bitmap.text_box(self.screen.gfx, f"Exception: {error_lines}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="top", halign="left")
 			self.screen.flush()
 
