@@ -151,7 +151,7 @@ class PyMirror:
 			print(f"Error occurred: {e}")
 			traceback.print_exc()  # <-- This prints the full stack trace to stdout
 			self.screen.bitmap.clear()
-			self.screen.gfx.color = "#fff"
+			self.screen.gfx.text_color = "#fff"
 			self.screen.bitmap.text_box(self.screen.gfx, f"Error: {e}", (0, 0, self.screen.gfx.width, self.screen.gfx.height))
 			self.screen.flush()
 

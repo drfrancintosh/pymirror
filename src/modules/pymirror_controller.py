@@ -22,5 +22,5 @@ class PymirrorController(PMModule):
 		if event.refresh != None: 
 			self.pm.full_render()
 		if event.error != None: 
-			raise Exception(f"PyMirrorController received error event: {event.error}")
+			raise Exception(f"PyMirrorController received error event:\n{event.error}")
 
