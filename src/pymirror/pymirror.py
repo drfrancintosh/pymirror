@@ -156,6 +156,7 @@ class PyMirror:
 			self.screen.bitmap.clear()
 			self.screen.gfx.text_color = "#ccc"
 			self.screen.gfx.text_bg_color = "#00f"
+			self.screen.gfx.font_name = "DejaVuSerif"
 			self.screen.gfx.set_font(self.screen.gfx.font_name, 32)
 			self.screen.bitmap.text_box(self.screen.gfx, f"Exception: {error_lines}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="top", halign="left")
 			self.screen.flush()
