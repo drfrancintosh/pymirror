@@ -134,14 +134,13 @@ class PyMirror:
 				for module in self.modules:
 					self._send_events(module, events) # send all subscribed events to the module
 					if module.disabled: continue
-					if module.force_render or self.force_render:
-						print(f"Running module: {module._moddef.name} at {module.force_render} {self.force_render}")
 					do_update = module.exec() # update module state (returns True if the state has changed)
 					if do_update or module.force_render or self.force_render:
 						module_dirty = module.render(force=module.force_render or self.force_render) # render() returns True if new rendering occurred
 						if module_dirty or module.force_render or self.force_render:
 							# Blit the module's image to the screen at the module's position
 							if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
+							print(f"Running module: {module._moddef.name} at {module.force_render} {self.force_render}")
 							is_dirty += 1
 					if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
 				if is_dirty:
