@@ -123,8 +123,8 @@ class PyMirror:
 			self.new_events = [] # displose of the old events
 			is_dirty = 0
 			for module in self.modules:
-				if module.disabled: continue
 				self._send_events(module, events) # send all subscribed events to the module
+				if module.disabled: continue
 				do_update = module.exec() # update module state (returns True if the state has changed)
 				if do_update:
 					module_dirty = module.render(self.force_flush) # render() returns True if new rendering occurred

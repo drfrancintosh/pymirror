@@ -71,29 +71,6 @@ class PMCard(PMModule):
 			self._render_text(self._card.body.text, (0, next_y0, gfx.width, gfx.height), self._card.body, maybe_invert_colors=False)
 		return True
 	
-	def _update_fader(self, card) -> bool:
-		""" Check if the card has changed and needs to be re-rendered. """
-		if not card: return False
-		is_dirty = False
-		if card.last_text == None:
-			card.last_text = card.text
-		if card.text != card.last_text:
-			if card.is_fading_out():
-				is_dirty = True
-			else:
-				card.last_text = card.text
-				card.in_fader = None
-		else:
-			if card.is_fading_in():
-				is_dirty = True
-			else:
-				card.out_fader = None
-		return is_dirty
 		
 	def exec(self) -> bool:
 		return False
-		""" Execute the card rendering logic. """
-		is_dirty = self._update_fader(self._card.header)
-		is_dirty += self._update_fader(self._card.body)
-		is_dirty += self._update_fader(self._card.footer)
-		return is_dirty

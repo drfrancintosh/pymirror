@@ -12,10 +12,11 @@ class Alert(PMCard):
 	def exec(self) -> bool:
 		is_dirty = super().exec()
 		if self.timer.is_timedout(): 
-			self.update("", "", "")
+			self.disabled = True
 			return True
 		return True	
 
 	def onAlertEvent(self, event) -> None:
+		self.disabled = False
 		self.update(event.header, event.body, event.footer)
 		self.timer.set_timeout(event.timeout)
