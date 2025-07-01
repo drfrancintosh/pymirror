@@ -154,8 +154,8 @@ class PyMirror:
 			error_lines = str(e) + "\n" + error_lines
 			print(error_lines)
 			self.screen.bitmap.clear()
-			self.screen.gfx.text_color = "#fff"
-			self.screen.bitmap.text_box(self.screen.gfx, f"Exception: {e}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="top")
+			self.screen.gfx.text_color = "#f00"
+			self.screen.bitmap.text_box(self.screen.gfx, f"Exception: {error_lines}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="top")
 			self.screen.flush()
 
 
