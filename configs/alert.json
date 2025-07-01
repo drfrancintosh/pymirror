@@ -1,8 +1,9 @@
 {
     "module": "alert",
+    "debug": true,
     "moddef": {
         "name": "Alert",
-        "position": "bottom_left",
+        "position": "alert_strip",
         "text_color": null,
         "text_bg_color": null,
         "font_name": "TNG_Title",
