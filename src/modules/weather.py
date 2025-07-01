@@ -71,6 +71,7 @@ class Weather(PMCard):
             return True
         self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
         self.weather_response = self.weather_api.fetch(self.weather_data)
+        print(f"Weather response: {self.weather_response}")  # Debugging line
         w = SimpleNamespace(**self.weather_response.get("current"))
         # convert w.current.dt to a datetime object
         dt_str = datetime.fromtimestamp(w.dt).strftime(self.datetime_format)
