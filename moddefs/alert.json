@@ -1,6 +1,5 @@
 {
     "module": "alert",
-    "debug": true,
     "moddef": {
         "name": "Alert",
         "position": "alert_strip",
@@ -9,7 +8,7 @@
         "font_name": "TNG_Title",
         "font_size": 24,
         "subscriptions": ["AlertEvent"],
-        "force_render": true
+        "force_render": false
     },
     "alert": {
         "header": "Alert",
