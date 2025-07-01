@@ -11,7 +11,7 @@ class Clock(PMModule):
 		self.last_time = None
 		self.curr_time = datetime.now().strftime(self.date_format)
 	
-	def render(self, force: bool = False) -> int:
+	def render(self, force: bool = False) -> bool:
 		gfx = self.gfx
 		self.bitmap.clear()
 		self.bitmap.text_box(gfx, self.curr_time,
@@ -19,12 +19,11 @@ class Clock(PMModule):
 			halign=self._clock.halign,
 			valign=self._clock.valign)
 		self.last_time = self.curr_time
-		return 1
+		return True
 
-	def exec(self):
+	def exec(self) -> bool:
 		self.curr_time = datetime.now().strftime(self.date_format)
-		if self.last_time == self.curr_time: return 0
-		return 1
+		return self.last_time != self.curr_time
 
 	def onEvent(self, event):
 		pass

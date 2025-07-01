@@ -19,7 +19,7 @@ class Alert(PMCard):
 			}
 			self.publish_event(event)
 			return True
-		return True	
+		return is_dirty	
 
 	def onEvent(self, event) -> None:
 		self.disabled = False
