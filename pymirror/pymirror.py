@@ -121,7 +121,7 @@ class PyMirror:
 			self._read_server_queue() # read any new events from the server queue
 			events = self.new_events # get any new events from server or modules
 			self.new_events = [] # displose of the old events
-			is_dirty = 1
+			is_dirty = 0
 			for module in self.modules:
 				if module.disabled: continue
 				self._send_events(module, events) # send all subscribed events to the module
