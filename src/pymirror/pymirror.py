@@ -139,7 +139,7 @@ class PyMirror:
 						module_dirty = module.render(self.force_render) # render() returns True if new rendering occurred
 						if module_dirty or module.force_render or self.force_render:
 							# Blit the module's image to the screen at the module's position
-							self.screen.bitmap.paste(module.gfx, module.bitmap)
+							if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
 							is_dirty += 1
 					if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
 				if is_dirty:
