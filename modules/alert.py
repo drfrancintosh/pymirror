@@ -6,6 +6,7 @@ class Alert(PMCard):
 		self._alert = config.alert
 		self.update(self._alert.header, self._alert.body, self._alert.footer)
 		self.timer.set_timeout(self._alert.timeout)
+		self.disabled = True
 		self.update("", "", "")  # Initialize with empty strings
 
 
