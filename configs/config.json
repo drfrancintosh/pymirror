@@ -1,7 +1,7 @@
 {
   "debug": true,
   "secrets": ".secrets",
-  "force_render": true,
+  "force_render": false,
   "screen": {
     "output_file": null,
     "frame_buffer": "/dev/fb0",
