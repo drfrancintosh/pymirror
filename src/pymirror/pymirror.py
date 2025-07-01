@@ -80,7 +80,7 @@ class PyMirror:
 		## add any messages that have come from the web server
 		try:
 			while event := self.event_queue.get(0):
-				self.add_event(**event)
+				self.add_event(event)
 		except queue.Empty:
 			# No new events in the queue
 			pass
