@@ -89,14 +89,17 @@ class PyMirror:
 		if not module.subscriptions: return
 		for event in events:
 			event_name = event.get("event")
-			event_class = None
+			# event_class = None
+			# if event_name in module.subscriptions:
+			# 	event_class = globals().get(event_name)
+			# if event_class:
+			# 	event_instance = event_class(**event) if isinstance(event, dict) else SafeNamespace(event)
+			# 	module.onEvent(event_instance)
+			# else:
+			# 	print(f"Unknown event class: {event_name}")
 			if event_name in module.subscriptions:
-				event_class = globals().get(event_name)
-			if event_class:
-				event_instance = event_class(**event) if isinstance(event, dict) else SafeNamespace(event)
-				module.onEvent(event_instance)
-			else:
-				print(f"Unknown event class: {event_name}")
+				event = SafeNamespace(**event) if isinstance(event, dict) else event
+				module.onEvent(event)
 
 	def add_event(self, event):
 		self.new_events.append(event)
