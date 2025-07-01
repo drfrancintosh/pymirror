@@ -19,7 +19,7 @@ class PyMirror:
 		## and they "pluck out" the values they need
 		self._config = self._load_config(config_fname)
 		self.screen = PMScreen(self._config)
-		self.force_render = self._config.force_render
+		self.force_render = False
 		self.debug = self._config.debug
 		self.modules = []
 		self.new_events = []
@@ -113,7 +113,7 @@ class PyMirror:
 		self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name}", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
 		self.screen.bitmap.text_box(scrn_gfx, f"{module._moddef.position}", module.gfx.rect, halign="right", valign="top")
 
-	def full_render(self, force=False):
+	def full_render(self):
 		self.screen.bitmap.clear()
 		for module in self.modules:
 			if module.disabled: continue
@@ -136,7 +136,7 @@ class PyMirror:
 					if module.disabled: continue
 					do_update = module.exec() # update module state (returns True if the state has changed)
 					if do_update or module.force_render or self.force_render:
-						module_dirty = module.render(self.force_render) # render() returns True if new rendering occurred
+						module_dirty = module.render(force=module.force_render or self.force_render) # render() returns True if new rendering occurred
 						if module_dirty or module.force_render or self.force_render:
 							# Blit the module's image to the screen at the module's position
 							if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
@@ -147,6 +147,7 @@ class PyMirror:
 					# otherwise, the screen will not be updated
 					# (this is to improve performance)
 					self.screen.flush()
+				self.force_render = False  # Reset force_render after each loop
 		except Exception as e:
 			traceback.print_exc()  # <-- This prints the full stack trace to stdout
 			self._error_screen(e)  # Display the error on the screen
