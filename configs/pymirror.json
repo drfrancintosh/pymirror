@@ -1,0 +1,6 @@
+{
+    "module": "pymirror",
+    "cron": {
+        "name": "PyMirror Controller"
+    }
+}
