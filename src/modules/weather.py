@@ -90,8 +90,9 @@ class Weather(PMCard):
                     "header": alert["event"],
                     "body": f"{_paragraph_fix(alert['description'])}",
                     "footer": f"Expires: {datetime.fromtimestamp(alert['end']).strftime(self.datetime_format)}",
-                    "timeout": 0,
+                    "timeout": 0
                 }
+                print(f"Publishing weather alert event: {event}")
                 self.publish_event(event)
 
         self.weather_response = None  # Clear response after rendering

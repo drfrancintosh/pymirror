@@ -18,7 +18,7 @@ class Cron(PMModule):
 	def exec(self):
 		if self.timer.is_timedout():
 			if self.repeat == 0: return 0
-			self.pm.add_event(self.event)
+			self.publish_event(self.event)
 			if self.repeat > 0: self.repeat -= 1
 			self.timer.set_timeout(self.delay) # note: self.repeat < 0 repeats forever
 		return 0
