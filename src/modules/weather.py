@@ -67,7 +67,7 @@ class Weather(PMCard):
 			alerts = self.weather_response["alerts"]
 			if alerts:
 				alert = alerts[0]
-				event = AlertEvent("alert", alert["event"], f"{_paragraph_fix(alert['description'])}", self.refresh_minutes * 60 * 1000)
+				event = {"alert", alert["event"], f"{_paragraph_fix(alert['description'])}", 0}
 				self.pm.add_event(event)
 
 		self.weather_response = None  # Clear response after rendering
