@@ -9,8 +9,8 @@
         "font_size": 24
     },
     "web_api": {
-        "update_mins": 60,
-        "cycle_seconds": 5,
+        "update_mins": 15,
+        "cycle_seconds": 15,
         "url": "https://newsapi.org/v2/top-headlines",
         "params": {
             "apiKey": "$NEWSAPI_KEY",

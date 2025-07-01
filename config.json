@@ -15,6 +15,7 @@
     "None": "0.0,0.0,0.0,0.0",
     "top_strip": "0.00,0.0,1.0,0.15",
     "alert_strip": "0.33,0.33,0.66,0.66",
+    "fps_strip": "0.0,0.95,0.33,1.00",
     "top_left": "0.0,0.15,0.33,0.33",
     "top_center_left": "0.33,0.15,0.55,0.33",
     "top_center_right": "0.55,0.15,0.66,0.33",
@@ -28,7 +29,6 @@
     "bottom_right": "0.66,0.90,1.00,1.00"
   },
   "modules": [
-    "configs/fps.json",
     "configs/weather.json",
     "configs/fortune.json",
     "configs/news.json",
@@ -38,6 +38,8 @@
     "configs/day_of_week.json",
     "configs/week_of_year.json",
     "configs/analog_clock.json",
-    "configs/alert.json"
+    "configs/alert.json",
+    "configs/weather_alert.json",
+    "configs/fps.json"
   ]
 }
