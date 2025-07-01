@@ -134,7 +134,8 @@ class PyMirror:
 				for module in self.modules:
 					self._send_events(module, events) # send all subscribed events to the module
 					if module.disabled: continue
-					print(f"Running module: {module._moddef.name} at {module.force_render} {self.force_render}")
+					if module.force_render or self.force_render:
+						print(f"Running module: {module._moddef.name} at {module.force_render} {self.force_render}")
 					do_update = module.exec() # update module state (returns True if the state has changed)
 					if do_update or module.force_render or self.force_render:
 						module_dirty = module.render(force=module.force_render or self.force_render) # render() returns True if new rendering occurred
