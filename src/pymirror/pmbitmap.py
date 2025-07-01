@@ -35,6 +35,7 @@ class PMBitmap:
             self.draw.ellipse(bbox, outline=gfx._color, width=gfx.line_width, fill=tocolor(fill))
 
     def rect(self, gfx: PMGfx, rect: tuple, fill="__use_bg_color__"):
+        print(f"PMBitmap.rect: {rect}, fill={fill}")
         if fill == "__use_bg_color__":
             # Use the gfx.background color if specified
             self.draw.rectangle(rect, outline=gfx._color, width=gfx.line_width, fill=gfx._bg_color)
