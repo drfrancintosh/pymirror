@@ -8,7 +8,8 @@
         "text_bg_color": null,
         "font_name": "TNG_Title",
         "font_size": 24,
-        "subscriptions": ["AlertEvent"]
+        "subscriptions": ["AlertEvent"],
+        "force_render": true
     },
     "alert": {
         "header": "Alert",

@@ -19,6 +19,7 @@ class PMModuleDef(ABC):
 	font_size: int = 64
 	subscriptions: list[str] = None
 	disabled: bool = False
+	force_render: bool = False
 
 class PMModule(ABC):
 	def __init__(self, pm, config: SafeNamespace):

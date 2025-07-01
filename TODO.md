@@ -17,6 +17,7 @@
 20. Make Longer "card body" text scroll
 21. Add Blinking Text
 22. Make multiple alerts cycle
+23. need to add "force" on an option for a module like "alert" so it always show up on top
 
 # DONE
 
