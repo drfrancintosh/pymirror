@@ -14,6 +14,7 @@
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
     "top_strip": "0.00,0.0,1.0,0.15",
+    "alert_strip": "0.33,0.33,0.66,0.66",
     "top_left": "0.0,0.15,0.33,0.33",
     "top_center_left": "0.33,0.15,0.55,0.33",
     "top_center_right": "0.55,0.15,0.66,0.33",
@@ -36,6 +37,7 @@
     "configs/week.json",
     "configs/day_of_week.json",
     "configs/week_of_year.json",
-    "configs/analog_clock.json"
-  ]
+    "configs/analog_clock.json",
+    "configs/alert.json"
+  ]1
 }
