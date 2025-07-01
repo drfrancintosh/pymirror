@@ -22,8 +22,8 @@ class PMServer:
             except Exception:
                 return "Page not found", 404
 
-        @self.app.route("/command", methods=["POST"])
-        def command():
+        @self.app.route("/event", methods=["POST"])
+        def event():
             data = request.get_json()
             if not data:
                 return jsonify({"error": "Missing 'action'"}), 400

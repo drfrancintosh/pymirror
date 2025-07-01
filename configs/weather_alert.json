@@ -2,7 +2,7 @@
     "module": "alert",
     "debug": true,
     "moddef": {
-        "name": "Alert",
+        "name": "Weather Alert",
         "position": "bottom_left",
         "subscriptions": ["WeatherAlertEvent"]
     },
