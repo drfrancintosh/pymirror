@@ -16,9 +16,11 @@ class PymirrorController(PMModule):
 		if event.event != "PyMirrorEvent":
 			print(f"Received unknown event type: {event.type}")
 			return
-		if event.debug != None: 
-			self.pm.debug = event.debug
+		if event.debug == "true" or event.debug == "false": 
+			self.pm.debug = event.debug == "true"
 			self.pm.full_render()
 		if event.refresh != None: 
 			self.pm.full_render()
+		if event.error != None: 
+			raise Exception(f"PyMirrorController received error event: {event.error}")
 

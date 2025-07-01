@@ -11,4 +11,4 @@ VALUE="$3"
 
 curl -X POST "http://$HOST:8080/event" \
   -H "Content-Type: application/json" \
-  -d "{\"event\":\"PyMirrorEvent\", \"$KEY\": $VALUE}"
+  -d "{\"event\":\"PyMirrorEvent\", \"$KEY\": \"$VALUE\"}"
