@@ -6,7 +6,7 @@ class PymirrorController(PMModule):
 		self._pymirror = config.pymirror
 		self.subscribe("PyMirrorEvent")
 
-	def render(self):
+	def render(self, force: bool = False) -> bool:
 		return False
 
 	def exec(self):

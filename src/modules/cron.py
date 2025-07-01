@@ -12,7 +12,7 @@ class Cron(PMModule):
 		if self._cron.first_delay: self.timer.set_timeout(self._cron.first_delay) ## emit event immediately
 		else: self.timer.set_timeout(self.delay)
 
-	def render(self):
+	def render(self, force: bool = False) -> bool:
 		pass
 
 	def exec(self):
