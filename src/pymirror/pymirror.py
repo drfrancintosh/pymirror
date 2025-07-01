@@ -116,6 +116,7 @@ class PyMirror:
 		self.screen.bitmap.clear()
 		for module in self.modules:
 			if module.disabled: continue
+			if not module.bitmap: continue
 			module.render(force=True)
 			self.screen.bitmap.paste(module.gfx, module.bitmap)
 		if self.debug: self._debug(module)
@@ -148,7 +149,7 @@ class PyMirror:
 		except Exception as e:
 			print(f"Error occurred: {e}")
 			self.screen.bitmap.clear()
-			self.screen.bitmap.text(self.screen.gfx, f"Error: {e}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), halign="center", valign="center")
+			self.screen.bitmap.text_box(self.screen.gfx, f"Error: {e}", (0, 0, self.screen.gfx.width, self.screen.gfx.height))
 			self.screen.flush()
 
 
