@@ -89,10 +89,7 @@ class Weather(PMCard):
                     "event": "WeatherAlertEvent",
                     "header": alert["event"],
                     "body": f"{_paragraph_fix(alert['description'])}",
-                    "footer": "Expires: "
-                    + datetime.fromtimestamp(alert["end"]).strftime(
-                        self.datetime_format
-                    ),
+                    "footer": f"Expires: {datetime.fromtimestamp(alert['end']).strftime(self.datetime_format)}",
                     "timeout": 0,
                 }
                 self.publish_event(event)
