@@ -18,6 +18,7 @@ class PymirrorController(PMModule):
 			return
 		if event.debug != None: 
 			self.pm.debug = event.debug
+			self.pm.full_render()
 		if event.refresh != None: 
 			self.pm.full_render()
 
