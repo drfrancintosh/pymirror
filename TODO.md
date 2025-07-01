@@ -1,18 +1,11 @@
 # TODO List
 
-2. refresh the entire display based upon some event
-    - this means clearing the display and forcing all objects to re-render
 
 6. Hot Reload of config.json
     - if config.json is updated then dispose of old modules and reload
 
-7. Some sort of full refresh. PyMirror would clear the screen and all render methods would be called with "force=True"
-
-12. Boundary clipping ?
-
 1. Error Handling
     1. weather.py - error checking for bad api results
-    1. add try/catch surrounding PyMirror main loop to catch errors in module processing
     1. Better error handling
 
 17. add device drivers for display
@@ -21,7 +14,6 @@
 
 19. add color palette to config.json
 
-20. add text animations, like fade in / fade out
 
 # DONE
 
@@ -62,3 +54,14 @@
 16. shore-up event processing with "onEventName()" events (can be overridden by overriding onEvent())
 
 17.  display write-to-file and webserver
+
+2. refresh the entire display based upon some event
+    - this means clearing the display and forcing all objects to re-render
+
+7. Some sort of full refresh. PyMirror would clear the screen and all render methods would be called with "force=True"
+
+1. add try/catch surrounding PyMirror main loop to catch errors in module processing
+
+20. add text animations, like fade in / fade out - commented out
+
+12. Boundary clipping
