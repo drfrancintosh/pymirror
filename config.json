@@ -1,19 +1,15 @@
 {
-  "debug": true,
+  "debug": false,
   "secrets": ".secrets",
-  "flush": false,
   "screen": {
     "output_file": null,
     "frame_buffer": "/dev/fb0",
-    "font": "Roboto-Regular",
+    "font_name": "Roboto-Thin",
     "font_size": 64,
     "color": "#fff",
     "bg_color": "#000",
     "text_color": "#fff",
-    "text_bg_color": null,
-    "width": 1920,
-    "height": 1080,
-    "rotate": 0
+    "text_bg_color": null
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
@@ -31,7 +27,7 @@
     "bottom_right": "0.66,0.90,1.00,1.00"
   },
   "modules": [
-    "configs/alert.json",
+    "configs/fps.json",
     "configs/weather.json",
     "configs/fortune.json",
     "configs/news.json",
@@ -40,7 +36,6 @@
     "configs/week.json",
     "configs/day_of_week.json",
     "configs/week_of_year.json",
-    "configs/analog_clock.json",
-    "configs/fps.json"
+    "configs/analog_clock.json"
   ]
 }
