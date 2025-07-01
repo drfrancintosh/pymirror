@@ -3,7 +3,7 @@
     "moddef": {
         "disabled": false,
         "name": "fps",
-        "position": "bottom_left",
+        "position": "fps_strip",
         "font_size": 32
     },
     "fps": {
