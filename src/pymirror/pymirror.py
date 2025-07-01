@@ -122,28 +122,35 @@ class PyMirror:
 		self.screen.flush()  # Flush the screen to show all modules at once
 
 	def run(self):
-		self.screen.bitmap.clear()
-		while True:
-			self._read_server_queue() # read any new events from the server queue
-			events = self.new_events # get any new events from server or modules
-			self.new_events = [] # displose of the old events
-			is_dirty = 0
-			for module in self.modules:
-				self._send_events(module, events) # send all subscribed events to the module
-				if module.disabled: continue
-				do_update = module.exec() # update module state (returns True if the state has changed)
-				if do_update:
-					module_dirty = module.render(self.force_flush) # render() returns True if new rendering occurred
-					if module_dirty:
-						# Blit the module's image to the screen at the module's position
-						self.screen.bitmap.paste(module.gfx, module.bitmap)
-						is_dirty += 1
-				if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
-			if is_dirty:
-				# if any new rendering occurred, flush the screen
-				# otherwise, the screen will not be updated
-				# (this is to improve performance)
-				self.screen.flush()
+		try:
+			self.screen.bitmap.clear()
+			while True:
+				self._read_server_queue() # read any new events from the server queue
+				events = self.new_events # get any new events from server or modules
+				self.new_events = [] # displose of the old events
+				is_dirty = 0
+				for module in self.modules:
+					self._send_events(module, events) # send all subscribed events to the module
+					if module.disabled: continue
+					do_update = module.exec() # update module state (returns True if the state has changed)
+					if do_update:
+						module_dirty = module.render(self.force_flush) # render() returns True if new rendering occurred
+						if module_dirty:
+							# Blit the module's image to the screen at the module's position
+							self.screen.bitmap.paste(module.gfx, module.bitmap)
+							is_dirty += 1
+					if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
+				if is_dirty:
+					# if any new rendering occurred, flush the screen
+					# otherwise, the screen will not be updated
+					# (this is to improve performance)
+					self.screen.flush()
+		except Exception as e:
+			print(f"Error occurred: {e}")
+			self.screen.bitmap.clear()
+			self.screen.bitmap.text(self.screen.gfx, f"Error: {e}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), halign="center", valign="center")
+			self.screen.flush()
+
 
 def main():
     parser = argparse.ArgumentParser(description="PyMirror")
