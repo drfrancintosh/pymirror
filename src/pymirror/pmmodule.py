@@ -31,6 +31,7 @@ class PMModule(ABC):
 		self.name = _moddef.name or self.__class__.__name__
 		self.position = _moddef.position
 		self.disabled = _moddef.disabled
+		self.force_render = _moddef.force_render
 		self.timer = PMTimer(0)
 		self.subscriptions = []
 		self.gfx = PMGfx() ## default graphics context
