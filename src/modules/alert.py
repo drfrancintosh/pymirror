@@ -19,10 +19,9 @@ class Alert(PMCard):
 			}
 			self.publish_event(event)
 			is_dirty = True
-		return is_dirty	
+		return True	
 
 	def onEvent(self, event) -> None:
 		self.disabled = False
 		self.update(event.header, event.body, event.footer)
-		self.disabled = False
 		self.timer.set_timeout(self._alert.timeout)
