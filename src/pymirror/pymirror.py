@@ -150,12 +150,13 @@ class PyMirror:
 		except Exception as e:
 			traceback.print_exc()  # <-- This prints the full stack trace to stdout
 			tb_lines = traceback.format_exception(type(e), e, e.__traceback__)
-			error_lines = [line for line in tb_lines if line.lstrip().startswith("File ")]
+			error_lines = [line.split("\n")[0] for line in tb_lines if line.lstrip().startswith("File ")]
 			error_lines = "\n".join(error_lines)
 			error_lines = str(e) + "\n" + error_lines
 			self.screen.bitmap.clear()
 			self.screen.gfx.text_color = "#f00"
 			self.screen.gfx.text_bg_color = "#ff0"
+			self.screen.gfx.set_font(self.screen.gfx.font_name, 16)
 			self.screen.bitmap.text_box(self.screen.gfx, f"Exception: {error_lines}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="top")
 			self.screen.flush()
 
