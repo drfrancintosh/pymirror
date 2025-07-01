@@ -80,7 +80,7 @@ class PyMirror:
 		## add any messages that have come from the web server
 		try:
 			while event := self.event_queue.get(0):
-				self.add_event(event)
+				self.add_event(**event)
 		except queue.Empty:
 			# No new events in the queue
 			pass
@@ -102,8 +102,8 @@ class PyMirror:
 				event = SafeNamespace(**event) if isinstance(event, dict) else event
 				module.onEvent(event)
 
-	def add_event(self, event):
-		self.new_events.append(event)
+	def add_event(self, **kwargs):
+		self.new_events.append(SafeNamespace(**kwargs))
 
 	def _debug(self, module):
 		scrn_gfx = copy.copy(self.screen.gfx)
