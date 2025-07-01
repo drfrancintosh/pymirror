@@ -95,7 +95,7 @@ class Weather(PMCard):
                     ),
                     "timeout": 0,
                 }
-                self.pm.add_event(event)
+                self.publish_event(event)
 
         self.weather_response = None  # Clear response after rendering
         return True

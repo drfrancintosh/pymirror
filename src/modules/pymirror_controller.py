@@ -19,7 +19,7 @@ class PymirrorController(PMModule):
 		if event.debug in ["true", "false", "on", "off"]: 
 			self.pm.debug = event.debug in ["true", "on"]
 			self.pm.full_render()
-		if event.refresh != None: 
+		if event.refresh: 
 			self.pm.full_render()
 		if event.error != None: 
 			raise Exception(f"PyMirrorController received error event:\n{event.error}")

@@ -13,6 +13,11 @@ class Alert(PMCard):
 		is_dirty = super().exec()
 		if self.timer.is_timedout(): 
 			self.disabled = True
+			event = {
+				"event": "PyMirrorEvent",
+				"refresh": True,
+			}
+			self.publish_event("PyMirrorEvent")
 			return True
 		return True	
 

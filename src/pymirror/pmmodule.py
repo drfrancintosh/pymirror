@@ -114,3 +114,9 @@ class PMModule(ABC):
 			method(event)
 		else:
 			print(f"No handler for event {event.name} in module {self._moddef.position}")
+
+	def publish_event(self, event) -> None:
+		""" Publish an event to the PM.
+		This is used to notify the PM of an event that occurred in the module.
+		"""
+		self.pm.add_event(event)
