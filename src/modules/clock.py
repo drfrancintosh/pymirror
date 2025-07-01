@@ -12,7 +12,6 @@ class Clock(PMModule):
 		self.curr_time = datetime.now().strftime(self.date_format)
 	
 	def render(self, force: bool = False) -> int:
-		if not force and self.last_time == self.curr_time: return 0
 		gfx = self.gfx
 		self.bitmap.clear()
 		self.bitmap.text_box(gfx, self.curr_time,
