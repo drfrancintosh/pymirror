@@ -9,7 +9,8 @@
     "color": "#fff",
     "bg_color": "#000",
     "text_color": "#fff",
-    "text_bg_color": null
+    "text_bg_color": null,
+    "force_render": true
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
