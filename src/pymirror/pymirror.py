@@ -106,6 +106,7 @@ class PyMirror:
 
 	def _debug(self, module):
 		scrn_gfx = copy.copy(self.screen.gfx)
+		if not module.gfx.rect: return
 		self.screen.bitmap.rect(scrn_gfx, module.gfx.rect, fill=None)
 		scrn_gfx.set_font(scrn_gfx.font_name, 24)
 		self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name}", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
