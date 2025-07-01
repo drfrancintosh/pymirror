@@ -47,19 +47,22 @@ class PMModule(ABC):
 	def _compute_rect(self) -> tuple:
 		# compute rect based on "position"
 		moddef = self._moddef
+		rect = (0,0,0,0)
 		if not moddef.position or moddef.position == "None": return None
 		dim_str = self.pm._config.positions[moddef.position]
-		dims = [float(x) for x in dim_str.split(",")]
-		## this is the bounding box for the module on-screen
-		## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
-		## these are in percentages of the screen size
-		## so we need to multiply to get the actual pixel values
-		rect = (
-			int((self.pm.screen.gfx.width) * dims[0]),
-			int((self.pm.screen.gfx.height) * dims[1]),
-			int((self.pm.screen.gfx.width) * dims[2]),
-			int((self.pm.screen.gfx.height) * dims[3])
-		)
+		if dim_str:
+			print(f"Module {self._moddef.name} position: {moddef.position}, dimensions: {dim_str}")
+			dims = [float(x) for x in dim_str.split(",")]
+			## this is the bounding box for the module on-screen
+			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
+			## these are in percentages of the screen size
+			## so we need to multiply to get the actual pixel values
+			rect = (
+				int((self.pm.screen.gfx.width) * dims[0]),
+				int((self.pm.screen.gfx.height) * dims[1]),
+				int((self.pm.screen.gfx.width) * dims[2]),
+				int((self.pm.screen.gfx.height) * dims[3])
+			)
 		return rect
 	
 	def _allocate_bitmap(self):

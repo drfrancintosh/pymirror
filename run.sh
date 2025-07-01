@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [ $# -eq 0 ]; then
-    CONFIG="./configurations/config.json"
+    CONFIG="./configs/config.json"
 else
-    CONFIG="$1"
+    CONFIG="./configs/$1"
 fi
 
 PYTHONPATH=src python3 -m pymirror.pymirror --config "$CONFIG"

@@ -27,15 +27,15 @@
     "bottom_right": "0.66,0.90,1.00,1.00"
   },
   "modules": [
-    "configs/fps.json",
-    "configs/weather.json",
-    "configs/fortune.json",
-    "configs/news.json",
-    "configs/date.json",
-    "configs/time.json",
-    "configs/week.json",
-    "configs/day_of_week.json",
-    "configs/week_of_year.json",
-    "configs/analog_clock.json"
+    "moddefs/fps.json",
+    "moddefs/weather.json",
+    "moddefs/fortune.json",
+    "moddefs/news.json",
+    "moddefs/date.json",
+    "moddefs/time.json",
+    "moddefs/week.json",
+    "moddefs/day_of_week.json",
+    "moddefs/week_of_year.json",
+    "moddefs/analog_clock.json"
   ]
 }
