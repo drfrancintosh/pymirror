@@ -19,7 +19,7 @@ class PyMirror:
 		## and they "pluck out" the values they need
 		self._config = self._load_config(config_fname)
 		self.screen = PMScreen(self._config)
-		self.force_flush = self._config.flush
+		self.force_render = self._config.force_render
 		self.debug = self._config.debug
 		self.modules = []
 		self.new_events = []
@@ -135,9 +135,9 @@ class PyMirror:
 					self._send_events(module, events) # send all subscribed events to the module
 					if module.disabled: continue
 					do_update = module.exec() # update module state (returns True if the state has changed)
-					if do_update or module.force_render:
-						module_dirty = module.render(self.force_flush) # render() returns True if new rendering occurred
-						if module_dirty or module.force_render:
+					if do_update or module.force_render or self.force_render:
+						module_dirty = module.render(self.force_render) # render() returns True if new rendering occurred
+						if module_dirty or module.force_render or self.force_render:
 							# Blit the module's image to the screen at the module's position
 							self.screen.bitmap.paste(module.gfx, module.bitmap)
 							is_dirty += 1
