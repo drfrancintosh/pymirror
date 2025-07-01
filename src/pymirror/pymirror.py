@@ -112,7 +112,7 @@ class PyMirror:
 		self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name}", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
 		self.screen.bitmap.text_box(scrn_gfx, f"{module._moddef.position}", module.gfx.rect, halign="right", valign="top")
 
-	def full_render(self):
+	def full_render(self, force=False):
 		self.screen.bitmap.clear()
 		for module in self.modules:
 			if module.disabled: continue
