@@ -66,7 +66,7 @@ class PMScreen:
             # Create a PIL Image
             img = Image.fromarray(rgb, "RGB")
             img.save(self._screen.output_file+".tmp", "JPEG")
-            os.rename(self._screen.output_file+".tmp", self._screen.output_file+".tmp")
+            os.rename(self._screen.output_file+".tmp", self._screen.output_file)
 
 
     def flush(self) -> None:
