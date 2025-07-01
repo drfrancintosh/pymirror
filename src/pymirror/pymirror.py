@@ -117,7 +117,8 @@ class PyMirror:
 		for module in self.modules:
 			if module.disabled: continue
 			module.render(force=True)
-			if self.debug: self._debug(module)
+			self.screen.bitmap.paste(module.gfx, module.bitmap)
+		if self.debug: self._debug(module)
 		self.screen.flush()  # Flush the screen to show all modules at once
 
 	def run(self):
