@@ -156,9 +156,7 @@ class PyMirror:
 		self.screen.bitmap.clear()
 		self.screen.gfx.text_color = "#f00"
 		self.screen.gfx.text_bg_color = "#ff0"
-		self.screen.gfx.font_name = "DejaVuSans"
-		self.screen.gfx.set_font(self.screen.gfx.font_name, 32)
-		self.screen.bitmap.text_box(self.screen.gfx, f"Exception: {str(e)}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="center", halign="left")
+		self.screen.bitmap.text_box(self.screen.gfx, f"Exception:\n\n{str(e)}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="center", halign="center")
 		self.screen.flush()
 
 	def _bsod(self, e):
