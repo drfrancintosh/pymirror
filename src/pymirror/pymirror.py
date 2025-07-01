@@ -149,9 +149,10 @@ class PyMirror:
 					self.screen.flush()
 		except Exception as e:
 			print(f"Error occurred: {e}")
-			traceback.print_exc()  # <-- This prints the full stack trace to stdout
+			# traceback.print_exc()  # <-- This prints the full stack trace to stdout
 			error_lines = "\n".join(traceback.format_exception(type(e), e, e.__traceback__))
 			error_lines = str(e) + "\n" + error_lines
+			print(error_lines)
 			self.screen.bitmap.clear()
 			self.screen.gfx.text_color = "#fff"
 			self.screen.bitmap.text_box(self.screen.gfx, f"Exception: {e}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="top")
