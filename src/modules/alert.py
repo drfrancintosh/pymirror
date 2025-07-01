@@ -17,7 +17,7 @@ class Alert(PMCard):
 				"event": "PyMirrorEvent",
 				"refresh": True,
 			}
-			self.publish_event("PyMirrorEvent")
+			self.publish_event(event)
 			return True
 		return True	
 
