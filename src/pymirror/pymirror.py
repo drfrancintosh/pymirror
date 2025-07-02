@@ -136,6 +136,7 @@ class PyMirror:
 			self.screen.bitmap.clear()
 			while True:
 				if self._clear_screen:
+					self.screen.bitmap.clear()
 					self.force_render = True  # Force a full render on the next loop
 					self._clear_screen = self._clear_screen_again
 				self._read_server_queue() # read any new events from the server queue
@@ -153,7 +154,7 @@ class PyMirror:
 						module_dirty = module.render(module.force_render or self.force_render) # render() returns True if new rendering occurred
 					if module_dirty or module.force_render or self.force_render:
 						# Blit the module's image to the screen at the module's position
-						if module.bitmap:
+						if not module.disabled and module.bitmap:
 							self.screen.bitmap.paste(module.gfx, module.bitmap)
 						is_dirty += 1
 					module_end = time.time()

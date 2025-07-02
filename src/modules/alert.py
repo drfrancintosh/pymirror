@@ -32,9 +32,6 @@ class Alert(PMCard):
 		return is_dirty
 
 	def onEvent(self, event) -> None:
-		## show the alert window
 		self.disabled = False
-		## update the alert text with the event data
 		self.update(event.header, event.body, event.footer)
-		## if the event has a timeout, set the timer
 		self.timer.set_timeout(event.timeout)
