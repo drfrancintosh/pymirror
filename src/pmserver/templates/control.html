@@ -17,6 +17,10 @@
             <input class="form-check-input" type="checkbox" id="refresh" name="refresh">
             <label class="form-check-label" for="refresh">Refresh</label>
         </div>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="remote_display" name="remote_display">
+            <label class="form-check-label" for="remote_display">Remote Display</label>
+        </div>
         <button type="submit" class="btn btn-success">Send</button>
     </form>
     <div id="result" class="mt-3"></div>
@@ -26,7 +30,8 @@ document.getElementById('controlForm').onsubmit = function(e) {
     e.preventDefault();
     const data = {
         debug: document.getElementById('debug').checked,
-        refresh: document.getElementById('refresh').checked
+        refresh: document.getElementById('refresh').checked,
+        remote_display: document.getElementById('remote_display').checked
     };
     fetch('/command', {
         method: 'POST',
