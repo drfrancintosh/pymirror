@@ -95,7 +95,6 @@ class PMModule(ABC):
 		This is called by the PM when an event is dispatched to the module.
 		Override this method to handle specific events.
 		"""
-		print(f"onEvent {self._moddef.name} received event: {event.event}")
 		self.dispatchEvent(event)
 
 	def subscribe(self, event_names):
@@ -119,5 +118,4 @@ class PMModule(ABC):
 		""" Publish an event to the PM.
 		This is used to notify the PM of an event that occurred in the module.
 		"""
-		print(f"Module {self._moddef.name} publishing event: {event['event']}")
 		self.pm.publish_event(event)
