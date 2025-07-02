@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from types import SimpleNamespace
 from dataclasses import dataclass
-from pymirror import PMCard
+from pymirror.pmcard import PMCard
 from events import AlertEvent
 
 

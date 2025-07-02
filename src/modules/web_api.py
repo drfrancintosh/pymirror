@@ -6,9 +6,9 @@ import copy
 import json
 from jinja2 import Template
 
-from pymirror import PMCard
+from pymirror.pmcard import PMCard
 from pymirror.utils import expand_dict
-from pymirror import PMTimer
+from pymirror.pmtimer import PMTimer
 
 class Api:
 	def __init__(self, config):
