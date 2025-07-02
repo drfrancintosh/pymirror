@@ -7,7 +7,7 @@ import json
 from jinja2 import Template
 
 from pymirror.pmcard import PMCard
-from pymirror.utils import expand_dict
+from pymirror.utils import SafeNamespace, expand_dict
 from pymirror.pmtimer import PMTimer
 
 class Api:
@@ -15,8 +15,8 @@ class Api:
 		self.config = config
 
 	def fetch(self):
-		if self._web_api.sample:  # type: ignore
-			with open(self._web_api.sample, "r") as file:
+		if self.config.sample:  # type: ignore
+			with open(self.config.sample, "r") as file:
 				sample_data = json.load(file)
 			return sample_data
 

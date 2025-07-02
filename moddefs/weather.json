@@ -10,6 +10,7 @@
     },
     "weather": {
         "refresh_minutes": 15,
+        "sample": "./samples/weather-sample.json",
         "degrees": "°F",
         "datetime_format": "%I:%M:%S %p",
         "weather_data": {

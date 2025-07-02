@@ -21,12 +21,12 @@ class WeatherData:
 
 
 class OpenWeatherMap:
-    def __init__(self):
-        self.base_url = "https://api.openweathermap.org/data/3.0/onecall?"
+    def __init__(self,  base_url = "https://api.openweathermap.org/data/3.0/onecall?"):
+        self.base_url = base_url
 
     def fetch(self, args: WeatherData):
-        if self._weather.sample:  # type: ignore
-            with open(self._weather.sample, "r") as file:
+        if "https://" not in self.base_url:  # type: ignore
+            with open(self.base_url, "r") as file:
                 sample_data = json.load(file)
             return sample_data
 
@@ -64,7 +64,7 @@ class Weather(PMCard):
         )
         self.timer.set_timeout(1)  # refresh right away
         self.weather_response = None
-        self.weather_api = OpenWeatherMap()
+        self.weather_api = OpenWeatherMap(self._weather.sample)
         # self.update("", "", "")  # Initialize with empty strings
 
     def exec(self) -> bool:

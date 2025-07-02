@@ -13,7 +13,7 @@
         "update_mins": 15,
         "cycle_seconds": 15,
         "url": "https://newsapi.org/v2/top-headlines",
-        "sample": "./samples/news.json",
+        "sample": "./samples/newsapi-sample.json",
         "params": {
             "apiKey": "$NEWSAPI_KEY",
             "country": "us",
