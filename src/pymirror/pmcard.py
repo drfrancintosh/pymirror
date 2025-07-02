@@ -76,4 +76,4 @@ class PMCard(PMModule):
 	def exec(self) -> bool:
 		is_dirty = self.is_dirty()
 		print(f"Card {self._moddef.name} is_dirty: {is_dirty}")
-		if is_dirty:
+		return is_dirty
