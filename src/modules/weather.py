@@ -26,7 +26,7 @@ class OpenWeatherMap:
 
     def fetch(self, args: WeatherData):
         ## read ./samples/openweathermap.json
-        with open("samples/openweathermap.json", "r") as file:
+        with open("samples/weather-sample.json", "r") as file:
             sample_data = json.load(file)
         return sample_data
     
