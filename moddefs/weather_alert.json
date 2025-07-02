@@ -7,10 +7,10 @@
         "subscriptions": ["WeatherAlertEvent"]
     },
     "alert": {
-        "header": "Alert",
-        "body": "This is an alert message.",
+        "header": "Weather Alert",
+        "body": "Weather Alerts Go Here.",
         "footer": "Alert Footer",
-        "timeout": 0
+        "timeout": 10000
     },
     "card": {
         "header": {
