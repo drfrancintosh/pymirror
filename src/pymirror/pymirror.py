@@ -86,6 +86,10 @@ class PyMirror:
 		except queue.Empty:
 			# No new events in the queue
 			pass
+		events = self.new_events # get any new events from server or modules
+		self.new_events = [] # dispose of the old events
+		return events
+
 
 	def _send_events(self, module, events):
 		## send all events to the module
@@ -131,28 +135,36 @@ class PyMirror:
 		if self.debug: self._debug(module)
 		self.screen.flush()  # Flush the screen to show all modules at once
 
+	def _exec_modules(self, events):
+		modules_changed = []
+		for module in self.modules:
+			self._send_events(module, events) # send all subscribed events to the module
+			if not module.disabled:
+				state_changed = module.exec() # update module state (returns True if the state has changed)
+				if state_changed: modules_changed.append(module)
+		return modules_changed
+
+	def _render_modules(self, modules_changed):
+		""" Render all modules that have changed state """
+		for module in modules_changed:
+			if not module.disabled and module.bitmap:
+				module.render(force=self.force_render)
+
+	def _update_screen(self):
+		self.screen.bitmap.clear()  # Clear the bitmap before rendering
+		for module in self.modules:
+			if not module.disabled and module.bitmap:
+				self.screen.bitmap.paste(module.gfx, module.bitmap)
+				if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
+		self.screen.flush()
+
 	def run(self):
 		try:
 			while True:
-				self._read_server_queue() # read any new events from the server queue
-				events = self.new_events # get any new events from server or modules
-				self.new_events = [] # dispose of the old events
-				is_dirty = 0
-				## manage state
-				modules_changed = []
-				for module in self.modules:
-					self._send_events(module, events) # send all subscribed events to the module
-					if not module.disabled:
-						state_changed = module.exec() # update module state (returns True if the state has changed)
-						if state_changed: modules_changed.append(module)
-				for module in modules_changed:
-					module.render(module.force_render or self.force_render) # render() returns True if new rendering occurred
-				self.screen.bitmap.clear()  # Clear the bitmap before rendering
-				for module in self.modules:
-					if not module.disabled and module.bitmap:
-						self.screen.bitmap.paste(module.gfx, module.bitmap)
-						if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
-				self.screen.flush()
+				events = self._read_server_queue() # read any new events from the server queue
+				modules_changed = self._exec_modules(events)
+				self._render_modules(modules_changed)  # Render only the modules that changed state
+				self._update_screen()  # Update the screen with the rendered modules
 		except Exception as e:
 			traceback.print_exc()  # <-- This prints the full stack trace to stdout
 			self._error_screen(e)  # Display the error on the screen
