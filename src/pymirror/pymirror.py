@@ -148,10 +148,10 @@ class PyMirror:
 							# Blit the module's image to the screen at the module's position
 							if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
 							is_dirty += 1
-					if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
 					module_end = time.time()
-					if self.debug:
+					if self.debug: 
 						module.name = f"{module._moddef.name} ({module_end - module_start:.2f}s)"
+						self._debug(module) # draw boxes around each module if debug is enabled
 				if is_dirty:
 					# if any new rendering occurred, flush the screen
 					# otherwise, the screen will not be updated
