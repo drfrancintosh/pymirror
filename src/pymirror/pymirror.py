@@ -26,7 +26,8 @@ class PyMirror:
 		self.new_events = []
 		self.event_queue = queue.Queue()  # Use a queue to manage events
 		self.server = PMServer(self._config.server, self.event_queue)
-
+		self._clear_screen = True  # Flag to clear the screen on each loop
+		self._clear_screen_again = False  # Flag to reset the screen on each loop
 		self._load_modules()
 		self.server.start()  # Start the server to handle incoming events
 
@@ -132,8 +133,10 @@ class PyMirror:
 
 	def run(self):
 		try:
-			self.screen.bitmap.clear()
 			while True:
+				if self._clear_screen:
+					self.screen.bitmap.clear()
+				self._clear_screen = self._clear_screen_again  # Reset the clear screen flag
 				self._read_server_queue() # read any new events from the server queue
 				events = self.new_events # get any new events from server or modules
 				self.new_events = [] # dispose of the old events

@@ -20,7 +20,8 @@ class PymirrorController(PMModule):
 			self.pm.debug = event.debug in [True, "true", "on"]
 			self.pm.full_render()
 		if event.refresh: 
-			self.pm.full_render()
+			## clear the screen on the next iteration
+			self.pm._clear_screen = True
 		if event.error != None: 
 			raise Exception(f"PyMirrorController received error event:\n{event.error}")
 
