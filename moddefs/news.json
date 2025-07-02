@@ -6,7 +6,8 @@
         "text_color": "#000000",
         "text_bg_color": "#c0c0c0",
         "font_name": "Roboto-Regular",
-        "font_size": 24
+        "font_size": 24,
+        "disable": true
     },
     "web_api": {
         "update_mins": 15,
