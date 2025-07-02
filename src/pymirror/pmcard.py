@@ -19,7 +19,6 @@ class PMCardText:
 		last_text: str = None
 
 		def is_dirty(self) -> bool:
-			""" Check if the text has changed. """
 			return self.text != self.last_text
 
 class PMCard(PMModule):
@@ -70,10 +69,14 @@ class PMCard(PMModule):
 			next_y0 =self._render_text(self._card.footer.text, (0, next_y0, gfx.width, gfx.height), self._card.footer, maybe_invert_colors=True)
 		else:
 			self._render_text(self._card.body.text, (0, next_y0, gfx.width, gfx.height), self._card.body, maybe_invert_colors=False)
+		
+		## should we update the last_text?
+		## render should not change the state of the object
+		self._card.header.last_text = self._card.header.text
+		self._card.body.last_text = self._card.body.text
+		self._card.footer.last_text = self._card.footer.text
 		return True
 	
 		
 	def exec(self) -> bool:
-		is_dirty = self.is_dirty()
-		print(f"Card {self._moddef.name} is_dirty: {is_dirty}")
-		return is_dirty
+		return self.is_dirty()
