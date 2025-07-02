@@ -32,7 +32,7 @@ class WebApi(PMCard):
 		self.response = None
 		self.items = []
 		self.item_number = 0
-		self.update("", "", "")  # Initialize with empty strings
+		self.update(None, None, None)  # Initialize with empty strings
 
 	def _read_items(self, force: bool = False) -> int:
 		context = {

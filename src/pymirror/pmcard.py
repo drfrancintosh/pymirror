@@ -78,4 +78,6 @@ class PMCard(PMModule):
 	
 		
 	def exec(self) -> bool:
-		return self.is_dirty()
+		is_dirty = self.is_dirty()
+		self.make_clean()  # Mark the card as clean after checking for changes
+		return is_dirty
