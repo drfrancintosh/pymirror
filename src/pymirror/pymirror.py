@@ -89,7 +89,7 @@ class PyMirror:
 		## send all events to the module
 		if not module.subscriptions: return
 		for event in events:
-			event_name = event.get("event")
+			event_name = event.event
 			# event_class = None
 			# if event_name in module.subscriptions:
 			# 	event_class = globals().get(event_name)
