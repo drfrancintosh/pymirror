@@ -25,6 +25,7 @@ class Alert(PMCard):
 				"event": "PyMirrorEvent",
 				"refresh": True,
 			}
+			self.update(None, None, None)
 			self.publish_event(event)
 			is_dirty = True
 		return is_dirty
