@@ -89,24 +89,18 @@ class PyMirror:
 
 
 	def _send_events_to_module(self, module, events):
-		## send all events to the module
 		if not module.subscriptions: return
 		for event in events:
-			event_name = event.event
-			# event_class = None
-			# if event_name in module.subscriptions:
-			# 	event_class = globals().get(event_name)
-			# if event_class:
-			# 	event_instance = event_class(**event) if isinstance(event, dict) else SafeNamespace(event)
-			# 	module.onEvent(event_instance)
-			# else:
-			# 	print(f"Unknown event class: {event_name}")
-			if event_name in module.subscriptions:
-				event = SafeNamespace(**event) if isinstance(event, dict) else event
+			if event.event in module.subscriptions:
 				module.onEvent(event)
+
+	def _convert_events_to_namespace(self):
+		""" Convert a list of events to SafeNamespace objects """
+		return [SafeNamespace(event) if isinstance(event, dict) else event for event in self.events]
 
 	def _send_all_events(self):
 		if not self.events: return
+		self.events = self._convert_events_to_namespace()  # Convert events to SafeNamespace if needed
 		for module in self.modules:
 			if not module.subscriptions: continue
 			self._send_events_to_module(module, self.events)  # Send all events to the module
