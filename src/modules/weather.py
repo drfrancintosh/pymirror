@@ -25,6 +25,12 @@ class OpenWeatherMap:
         self.base_url = "https://api.openweathermap.org/data/3.0/onecall?"
 
     def fetch(self, args: WeatherData):
+        ## read ./samples/openweathermap.json
+        with open("samples/openweathermap.json", "r") as file:
+            sample_data = json.load(file)
+        return sample_data
+    
+    def fetch_save(self, args: WeatherData):
         response = requests.get(self.base_url, params=args.__dict__)
         if response.ok:
             # Parse the JSON response into a dictionary

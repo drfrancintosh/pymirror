@@ -15,6 +15,7 @@
 7. Check on news module - "None" and missing data sometimes
 8. if alert card is 'timed', show timer percent. bar
 9. Code Cleanup
+10. optimize API calls (cache to disk) for weather, news
 
 ## Backlog
 
