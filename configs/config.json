@@ -1,5 +1,5 @@
 {
-  "debug": true,
+  "debug": false,
   "secrets": ".secrets",
   "force_render": false,
   "screen": {
