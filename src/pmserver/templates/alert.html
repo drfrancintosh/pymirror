@@ -10,6 +10,10 @@
     <h1 class="mb-4">Send Alert</h1>
     <form id="commandForm">
         <div class="mb-3">
+            <label for="event" class="form-label">Event</label>
+            <input type="text" class="form-control" id="event" name="event" value="AlertEvent" required>
+        </div>
+        <div class="mb-3">
             <label for="header" class="form-label">Header</label>
             <input type="text" class="form-control" id="header" name="header" value="WOWSA!" required>
         </div>
@@ -26,6 +30,7 @@
             <input type="number" class="form-control" id="timeout" name="timeout" value="6000" required>
         </div>
         <button type="submit" class="btn btn-primary">Send Command</button>
+        <a href="/" class="btn btn-secondary ms-2">Back to Home</a>
     </form>
     <div id="result" class="mt-3"></div>
 </div>
@@ -33,7 +38,7 @@
 document.getElementById('commandForm').onsubmit = function(e) {
     e.preventDefault();
     const data = {
-        event: "AlertEvent",
+        event: document.getElementById('event').value,
         header: document.getElementById('header').value,
         body: document.getElementById('body').value,
         footer: document.getElementById('footer').value,
