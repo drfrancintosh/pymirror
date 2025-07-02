@@ -133,10 +133,11 @@ class PyMirror:
 
 	def run(self):
 		try:
+			self.screen.bitmap.clear()
 			while True:
 				if self._clear_screen:
-					self.screen.bitmap.clear()
-				self._clear_screen = self._clear_screen_again  # Reset the clear screen flag
+					self.force_render = True  # Force a full render on the next loop
+					self._clear_screen = self._clear_screen_again
 				self._read_server_queue() # read any new events from the server queue
 				events = self.new_events # get any new events from server or modules
 				self.new_events = [] # dispose of the old events
@@ -146,7 +147,7 @@ class PyMirror:
 					self._send_events(module, events) # send all subscribed events to the module
 					if not module.disabled:
 						do_update = module.exec() # update module state (returns True if the state has changed)
-						if not module.disabled and (do_update or module.force_render or self.force_render):
+						if do_update or module.force_render or self.force_render:
 							module_dirty = module.render(force=module.force_render or self.force_render) # render() returns True if new rendering occurred
 							if module_dirty or module.force_render or self.force_render:
 								# Blit the module's image to the screen at the module's position
