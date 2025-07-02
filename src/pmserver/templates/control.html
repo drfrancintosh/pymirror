@@ -29,11 +29,13 @@
 document.getElementById('controlForm').onsubmit = function(e) {
     e.preventDefault();
     const data = {
+        event: 'PyMirrorEvent',
         debug: document.getElementById('debug').checked,
         refresh: document.getElementById('refresh').checked,
         remote_display: document.getElementById('remote_display').checked
     };
-    fetch('/command', {
+    console.log('Sending data:', data);
+    fetch('/event', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)

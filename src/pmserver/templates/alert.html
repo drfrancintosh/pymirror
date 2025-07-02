@@ -10,10 +10,6 @@
     <h1 class="mb-4">Send Alert</h1>
     <form id="commandForm">
         <div class="mb-3">
-            <label for="event" class="form-label">Event</label>
-            <input type="text" class="form-control" id="event" name="event" value="AlertEvent" required>
-        </div>
-        <div class="mb-3">
             <label for="header" class="form-label">Header</label>
             <input type="text" class="form-control" id="header" name="header" value="WOWSA!" required>
         </div>
@@ -37,13 +33,14 @@
 document.getElementById('commandForm').onsubmit = function(e) {
     e.preventDefault();
     const data = {
-        event: document.getElementById('event').value,
+        event: "AlertEvent",
         header: document.getElementById('header').value,
         body: document.getElementById('body').value,
         footer: document.getElementById('footer').value,
         timeout: parseInt(document.getElementById('timeout').value)
     };
-    fetch('/command', {
+    console.log('Sending data:', data);
+    fetch('/event', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
