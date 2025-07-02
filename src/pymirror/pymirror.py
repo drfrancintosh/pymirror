@@ -116,7 +116,7 @@ class PyMirror:
 		if not module.gfx.rect: return
 		self.screen.bitmap.rect(scrn_gfx, module.gfx.rect, fill=None)
 		scrn_gfx.set_font(scrn_gfx.font_name, 24)
-		self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name}", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
+		self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name} ({module._time:.2f}s)", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
 		self.screen.bitmap.text_box(scrn_gfx, f"{module._moddef.position}", module.gfx.rect, halign="right", valign="top")
 
 	def full_render(self):
@@ -150,7 +150,7 @@ class PyMirror:
 							is_dirty += 1
 					module_end = time.time()
 					if self.debug: 
-						module._moddef.name = f"{module._moddef.name} ({module_end - module_start:.2f}s)"
+						module._time = module_end - module_start
 						self._debug(module) # draw boxes around each module if debug is enabled
 				if is_dirty:
 					# if any new rendering occurred, flush the screen
