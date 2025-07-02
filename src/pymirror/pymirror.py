@@ -2,7 +2,7 @@ import importlib
 import json
 import copy
 import os
-from time import time
+import time
 from dotenv import load_dotenv
 import queue
 import argparse
