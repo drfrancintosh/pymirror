@@ -15,11 +15,16 @@ class Api:
 		self.config = config
 
 	def fetch(self):
+		if self._web_api.sample:  # type: ignore
+			with open(self._web_api.sample, "r") as file:
+				sample_data = json.load(file)
+			return sample_data
+
 		response = requests.get(self.config.url, params=self.config.params.__dict__)
 		if response.ok:
 			return response.json()
 		else:
-			print(f"Error fetching weather data: {response.status_code} - {response.text}")
+			print(f"Error fetching data: {response.status_code} - {response.text}")
 			return {"error": "error"}
 
 class WebApi(PMCard):
