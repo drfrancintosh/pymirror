@@ -143,7 +143,7 @@ class PyMirror:
 					self._send_events(module, events) # send all subscribed events to the module
 					if not module.disabled:
 						do_update = module.exec() # update module state (returns True if the state has changed)
-						if do_update or module.force_render or self.force_render:
+						if not module.disabled and (do_update or module.force_render or self.force_render):
 							module_dirty = module.render(force=module.force_render or self.force_render) # render() returns True if new rendering occurred
 							if module_dirty or module.force_render or self.force_render:
 								# Blit the module's image to the screen at the module's position
