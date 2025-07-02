@@ -2,6 +2,7 @@ import importlib
 import json
 import copy
 import os
+from time import time
 from dotenv import load_dotenv
 import queue
 import argparse
@@ -134,9 +135,10 @@ class PyMirror:
 			while True:
 				self._read_server_queue() # read any new events from the server queue
 				events = self.new_events # get any new events from server or modules
-				self.new_events = [] # displose of the old events
+				self.new_events = [] # dispose of the old events
 				is_dirty = 0
 				for module in self.modules:
+					module_start = time.time()
 					self._send_events(module, events) # send all subscribed events to the module
 					if module.disabled: continue
 					do_update = module.exec() # update module state (returns True if the state has changed)
@@ -147,6 +149,9 @@ class PyMirror:
 							if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
 							is_dirty += 1
 					if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
+					module_end = time.time()
+					if self.debug:
+						module.name = f"{module._moddef.name} ({module_end - module_start:.2f}s)"
 				if is_dirty:
 					# if any new rendering occurred, flush the screen
 					# otherwise, the screen will not be updated
