@@ -1,5 +1,17 @@
 # TODO List
 
+## MVP
+
+1. fix week number (use iso date)
+2. webserver
+    1. debug on / off
+    2. send alert
+    3. turn on / off preview
+4. update README.md
+    1. where to get API Keys
+    2. setup rpi zero 2
+5. README.md for each module
+## Backlog
 
 6. Hot Reload of config.json
     - if config.json is updated then dispose of old modules and reload
@@ -19,7 +31,7 @@
 22. Make multiple alerts cycle
 23. need to add "force" on an option for a module like "alert" so it always show up on top
 
-# DONE
+## DONE
 
 1. update gfx object so "set_font(font_name, font_size)" is 'permanent'
     - currently it only sets the gfx.font, but not gfx.font_name, gfx.font_size

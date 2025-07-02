@@ -21,7 +21,7 @@
             "font_name": "TNG_Credits",
             "font_size": 24,
             "text_color": "#000",
-            "text_bg_color": "#f00",
+            "text_bg_color": "#0ff",
             "height": 48
         },
         "body": {
