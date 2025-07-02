@@ -57,6 +57,7 @@ class PMCard(PMModule):
 		return rect[3] + 1 # next y position after rendering the text box
 
 	def render(self, force: bool = False) -> bool:
+		print(f"Rendering card: {self._moddef.name}")
 		self.bitmap.clear()
 		gfx = self.gfx
 		header_height = self._card.header.height or self._card.header.font_size or gfx.font_size
