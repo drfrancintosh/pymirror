@@ -116,7 +116,7 @@ class PyMirror:
 		if not module.gfx.rect: return
 		self.screen.bitmap.rect(scrn_gfx, module.gfx.rect, fill=None)
 		scrn_gfx.set_font(scrn_gfx.font_name, 24)
-		module._moddef_time = module._time if hasattr(module, '_time') else 0.0
+		module._time = module._time if hasattr(module, '_time') else 0.0
 		self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name} ({module._time:.2f}s)", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
 		self.screen.bitmap.text_box(scrn_gfx, f"{module._moddef.position}", module.gfx.rect, halign="right", valign="top")
 
