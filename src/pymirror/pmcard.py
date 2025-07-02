@@ -34,6 +34,12 @@ class PMCard(PMModule):
 		self._card.body.text = body
 		self._card.footer.text = footer
 
+	def make_clean(self) -> None:
+		""" Mark the card as clean, i.e. no changes since last render """
+		self._card.header.last_text = self._card.header.text
+		self._card.body.last_text = self._card.body.text
+		self._card.footer.last_text = self._card.footer.text
+
 	def is_dirty(self) -> bool:
 		return (self._card.header.is_dirty() or
 				self._card.body.is_dirty() or
@@ -68,12 +74,6 @@ class PMCard(PMModule):
 			next_y0 =self._render_text(self._card.footer.text, (0, next_y0, gfx.width, gfx.height), self._card.footer, maybe_invert_colors=True)
 		else:
 			self._render_text(self._card.body.text, (0, next_y0, gfx.width, gfx.height), self._card.body, maybe_invert_colors=False)
-		
-		## should we update the last_text?
-		## render should not change the state of the object
-		self._card.header.last_text = self._card.header.text
-		self._card.body.last_text = self._card.body.text
-		self._card.footer.last_text = self._card.footer.text
 		return True
 	
 		

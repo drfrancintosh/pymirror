@@ -28,6 +28,8 @@ class Alert(PMCard):
 			}
 			self.publish_event(event)
 			is_dirty = True
+		if is_dirty:
+			self.make_clean()
 		return is_dirty
 
 	def onEvent(self, event) -> None:
