@@ -14,6 +14,7 @@
 6. WebServer seems to lag - lacking CPU time?
 7. Check on news module - "None" and missing data sometimes
 8. if alert card is 'timed', show timer percent. bar
+9. Code Cleanup
 
 ## Backlog
 
