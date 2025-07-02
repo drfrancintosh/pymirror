@@ -80,7 +80,7 @@ class PyMirror:
 		## add any messages that have come from the web server
 		try:
 			while event := self.event_queue.get(0):
-				self.add_event(event)
+				self.publish_event(event)
 		except queue.Empty:
 			# No new events in the queue
 			pass
@@ -102,9 +102,14 @@ class PyMirror:
 				event = SafeNamespace(**event) if isinstance(event, dict) else event
 				module.onEvent(event)
 
-	def add_event(self, **kwargs):
-		self.new_events.append(SafeNamespace(**kwargs))
-
+	def publish_event(self, event: dict):
+		if type(event) is dict:
+			self.new_events.append(SafeNamespace(**event))
+		elif isinstance(event, SafeNamespace):
+			self.new_events.append(event)
+		else:
+			raise TypeError(f"Event must be a dict or SafeNamespace, got {type(event)}")
+	
 	def _debug(self, module):
 		scrn_gfx = copy.copy(self.screen.gfx)
 		if not module.gfx.rect: return

@@ -119,5 +119,5 @@ class PMModule(ABC):
 		""" Publish an event to the PM.
 		This is used to notify the PM of an event that occurred in the module.
 		"""
-		print(f"Module {self._moddef.name} publishing event: {event}")
-		self.pm.add_event(event)
+		print(f"Module {self._moddef.name} publishing event: {event['event']}")
+		self.pm.publish_event(event)
