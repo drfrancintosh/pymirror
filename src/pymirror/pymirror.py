@@ -150,7 +150,7 @@ class PyMirror:
 							is_dirty += 1
 					module_end = time.time()
 					if self.debug: 
-						module.name = f"{module._moddef.name} ({module_end - module_start:.2f}s)"
+						module._moddef.name = f"{module._moddef.name} ({module_end - module_start:.2f}s)"
 						self._debug(module) # draw boxes around each module if debug is enabled
 				if is_dirty:
 					# if any new rendering occurred, flush the screen
