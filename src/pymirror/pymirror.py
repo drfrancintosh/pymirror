@@ -135,33 +135,28 @@ class PyMirror:
 		try:
 			self.screen.bitmap.clear()
 			while True:
-				self.force_render = self._clear_screen  # Force a full render on the next loop
-				if self._clear_screen:
-					self.full_render()  # Render all modules to the screen
-					self._clear_screen = self._clear_screen_again
 				self._read_server_queue() # read any new events from the server queue
 				events = self.new_events # get any new events from server or modules
 				self.new_events = [] # dispose of the old events
 				is_dirty = 0
+				## manage state
+				do_updates = []
+				do_blits = []
 				for module in self.modules:
-					module_start = time.time()
 					self._send_events(module, events) # send all subscribed events to the module
-					do_update = False
-					module_dirty = False
 					if not module.disabled:
-						do_update = module.exec() # update module state (returns True if the state has changed)
-					if not module.disabled and (do_update or module.force_render or self.force_render):
-						module_dirty = module.render(module.force_render or self.force_render) # render() returns True if new rendering occurred
-					if module_dirty or module.force_render or self.force_render:
-						# Blit the module's image to the screen at the module's position
-						if not module.disabled and module.bitmap:
-							self.screen.bitmap.paste(module.gfx, module.bitmap)
-						is_dirty += 1
-					module_end = time.time()
-					module._time = module_end - module_start
-					if self.debug: 
+						state_changed = module.exec() # update module state (returns True if the state has changed)
+						if state_changed: do_updates.append(module)
+				for module in do_updates:
+					module_dirty = module.render(module.force_render or self.force_render) # render() returns True if new rendering occurred
+					if module_dirty: do_blits.append(module)
+				for module in do_blits:
+					if module.bitmap:
+						self.screen.bitmap.paste(module.gfx, module.bitmap)
+				if self.debug:
+					for module in self.modules:
 						self._debug(module) # draw boxes around each module if debug is enabled
-				if is_dirty:
+				if len(do_blits):
 					# if any new rendering occurred, flush the screen
 					self.screen.flush()
 		except Exception as e:
