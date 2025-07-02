@@ -135,9 +135,9 @@ class PyMirror:
 		try:
 			self.screen.bitmap.clear()
 			while True:
+				self.force_render = self._clear_screen  # Force a full render on the next loop
 				if self._clear_screen:
 					self.screen.bitmap.clear()
-					self.force_render = True  # Force a full render on the next loop
 					self._clear_screen = self._clear_screen_again
 				self._read_server_queue() # read any new events from the server queue
 				events = self.new_events # get any new events from server or modules
