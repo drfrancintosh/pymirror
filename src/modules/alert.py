@@ -23,11 +23,11 @@ class Alert(PMCard):
 			self.disabled = True
 			self.update(None, None, None)
 			self.make_clean()  # mark the alert as clean
-			event = {
-				"event": "PyMirrorEvent",
-				"refresh": True,
-			}
-			self.publish_event(event)
+			# event = {
+			# 	"event": "PyMirrorEvent",
+			# 	"refresh": True,
+			# }
+			# self.publish_event(event)
 			is_dirty = False ## don't render the alert if it is disabled
 		return is_dirty
 
