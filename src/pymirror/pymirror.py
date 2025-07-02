@@ -23,9 +23,9 @@ class PyMirror:
 		self.force_render = False
 		self.debug = self._config.debug
 		self.modules = []
-		self.new_events = []
-		self.event_queue = queue.Queue()  # Use a queue to manage events
-		self.server = PMServer(self._config.server, self.event_queue)
+		self.events = []
+		self.server_queue = queue.Queue()  # Use a queue to manage events
+		self.server = PMServer(self._config.server, self.server_queue)
 		self._clear_screen = True  # Flag to clear the screen on each loop
 		self._clear_screen_again = False  # Flag to reset the screen on each loop
 		self._load_modules()
@@ -81,17 +81,14 @@ class PyMirror:
 	def _read_server_queue(self):
 		## add any messages that have come from the web server
 		try:
-			while event := self.event_queue.get(0):
+			while event := self.server_queue.get(0):
 				self.publish_event(event)
 		except queue.Empty:
 			# No new events in the queue
 			pass
-		events = self.new_events # get any new events from server or modules
-		self.new_events = [] # dispose of the old events
-		return events
 
 
-	def _send_events(self, module, events):
+	def _send_events_to_module(self, module, events):
 		## send all events to the module
 		if not module.subscriptions: return
 		for event in events:
@@ -108,11 +105,18 @@ class PyMirror:
 				event = SafeNamespace(**event) if isinstance(event, dict) else event
 				module.onEvent(event)
 
+	def _send_all_events(self):
+		if not self.events: return
+		for module in self.modules:
+			if not module.subscriptions: continue
+			self._send_events_to_module(module, self.events)  # Send all events to the module
+		self.events.clear()  # Clear the events after sending them
+
 	def publish_event(self, event: dict):
 		if type(event) is dict:
-			self.new_events.append(SafeNamespace(**event))
+			self.events.append(SafeNamespace(**event))
 		elif isinstance(event, SafeNamespace):
-			self.new_events.append(event)
+			self.events.append(event)
 		else:
 			raise TypeError(f"Event must be a dict or SafeNamespace, got {type(event)}")
 	
@@ -135,10 +139,9 @@ class PyMirror:
 		if self.debug: self._debug(module)
 		self.screen.flush()  # Flush the screen to show all modules at once
 
-	def _exec_modules(self, events):
+	def _exec_modules(self):
 		modules_changed = []
 		for module in self.modules:
-			self._send_events(module, events) # send all subscribed events to the module
 			if not module.disabled:
 				state_changed = module.exec() # update module state (returns True if the state has changed)
 				if state_changed: modules_changed.append(module)
@@ -161,8 +164,9 @@ class PyMirror:
 	def run(self):
 		try:
 			while True:
-				events = self._read_server_queue() # read any new events from the server queue
-				modules_changed = self._exec_modules(events)
+				self._read_server_queue() # read any new events from the server queue
+				self._send_all_events()  # send all new events to the modules
+				modules_changed = self._exec_modules()
 				self._render_modules(modules_changed)  # Render only the modules that changed state
 				self._update_screen()  # Update the screen with the rendered modules
 		except Exception as e:

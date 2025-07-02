@@ -11,6 +11,9 @@
     1. where to get API Keys
     2. setup rpi zero 2
 5. README.md for each module
+6. WebServer seems to lag - lacking CPU time?
+7. Check on news module - "None" and missing data sometimes
+
 ## Backlog
 
 6. Hot Reload of config.json
