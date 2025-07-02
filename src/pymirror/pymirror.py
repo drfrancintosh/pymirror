@@ -145,24 +145,24 @@ class PyMirror:
 				for module in self.modules:
 					module_start = time.time()
 					self._send_events(module, events) # send all subscribed events to the module
+					do_update = False
+					module_dirty = False
 					if not module.disabled:
 						do_update = module.exec() # update module state (returns True if the state has changed)
-						if do_update or module.force_render or self.force_render:
-							module_dirty = module.render(force=module.force_render or self.force_render) # render() returns True if new rendering occurred
-							if module_dirty or module.force_render or self.force_render:
-								# Blit the module's image to the screen at the module's position
-								if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
-								is_dirty += 1
+					if not module.disabled and (do_update or module.force_render or self.force_render):
+						module_dirty = module.render(module.force_render or self.force_render) # render() returns True if new rendering occurred
+					if module_dirty or module.force_render or self.force_render:
+						# Blit the module's image to the screen at the module's position
+						if module.bitmap:
+							self.screen.bitmap.paste(module.gfx, module.bitmap)
+						is_dirty += 1
 					module_end = time.time()
+					module._time = module_end - module_start
 					if self.debug: 
-						module._time = module_end - module_start
 						self._debug(module) # draw boxes around each module if debug is enabled
 				if is_dirty:
 					# if any new rendering occurred, flush the screen
-					# otherwise, the screen will not be updated
-					# (this is to improve performance)
 					self.screen.flush()
-				self.force_render = False  # Reset force_render after each loop
 		except Exception as e:
 			traceback.print_exc()  # <-- This prints the full stack trace to stdout
 			self._error_screen(e)  # Display the error on the screen
