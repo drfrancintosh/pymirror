@@ -140,7 +140,6 @@ class PyMirror:
 				is_dirty = 0
 				## manage state
 				modules_changed = []
-				do_blits = []
 				for module in self.modules:
 					self._send_events(module, events) # send all subscribed events to the module
 					if not module.disabled:
