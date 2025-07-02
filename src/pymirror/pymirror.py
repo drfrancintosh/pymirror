@@ -133,7 +133,6 @@ class PyMirror:
 
 	def run(self):
 		try:
-			self.screen.bitmap.clear()
 			while True:
 				self._read_server_queue() # read any new events from the server queue
 				events = self.new_events # get any new events from server or modules
@@ -150,7 +149,8 @@ class PyMirror:
 				for module in do_updates:
 					module_dirty = module.render(module.force_render or self.force_render) # render() returns True if new rendering occurred
 					if module_dirty: do_blits.append(module)
-				for module in do_blits:
+				self.screen.bitmap.clear()  # Clear the bitmap before rendering
+				for module in self.modules:
 					if module.bitmap:
 						self.screen.bitmap.paste(module.gfx, module.bitmap)
 				if self.debug:
