@@ -21,6 +21,8 @@ class Alert(PMCard):
 			## disable the alert (hiding it)
 			## and publish an event to refresh the display
 			self.disabled = True
+			self.update(None, None, None)
+			self.make_clean()  # mark the alert as clean
 			event = {
 				"event": "PyMirrorEvent",
 				"refresh": True,
