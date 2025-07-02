@@ -6,7 +6,7 @@ class PMTimer:
         self.set_timeout(ms)
         
     def set_timeout(self, ms):
-        if not ms: self.timeout = 0 ## disable timer
+        if not ms or ms < 0: self.timeout = 0 ## disable timer
         else: self.timeout = time.time() + ms / 1000
 
     def is_timedout(self):

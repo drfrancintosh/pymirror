@@ -10,13 +10,13 @@ class Alert(PMCard):
 		self.timer.set_timeout(self._alert.timeout)
 		## disable the alert if the timeout is 0 or less
 		## this means the alert is not active
-		self.disabled = self._alert.timeout <= 0
+		self.disabled = self._alert.timeout < 0
 
 
 	def exec(self) -> bool:
 		## has there been a change in the alert text?
 		is_dirty = super().exec()
-		if self.timer.is_timedout() or is_dirty: 
+		if self.timer.is_timedout(): 
 			## the timer has expired
 			## disable the alert (hiding it)
 			## and publish an event to refresh the display
