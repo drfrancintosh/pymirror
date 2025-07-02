@@ -16,7 +16,7 @@ class Alert(PMCard):
 	def exec(self) -> bool:
 		## has there been a change in the alert text?
 		is_dirty = super().exec()
-		if self.timer.is_timedout(): 
+		if self.timer.is_timedout() or is_dirty: 
 			## the timer has expired
 			## disable the alert (hiding it)
 			## and publish an event to refresh the display
