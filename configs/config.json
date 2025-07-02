@@ -30,6 +30,7 @@
     "bottom_right": "0.66,0.90,1.00,1.00"
   },
   "modules": [
+    "moddefs/alert.json",
     "moddefs/pymirror_controller.json",
     "moddefs/weather.json",
     "moddefs/fortune.json",
@@ -40,7 +41,6 @@
     "moddefs/day_of_week.json",
     "moddefs/week_of_year.json",
     "moddefs/analog_clock.json",
-    "moddefs/alert.json",
     "moddefs/weather_alert.json",
     "moddefs/fps.json"
   ]

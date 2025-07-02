@@ -152,7 +152,7 @@ class PyMirror:
 
 	def _update_screen(self):
 		self.screen.bitmap.clear()  # Clear the bitmap before rendering
-		for module in self.modules:
+		for module in reversed(self.modules):
 			if not module.disabled and module.bitmap:
 				self.screen.bitmap.paste(module.gfx, module.bitmap)
 				if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
