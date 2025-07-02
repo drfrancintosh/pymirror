@@ -20,7 +20,7 @@ class Alert(PMCard):
 			## the timer has expired
 			## disable the alert (hiding it)
 			## and publish an event to refresh the display
-			# self.disabled = True
+			self.disabled = True
 			event = {
 				"event": "PyMirrorEvent",
 				"refresh": True,
