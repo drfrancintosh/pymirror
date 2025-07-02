@@ -10,7 +10,7 @@
         "header": "Alert",
         "body": "This is an alert message.",
         "footer": "Alert Footer",
-        "timeout": 10000
+        "timeout": 0
     },
     "card": {
         "header": {
