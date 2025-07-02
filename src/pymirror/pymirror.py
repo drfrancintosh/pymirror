@@ -148,7 +148,7 @@ class PyMirror:
 								# Blit the module's image to the screen at the module's position
 								if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
 								is_dirty += 1
-						module_end = time.time()
+					module_end = time.time()
 					if self.debug: 
 						module._time = module_end - module_start
 						self._debug(module) # draw boxes around each module if debug is enabled
