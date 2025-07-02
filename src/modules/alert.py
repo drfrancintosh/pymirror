@@ -27,9 +27,8 @@ class Alert(PMCard):
 				"refresh": True,
 			}
 			self.publish_event(event)
-			is_dirty = True
-		if is_dirty:
-			self.make_clean()
+			is_dirty = False
+		self.make_clean()
 		return is_dirty
 
 	def onEvent(self, event) -> None:
