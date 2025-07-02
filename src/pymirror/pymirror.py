@@ -149,9 +149,9 @@ class PyMirror:
 								if module.bitmap:self.screen.bitmap.paste(module.gfx, module.bitmap)
 								is_dirty += 1
 						module_end = time.time()
-						if self.debug: 
-							module._time = module_end - module_start
-							self._debug(module) # draw boxes around each module if debug is enabled
+					if self.debug: 
+						module._time = module_end - module_start
+						self._debug(module) # draw boxes around each module if debug is enabled
 				if is_dirty:
 					# if any new rendering occurred, flush the screen
 					# otherwise, the screen will not be updated
