@@ -139,19 +139,19 @@ class PyMirror:
 				self.new_events = [] # dispose of the old events
 				is_dirty = 0
 				## manage state
-				do_updates = []
+				state_changed = []
 				do_blits = []
 				for module in self.modules:
 					self._send_events(module, events) # send all subscribed events to the module
 					if not module.disabled:
 						state_changed = module.exec() # update module state (returns True if the state has changed)
-						if state_changed: do_updates.append(module)
-				for module in do_updates:
+						if state_changed: state_changed.append(module)
+				for module in state_changed:
 					module_dirty = module.render(module.force_render or self.force_render) # render() returns True if new rendering occurred
 					if module_dirty: do_blits.append(module)
 				self.screen.bitmap.clear()  # Clear the bitmap before rendering
 				for module in self.modules:
-					if module.bitmap:
+					if not module.disabled and module.bitmap:
 						self.screen.bitmap.paste(module.gfx, module.bitmap)
 				if self.debug:
 					for module in self.modules:
