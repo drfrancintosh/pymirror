@@ -37,6 +37,7 @@
 22. Make multiple alerts cycle
 23. need to add "force" on an option for a module like "alert" so it always show up on top
 24. For "positions" allow "fps_strip": "bottom_left" so that moddefs are not tied to screen positions
+25. Different display configurations need to be detected and handled (same as device drivers, above?)
 
 ## DONE
 

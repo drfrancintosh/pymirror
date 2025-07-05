@@ -11,11 +11,16 @@
 - RPI OS Lite 32-bit
 - sudo apt update
 - sudo apt install git
-- add ssh private key to .ssh
+- add github ssh private key to .ssh
 - eval "$(ssh-agent -s)"
 - ssh-add ~/.ssh/id_rsa
 - ssh -T git@github.com
 - git clone git@github.com:devcybiko/pymirror.git
+? sudo apt install --no-install-recommends plymouth plymouth-themes
+? sudo apt install kmscube -y  # if not installed
+- sudo apt install fortune
+- sudo apt install libdrm-tests
+  - modetest
 
 ## Installing Libraries
 
@@ -199,3 +204,15 @@ display_rotate=0    # Set rotation if needed (0 = no rotation, 1 = 90 degrees, e
     }
 }
 ```
+
+## Special Commands
+- vcgencmd get_throttled
+- vcgencmd get_config int
+- dmesg -w
+
+
+## .bashrc
+echo "PyMirror Started"
+setterm -cursor off 
+cd git/pymirror
+./run.sh

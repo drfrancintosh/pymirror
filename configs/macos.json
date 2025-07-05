@@ -37,6 +37,7 @@
     "moddefs/week.json",
     "moddefs/day_of_week.json",
     "moddefs/week_of_year.json",
-    "moddefs/analog_clock.json"
+    "moddefs/analog_clock.json",
+    "moddefs/pymirror_controller.json"
   ]
 }
