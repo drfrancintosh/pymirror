@@ -3,10 +3,6 @@
 ## MVP
 
 1. fix week number (use iso date)
-2. webserver
-    1. debug on / off
-    2. send alert
-    3. turn on / off preview
 4. update README.md
     1. where to get API Keys
     2. setup rpi zero 2
@@ -89,3 +85,8 @@
 20. add text animations, like fade in / fade out - commented out
 
 12. Boundary clipping
+
+2. webserver
+    1. debug on / off
+    2. send alert
+    3. turn on / off preview
