@@ -65,7 +65,7 @@ class Weather(PMCard):
             return is_dirty # early exit if not timed out
         self.timer.set_timeout(self._weather.refresh_minutes * 60 * 1000)
         self.weather_response = self.api.get_json(self.owm_config.__dict__)
-        print(f"Weather response: {self.weather_response}")  # Debugging line
+        # print(f"Weather response: {self.weather_response}")  # Debugging line
         w = SimpleNamespace(**self.weather_response.get("current"))
         # convert w.current.dt to a datetime object
         dt_str = datetime.fromtimestamp(w.dt).strftime(self._weather.datetime_format)
