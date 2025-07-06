@@ -163,7 +163,7 @@ class PyMirror:
 				modules_changed = self._exec_modules()
 				self._render_modules(modules_changed)  # Render only the modules that changed state
 				self._update_screen()  # Update the screen with the rendered modules
-				time.sleep(0.01)
+				time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
 		except Exception as e:
 			traceback.print_exc()  # <-- This prints the full stack trace to stdout
 			self._error_screen(e)  # Display the error on the screen

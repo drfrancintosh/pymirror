@@ -9,11 +9,13 @@
 5. README.md for each module
 6. WebServer seems to lag - lacking CPU time?
 7. Check on news module - "None" and missing data sometimes
-8. if alert card is 'timed', show timer percent. bar
 9. Code Cleanup
-10. optimize API calls (cache to disk) for weather, news
 
 ## Backlog
+
+10. optimize API calls (cache to disk) for weather, news
+
+8. if alert card is 'timed', show timer percent. bar
 
 6. Hot Reload of config.json
     - if config.json is updated then dispose of old modules and reload
