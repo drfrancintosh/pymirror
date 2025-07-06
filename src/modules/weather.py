@@ -8,10 +8,10 @@ from types import SimpleNamespace
 from dataclasses import dataclass
 from pymirror.pmcard import PMCard
 from events import AlertEvent
-
+from pymirror.pmwebapi import PMWebApi
 
 @dataclass
-class WeatherData:
+class OpenWeatherMapConfig:
     lat: str = "37.5050"
     lon: str = "-77.6491"
     appid: str = ""
@@ -19,24 +19,20 @@ class WeatherData:
     units: str = "imperial"
     lang: str = "english"
 
-
-class OpenWeatherMap:
-    def __init__(self,  base_url = "https://api.openweathermap.org/data/3.0/onecall?"):
-        self.base_url = base_url
-
-    def fetch(self, args: WeatherData):
-        if "https://" not in self.base_url:  # type: ignore
-            with open(self.base_url, "r") as file:
-                sample_data = json.load(file)
-            return sample_data
-
-        response = requests.get(self.base_url, params=args.__dict__)
-        if response.ok:
-            return response.json()
-        else:
-            print(f"Error fetching data: {response.status_code} - {response.text}")
-            return {"error": "error"}
-
+@dataclass
+class WeatherConfig:
+    url: str
+    cache_file: str  = None
+    cache_timeout_secs: int = 3600  # Default cache timeout in seconds
+    refresh_minutes: int = 15
+    degrees: str = "°F"
+    datetime_format: str = "%I:%M:%S %p"
+    lat: str = "37.5050"
+    lon: str = "-77.6491"
+    appid: str = ""
+    exclude: str = "minutely"
+    units: str = "imperial"
+    lang: str = "english"
 
 def _paragraph_fix(text: str) -> str:
     results = []
@@ -47,39 +43,35 @@ def _paragraph_fix(text: str) -> str:
         results.append(paragraph)
     return "\n\n".join(results)
 
-
 class Weather(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._weather = config.weather
-        self.weather_data = WeatherData(**self._weather.weather_data.__dict__)
-        self.refresh_minutes = self._weather.refresh_minutes
-        self.degrees = (
-            self._weather.degrees if hasattr(self._weather, "degrees") else "\u00b0F"
-        )  # Default to Fahrenheit
-        self.datetime_format = (
-            self._weather.datetime_format
-            if hasattr(self._weather, "datetime_format")
-            else "%I:%M:%S %p"
-        )
+        self._api = WeatherConfig(**self._weather.__dict__)
         self.timer.set_timeout(1)  # refresh right away
         self.weather_response = None
-        self.weather_api = OpenWeatherMap(self._weather.sample)
-        # self.update("", "", "")  # Initialize with empty strings
-
+        self.api = PMWebApi(self._api.url, self._api.cache_file, self._api.cache_timeout_secs)
+        self.owm_config = OpenWeatherMapConfig(
+            lat=self._api.lat,
+            lon=self._api.lon,
+            appid=self._api.appid,
+            exclude=self._api.exclude,
+            units=self._api.units,
+            lang=self._api.lang
+        )
     def exec(self) -> bool:
         is_dirty = super().exec()
         if not self.timer.is_timedout():
             return is_dirty # early exit if not timed out
-        self.timer.set_timeout(self.refresh_minutes * 60 * 1000)
-        self.weather_response = self.weather_api.fetch(self.weather_data)
-        # print(f"Weather response: {self.weather_response}")  # Debugging line
+        self.timer.set_timeout(self._weather.refresh_minutes * 60 * 1000)
+        self.weather_response = self.api.get_json(self.owm_config.__dict__)
+        print(f"Weather response: {self.weather_response}")  # Debugging line
         w = SimpleNamespace(**self.weather_response.get("current"))
         # convert w.current.dt to a datetime object
-        dt_str = datetime.fromtimestamp(w.dt).strftime(self.datetime_format)
+        dt_str = datetime.fromtimestamp(w.dt).strftime(self._weather.datetime_format)
         self.update(
             "WEATHER",
-            f"{w.temp}{self.degrees}\n{w.humidity} %\n{w.feels_like}{self.degrees}",
+            f"{w.temp}{self._weather.degrees}\n{w.humidity} %\n{w.feels_like}{self._weather.degrees}",
             dt_str,
         )
 

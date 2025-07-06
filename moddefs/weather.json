@@ -9,18 +9,18 @@
         "font_size": 64
     },
     "weather": {
+        "url": "https://api.openweathermap.org/data/3.0/onecall",
+        "cache_file": "./caches/weather.json",
+        "cache_timeout_secs": 840,
         "refresh_minutes": 15,
-        "sample": "./samples/weather-sample.json",
         "degrees": "°F",
         "datetime_format": "%I:%M:%S %p",
-        "weather_data": {
-            "lat": "37.50598",
-            "lon": "-77.64916",
-            "appid": "$OPENWEATHERMAP_API_KEY",
-            "exclude": "minutely,hourly",
-            "units": "imperial",
-            "lang": "english"
-        }
+        "lat": "37.50598",
+        "lon": "-77.64916",
+        "appid": "$OPENWEATHERMAP_API_KEY",
+        "exclude": "minutely,hourly",
+        "units": "imperial",
+        "lang": "english"
     },
     "card": {
         "header": {

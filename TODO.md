@@ -34,6 +34,9 @@
 23. need to add "force" on an option for a module like "alert" so it always show up on top
 24. For "positions" allow "fps_strip": "bottom_left" so that moddefs are not tied to screen positions
 25. Different display configurations need to be detected and handled (same as device drivers, above?)
+26. Generic Text Item (scrolling horizontally and vertically, blinking color)
+27. Add strong typing and checks on config data
+28. Better logging at the module level
 
 ## DONE
 

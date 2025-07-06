@@ -10,10 +10,11 @@
         "disabled": false
     },
     "web_api": {
+        "cache_file": "./caches/news.json",
+        "cache_timeout_secs": 840,
         "update_mins": 15,
         "cycle_seconds": 15,
         "url": "https://newsapi.org/v2/top-headlines",
-        "sample": "./samples/newsapi-sample.json",
         "params": {
             "apiKey": "$NEWSAPI_KEY",
             "country": "us",

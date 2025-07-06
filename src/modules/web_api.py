@@ -1,20 +1,17 @@
-# weather.py
-# https://openweathermap.org/api/one-call-3#current
-
+from dataclasses import dataclass
 import requests
 import copy
-import json
-from jinja2 import Template
 
 from pymirror.pmcard import PMCard
 from pymirror.utils import SafeNamespace, expand_dict
 from pymirror.pmtimer import PMTimer
+from pymirror.pmwebapi import PMWebApi
 
 class WebApi(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._web_api = config.web_api
-		self.api = Api(self._web_api)
+		self.api = PMWebApi(self._web_api.url, self._web_api.cache_file, self._web_api.cache_timeout_secs	)
 		self.timer.set_timeout(0.1) # refresh right away
 		self.display_timer = PMTimer(0)
 		self.response = None
@@ -44,13 +41,15 @@ class WebApi(PMCard):
 		return len(self.items)
 	
 	def _read_api(self):
-		self.response = self.api.fetch()
-		if self.response.get("error"):
-			print(f"Error fetching data: {self.response['error']}")
+		self.response = self.api.get_json(self._web_api.params.__dict__)
+		if not self.response:
+			print(f"Error fetching data")
 			return False
 		self._read_items()
 
 	def _display_next_item(self):
+		if not self.items:
+			return
 		if self.item_number >= len(self.items):
 			self.item_number = 0
 		self.header = self.items[self.item_number].get("header", "")
@@ -62,7 +61,7 @@ class WebApi(PMCard):
 	def exec(self) -> bool:
 		update = super().exec()
 		if self.timer.is_timedout():
-			self._read_api()
+			self.result = self._read_api()
 			self.timer.set_timeout(self._web_api.update_mins * 60 * 1000)
 			self.display_timer.set_timeout(0.1)
 			update = True

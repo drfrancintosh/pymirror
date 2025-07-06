@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import os
-from time import time
+import time
 import requests
 import json
 
@@ -27,25 +27,36 @@ class PMWebApi:
             text = file.read()
         return text
 
+    def _save_to_cache(self, text):
+        if not self.cache_file:
+            return
+        # Ensure the directory exists
+        # os.makedirs(os.path.dirname(self.cache_file), exist_ok=True)
+        # Write the text to the cache file
+        with open(self.cache_file, 'w') as file:
+            file.write(text)
+
     def get_text(self, params=None):
         if self.cache_file:
             result = self._fetch_from_cache()
             if result: return result
         
         # If no cache or cache failed, fetch from URL
-        response = requests.get(self.url, params=params if params else None)
+        # print(f"Fetching data from {self.url} with params: {params}")
+        response = requests.get(self.url, params=params)
         if response.ok:
             self._save_to_cache(response.text)
             result = response.text
         else:
             print(f"Error fetching data: {response.status_code} - {response.text}")
-            result = {"error": "error"}
+            result = None
         return result
 
     def get_json(self, params=None):
         text = self.get_text(params)
+        # print(f"Response text: {text}")
         if text:
             result = json.loads(text)
         else:
-            result = {"error": "error"}
+            result = None
         return result
