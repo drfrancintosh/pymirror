@@ -1,6 +1,6 @@
 # TODO List
 
-## MVP
+## MVP - before launch on Dr. Francintosh
 
 1. fix week number (use iso date)
 6. WebServer seems to lag - lacking CPU time?
@@ -14,7 +14,6 @@
 
 ## Backlog
 
-10. optimize API calls (cache to disk) for weather, news
 
 8. if alert card is 'timed', show timer percent. bar
 
@@ -35,11 +34,11 @@
 21. Add Blinking Text
 22. Make multiple alerts cycle
 23. need to add "force" on an option for a module like "alert" so it always show up on top
-24. For "positions" allow "fps_strip": "bottom_left" so that moddefs are not tied to screen positions
+24. For "positions" allow aliases: "fps_strip": "bottom_left" so that moddefs are not tied to screen positions
 25. Different display configurations need to be detected and handled (same as device drivers, above?)
 26. Generic Text Item (scrolling horizontally and vertically, blinking color)
 27. Add strong typing and checks on config data
-28. Better logging at the module level
+28. Better logging (_debug, _info, _warn, _error) at the module level
 
 ## DONE
 
@@ -96,3 +95,4 @@
     1. debug on / off
     2. send alert
     3. turn on / off preview
+10. optimize API calls (cache to disk) for weather, news
