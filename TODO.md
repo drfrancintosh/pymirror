@@ -2,9 +2,7 @@
 
 ## MVP - before launch on Dr. Francintosh
 
-1. fix week number (use iso date)
 6. WebServer seems to lag - lacking CPU time?
-7. Check on news module - "None" and missing data sometimes
 
 9. Code Cleanup
 4. update README.md
@@ -96,3 +94,5 @@
     2. send alert
     3. turn on / off preview
 10. optimize API calls (cache to disk) for weather, news
+1. fix week number (use iso date)
+7. Check on news module - "None" and missing data sometimes
