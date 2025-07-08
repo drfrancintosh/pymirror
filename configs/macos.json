@@ -1,5 +1,5 @@
 {
-  "debug": true,
+  "debug": false,
   "secrets": ".secrets",
   "screen": {
     "output_file": "./src/pmserver/static/output.jpg",

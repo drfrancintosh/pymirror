@@ -22,9 +22,21 @@ class Clock(PMModule):
 		return True
 
 	def exec(self) -> bool:
+		# if date_format includes "%W" or "%U", update the week number
+		# all this ceremony because %W and %U are zero-based and we must add 1 to them
+		if self.date_format and "%W" in self.date_format:
+			self.date_format = self.date_format.replace("%W", "_W_")
+		if self.date_format and "%U" in self.date_format:
+			self.date_format = self.date_format.replace("%U", "_U_")
 		self.curr_time = datetime.now().strftime(self.date_format)
-		return self.last_time != self.curr_time
-
+		if self.date_format and "_W_" in self.date_format:
+			week_number = int(datetime.now().strftime("%W")) + 1
+			self.curr_time = self.curr_time.replace("_W_", f"{week_number:02d}")
+		if self.date_format and "_U_" in self.date_format:
+			week_number = int(datetime.now().strftime("%U")) + 1
+			self.curr_time = self.curr_time.replace("_U_", f"{week_number:02d}")
+		return self.curr_time != self.last_time 
+	
 	def onEvent(self, event):
 		pass
 

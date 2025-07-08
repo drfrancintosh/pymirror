@@ -5,7 +5,7 @@ from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndef
 def snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
 
-def expand_string(s: str, context: dict) -> str:
+def expand_string(s: str, context: dict, dflt: str = None) -> str:
 	if not s: return s
 	if not isinstance(s, str): return s
 	s = os.path.expandvars(s)
@@ -15,22 +15,22 @@ def expand_string(s: str, context: dict) -> str:
 		s = template.render(**context)
 	except Exception as e:
 		# print(f"Error rendering string '{s}' with context {context}: {e}")
-		pass
+		return dflt if dflt is not None else s
 	return s
 
-def expand_dict(config: dict, context: dict):
+def expand_dict(config: dict, context: dict, dflt: str = None):
 	## recursively expand environment variables in the config dictionary
 	for key, value in config.items():
 		if isinstance(value, str):
-			config[key] = expand_string(value, context)
+			config[key] = expand_string(value, context, dflt)
 		elif isinstance(value, dict):
-			expand_dict(value, context)
+			expand_dict(value, context, dflt)
 		elif isinstance(value, list):
 			for i in range(len(value)):
 				if isinstance(value[i], str):
-					value[i] = expand_string(value[i], context)
+					value[i] = expand_string(value[i], context, dflt)
 				elif isinstance(value[i], dict):
-					expand_dict(value[i], context)
+					expand_dict(value[i], context, dflt)
 
 ##
 ## This is a proxy class that returns None for any attribute or item access.

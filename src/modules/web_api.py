@@ -36,8 +36,11 @@ class WebApi(PMCard):
 		for n in range(total_items):
 			context["_n_"] = n
 			display = copy.copy(self._web_api.display.__dict__)
-			expand_dict(display, context) # extract the 'nth' item to display
-			self.items.append(display)	
+			expand_dict(display, context, "__error__") # extract the 'nth' item to display
+			# if any of the display fields are "__error__", skip this item
+			if "__error__" in display.values():
+				continue
+			self.items.append(display)
 		return len(self.items)
 	
 	def _read_api(self):

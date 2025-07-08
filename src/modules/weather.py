@@ -46,18 +46,17 @@ def _paragraph_fix(text: str) -> str:
 class Weather(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
-        self._weather = config.weather
-        self._api = WeatherConfig(**self._weather.__dict__)
+        self._weather = WeatherConfig(**config.weather.__dict__)
         self.timer.set_timeout(1)  # refresh right away
         self.weather_response = None
-        self.api = PMWebApi(self._api.url, self._api.cache_file, self._api.cache_timeout_secs)
+        self.api = PMWebApi(self._weather.url, self._weather.cache_file, self._weather.cache_timeout_secs)
         self.owm_config = OpenWeatherMapConfig(
-            lat=self._api.lat,
-            lon=self._api.lon,
-            appid=self._api.appid,
-            exclude=self._api.exclude,
-            units=self._api.units,
-            lang=self._api.lang
+            lat=self._weather.lat,
+            lon=self._weather.lon,
+            appid=self._weather.appid,
+            exclude=self._weather.exclude,
+            units=self._weather.units,
+            lang=self._weather.lang
         )
     def exec(self) -> bool:
         is_dirty = super().exec()
@@ -83,7 +82,7 @@ class Weather(PMCard):
                     "event": "WeatherAlertEvent",
                     "header": alert["event"],
                     "body": f"{_paragraph_fix(alert['description'])}",
-                    "footer": f"Expires: {datetime.fromtimestamp(alert['end']).strftime(self.datetime_format)}",
+                    "footer": f"Expires: {datetime.fromtimestamp(alert['end']).strftime(self._weather.datetime_format)}",
                     "timeout": 0
                 }
                 print(f"Publishing weather alert event: {event['event']}")
