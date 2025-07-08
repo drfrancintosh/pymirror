@@ -6,4 +6,6 @@ else
     CONFIG="./configs/$1"
 fi
 
-PYTHONPATH=src python3 -u -m pymirror.pymirror --config "$CONFIG" > src/pmserver/static/output.log 2>&1
+# Create a new process group and redirect everything
+exec > src/pmserver/static/output.log 2>&1
+PYTHONPATH=src python3 -u -m pymirror.pymirror --config "$CONFIG"
