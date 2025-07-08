@@ -136,16 +136,23 @@ class PyMirror:
 	def _exec_modules(self):
 		modules_changed = []
 		for module in self.modules:
+			module._time = 0.0  # Reset the time for each module
 			if not module.disabled:
+				start_time = time.time()  # Start timing the module execution
 				state_changed = module.exec() # update module state (returns True if the state has changed)
 				if state_changed: modules_changed.append(module)
+				end_time = time.time()  # End timing the module execution
+				module._time = end_time - start_time  # Calculate the time taken for module execution
 		return modules_changed
 
 	def _render_modules(self, modules_changed):
 		""" Render all modules that have changed state """
 		for module in modules_changed:
 			if not module.disabled and module.bitmap:
+				start_time = time.time()  # Start timing the module rendering
 				module.render(force=self.force_render)
+				end_time = time.time()  # End timing the module rendering
+				module._time += end_time - start_time  # add on the time taken for module rendering
 
 	def _update_screen(self):
 		self.screen.bitmap.clear()  # Clear the bitmap before rendering
@@ -160,11 +167,8 @@ class PyMirror:
 			while True:
 				self._read_server_queue() # read any new events from the server queue
 				self._send_all_events()  # send all new events to the modules
-				start_time = time.time()  # Start timing the module execution
 				modules_changed = self._exec_modules() # update / check the state of all modules
 				self._render_modules(modules_changed)  # Render only the modules that changed state
-				end_time = time.time()  # End timing the module execution
-				module._time = end_time - start_time  # Calculate the time taken for module execution
 				self._update_screen()  # Update the screen with the rendered modules
 				time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
 		except Exception as e:
