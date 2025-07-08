@@ -6,4 +6,4 @@ else
     CONFIG="./configs/$1"
 fi
 
-PYTHONPATH=src python3 -m pymirror.pymirror --config "$CONFIG"
+PYTHONPATH=src python3 -u -m pymirror.pymirror --config "$CONFIG" 2>&1 > src/pmserver/static/output.log

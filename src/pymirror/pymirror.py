@@ -160,8 +160,11 @@ class PyMirror:
 			while True:
 				self._read_server_queue() # read any new events from the server queue
 				self._send_all_events()  # send all new events to the modules
+				start_time = time.time()  # Start timing the module execution
 				modules_changed = self._exec_modules() # update / check the state of all modules
 				self._render_modules(modules_changed)  # Render only the modules that changed state
+				end_time = time.time()  # End timing the module execution
+				module._time = end_time - start_time  # Calculate the time taken for module execution
 				self._update_screen()  # Update the screen with the rendered modules
 				time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
 		except Exception as e:

@@ -3,6 +3,9 @@
 ## MVP - before launch on Dr. Francintosh
 
 6. WebServer seems to lag - lacking CPU time?
+7. update debug mode to include times for rendering modules
+8. temporary: send output from ./run.sh to a log file 
+- potentially make accessible from web front end
 
 9. Code Cleanup
 4. update README.md
@@ -37,6 +40,7 @@
 26. Generic Text Item (scrolling horizontally and vertically, blinking color)
 27. Add strong typing and checks on config data
 28. Better logging (_debug, _info, _warn, _error) at the module level
+29. Add sound - weather alerts for example
 
 ## DONE
 
