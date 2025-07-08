@@ -38,6 +38,7 @@
 28. Better logging (_debug, _info, _warn, _error) at the module level
 29. Add sound - weather alerts for example
 6. WebServer seems to lag - lacking CPU time?
+30. Better solution for web-based logging (dribbling stderr/stdout to text file is not a good solution)
 
 ## DONE
 
