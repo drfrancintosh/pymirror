@@ -14,7 +14,7 @@
         "cache_timeout_secs": 840,
         "refresh_minutes": 15,
         "degrees": "°F",
-        "datetime_format": "%I:%M:%S %p",
+        "datetime_format": "%A, %I:%M:%S %p",
         "lat": "37.50598",
         "lon": "-77.64916",
         "appid": "$OPENWEATHERMAP_API_KEY",
