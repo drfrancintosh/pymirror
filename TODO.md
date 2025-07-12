@@ -2,16 +2,31 @@
 
 ## MVP - before launch on Dr. Francintosh
 
-
 9. Code Cleanup
 4. update README.md
     1. where to get API Keys
     2. setup rpi zero 2
 5. README.md for each module
 
+## Other Notes
+
+- add github ssh private key to .ssh
+- eval "$(ssh-agent -s)"
+- ssh-add ~/.ssh/id_rsa
+- ssh -T git@github.com
+
+## Special Commands
+- vcgencmd get_throttled
+- vcgencmd get_config int
+- dmesg -w
+
+## .bashrc
+echo "PyMirror Started"
+setterm -cursor off 
+cd git/pymirror
+./run.sh
+
 ## Backlog
-
-
 8. if alert card is 'timed', show timer percent. bar
 
 6. Hot Reload of config.json
@@ -39,6 +54,7 @@
 29. Add sound - weather alerts for example
 6. WebServer seems to lag - lacking CPU time?
 30. Better solution for web-based logging (dribbling stderr/stdout to text file is not a good solution)
+31. Make the Control Panel web page display current status in the toggles (currently always shows "off")
 
 ## DONE
 
