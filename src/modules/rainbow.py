@@ -9,6 +9,8 @@ class Rainbow(PMModule):
 		self.first_time = True
 
 	def render(self, force: bool = False) -> bool:
+		print(f"Rainbow module render at {datetime.now()}")
+		self.bitmap.clear()
 		gfx = self.gfx
 		x = gfx.x0
 		y = gfx.y0
@@ -18,27 +20,29 @@ class Rainbow(PMModule):
 		dx = 0
 		x = int(dx)
 		for r in range(256):
-			gfx.color = (r, 0, 0)  # Red to black
-			self.bitmap.line(gfx, (x, y, x, y + height))
+			gfx.color = f"#{r:02x}0000"  # Red to black
+			gfx.color = "#fff"
+			self.bitmap.line(gfx, (x, y, x+1, y + height))
 			dx += dw
 			x = int(dx)
 		for g in range(256):
-			gfx.color = (0, g, 0)  # Green to black
-			self.bitmap.line(gfx, (x, y, x, y + height))
+			gfx.color = f"#00{g:02x}00"  # Green to black
+			self.bitmap.line(gfx, (x, y, x+1, y + height))
 			dx += dw
 			x = int(dx)
 		for b in range(256):
-			gfx.color = (0, 0, b)  # Blue to black
-			self.bitmap.line(gfx, (x, y, x, y + height))
+			gfx.color = f"#0000{b:02x}"  # Blue to black
+			self.bitmap.line(gfx, (x, y, x+1, y + height))
 			dx += dw
 			x = int(dx)
 		return True
 
 	def exec(self):
+		print(f"Rainbow module exec at {datetime.now()}")
 		if self.first_time:
 			self.first_time = False
 			return 1
-		return 0
+		return 1
 
 	def onEvent(self, event):
 		pass

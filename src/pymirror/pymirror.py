@@ -82,6 +82,7 @@ class PyMirror:
 		## add any messages that have come from the web server
 		try:
 			while event := self.server_queue.get(0):
+				print(f"Received event from server: {event}")
 				self.publish_event(event)
 		except queue.Empty:
 			# No new events in the queue
@@ -92,6 +93,7 @@ class PyMirror:
 		if not module.subscriptions: return
 		for event in events:
 			if event.event in module.subscriptions:
+				print(f"... Event {event.event} to module {module._moddef.name}")
 				module.onEvent(event)
 
 	def _convert_events_to_namespace(self):

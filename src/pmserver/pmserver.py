@@ -30,6 +30,7 @@ class PMServer:
         @self.app.route("/event", methods=["POST"])
         def event():
             data = request.get_json()
+            print(f"Received event {data}")
             if not data:
                 return jsonify({"error": "Missing 'action'"}), 400
             self.queue.put(data)
