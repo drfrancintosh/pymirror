@@ -1,0 +1,12 @@
+{
+    "module": "clock",
+    "moddef": {
+        "name": "day_of_week",
+        "position": "bottom_center",
+        "font_name": "TNG_Credits",
+        "font_size": 96
+    },
+    "clock": {
+        "date_format": "%A"
+    }
+}

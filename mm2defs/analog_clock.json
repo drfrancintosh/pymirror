@@ -1,0 +1,18 @@
+{
+    "module": "analog_clock",
+    "moddef": {
+        "name": "analog_clock",
+        "color": "#ccc",
+        "bg_color": "#000",
+        "text_color": "#ccc",
+        "text_bg_color": "#000",
+        "position": "middle_center",
+        "font_name": "TOS_Title.ttf",
+        "font_size": 48
+    },
+    "analog_clock": {
+        "hour_hand": "#fff",
+        "minute_hand": "#fff",
+        "second_hand": "#fff"
+    }
+}

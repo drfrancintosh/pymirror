@@ -59,6 +59,7 @@ class WebApi(PMCard):
 		self.body = self.items[self.item_number].get("body", "")
 		self.footer = self.items[self.item_number].get("footer", "")
 		self.update(self.header, self.body, self.footer)
+		print(f"... {self.header}: {self.body}, {self.footer}")
 		self.item_number += 1
 	
 	def exec(self) -> bool:

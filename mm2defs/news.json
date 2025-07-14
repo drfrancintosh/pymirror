@@ -1,0 +1,40 @@
+{
+    "module": "web_api",
+    "moddef": {
+        "name": "newsapi.com",
+        "position": "news_strip",
+        "text_color": "#fff",
+        "text_bg_color": "#000",
+        "font_name": "Roboto-Regular",
+        "font_size": 24,
+        "disabled": false
+    },
+    "web_api": {
+        "cache_file": "./caches/news.json",
+        "cache_timeout_secs": 840,
+        "update_mins": 15,
+        "cycle_seconds": 15,
+        "url": "https://newsapi.org/v2/top-headlines",
+        "params": {
+            "apiKey": "$NEWSAPI_KEY",
+            "country": "us",
+            "pageSize": 10,
+            "category": "general"
+        },
+        "display": {
+            "total": "{{payload.totalResults}}",
+            "max": "10",
+            "header": "Hello",
+            "body": "World",
+            "footer": ""
+        },
+        "card": {
+            "body": {
+                "font_name": "Roboto-Regular",
+                "font_size": 32,
+                "text_color": "#fff",
+                "text_bg_color": "#000"
+            }
+        }
+    }
+}

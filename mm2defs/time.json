@@ -1,0 +1,16 @@
+{
+    "module": "clock",
+    "moddef": {
+        "name": "time",
+        "text_color": "#fff",
+        "text_bg_color": null,
+        "position": "time_strip",
+        "font_name": "Roboto-Light",
+        "font_size": 96
+    },
+    "clock": {
+        "date_format": "%I:%M",
+        "valign": "bottom",
+        "halign": "right"
+    }
+}
