@@ -69,8 +69,11 @@ class PMBitmap:
             msg = ""
         if wrap == "chars":
             lines = _text_split(gfx, msg, rect, split_fn=_text_split_chars)
-        else:
+        elif wrap == "words":
             lines = _text_split(gfx, msg, rect, split_fn=_text_split_words)
+        else:
+            lines = msg.splitlines()
+            lines = [line.strip() for line in lines if line.strip()]
         if valign == "center": text_y0 = y0 + ( _height(rect) - gfx.font_height * len(lines)) / 2 - gfx.font_baseline / 2
         elif valign == "top": text_y0 = y0 - gfx.font_baseline
         elif valign == "bottom": text_y0 = y1 - gfx.font_height * len(lines) - gfx.font_baseline
@@ -83,7 +86,8 @@ class PMBitmap:
             elif halign == "left": text_x0 = x0
             elif halign == "right": text_x0 = x1 - width
             else: print(f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead.")
-
+            text_x0 = int(text_x0)
+            text_y0 = int(text_y0)
             self.draw.text((text_x0, text_y0), line, fill=gfx._text_color, font=gfx.font)
             text_y0 += gfx.font_height
 
