@@ -32,7 +32,10 @@
 - The Default font DejaVuSerif.ttf was delivered with RPI-OS and copied locally for convenience
 - The Roboto fonts came from https://fonts.google.com/specimen/Roboto
 - Update `fontlist.txt` as per your system
-
+- Icons fonts (Font Awesome) Free download
+  - https://fontawesome.com/search?o=r&s=solid&ip=classic
+  - https://fontawesome.com/search?o=r&s=regular&ip=classic
+  - https://fontawesome.com/search?ic=brands
 ## Running
 - `cd ./pymirror`
 - `./run.sh`

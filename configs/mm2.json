@@ -26,7 +26,8 @@
     "time_strip":   "0.00,0.10,0.20,0.20",
     "seconds_strip": "0.20,0.10,0.33,0.20",
     "news_strip":    "0.00,0.80,1.00,1.00",
-    "calendar_strip1": "0.00,0.20,0.25,0.50",
+    "calendar_strip0": "0.00,0.20,0.02,0.50",
+    "calendar_strip1": "0.02,0.20,0.25,0.50",
     "calendar_strip2": "0.26,0.20,0.33,0.50"
     },
   "modules": [
@@ -35,6 +36,7 @@
     "mm2defs/seconds.json",
     "mm2defs/compliments.json",
     "mm2defs/news.json",
+    "mm2defs/calendar0.json",
     "mm2defs/calendar1.json",
     "mm2defs/calendar2.json",
     "mm2defs/pymirror_controller.json"

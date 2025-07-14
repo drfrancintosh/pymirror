@@ -2,26 +2,23 @@ Module date position: date_strip, dimensions: 0.00,0.00,0.33,0.10
 Module time position: time_strip, dimensions: 0.00,0.10,0.20,0.20
 Module time position: seconds_strip, dimensions: 0.20,0.10,0.33,0.20
 Module Complements position: lower_third, dimensions: 0.00,0.65,1.00,0.80
-Module newsapi.com position: lower_third, dimensions: 0.00,0.65,1.00,0.80
+Module newsapi.com position: news_strip, dimensions: 0.00,0.80,1.00,1.00
+Module calendar position: calendar_strip1, dimensions: 0.00,0.20,0.25,0.50
+Module calendar2 position: calendar_strip2, dimensions: 0.26,0.20,0.33,0.50
+Module PymirrorController has no rect defined, cannot allocate bitmap.
  * Serving Flask app 'pmserver.pmserver'
  * Debug mode: off
-[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:8080
- * Running on http://192.168.1.86:8080
-[33mPress CTRL+C to quit[0m
-WebApi: Fetched 10 items from API
-127.0.0.1 - - [13/Jul/2025 23:58:23] "GET /static/output.jpg?t=1752465503376 HTTP/1.1" 200 -
 Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/Users/greg/git/pymirror/src/pymirror/pymirror.py", line 216, in <module>
-    main()
-    ~~~~^^
-  File "/Users/greg/git/pymirror/src/pymirror/pymirror.py", line 213, in main
-    pm.run()
-    ~~~~~~^^
-  File "/Users/greg/git/pymirror/src/pymirror/pymirror.py", line 175, in run
-    time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
-    ~~~~~~~~~~^^^^^^
-KeyboardInterrupt
+  File "/Users/greg/git/pymirror/src/pymirror/pymirror.py", line 172, in run
+    modules_changed = self._exec_modules() # update / check the state of all modules
+  File "/Users/greg/git/pymirror/src/pymirror/pymirror.py", line 144, in _exec_modules
+    state_changed = module.exec() # update module state (returns True if the state has changed)
+  File "/Users/greg/git/pymirror/src/modules/web_api.py", line 67, in exec
+    self.result = self._read_api()
+                  ~~~~~~~~~~~~~~^^
+  File "/Users/greg/git/pymirror/src/modules/web_api.py", line 51, in _read_api
+    self._read_items()
+    ~~~~~~~~~~~~~~~~^^
+  File "/Users/greg/git/pymirror/src/modules/web_api.py", line 33, in _read_items
+    total_items = int(display.get("total", "1"))
+ValueError: invalid literal for int() with base 10: "{{payload.totalResults.split(' - ')[0] }}"
