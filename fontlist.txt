@@ -1,7 +1,9 @@
 fonts/7segment.ttf
 fonts/DejaVuSans.ttf
 fonts/DejaVuSerif.ttf
-fonts/Roboto_Condensed-Light.ttf
+fonts/Font Awesome 6 Brands-Regular-400.otf
+fonts/Font Awesome 6 Free-Regular-400.otf
+fonts/Font Awesome 6 Free-Solid-900.otf
 fonts/Roboto_Condensed-Black.ttf
 fonts/Roboto_Condensed-BlackItalic.ttf
 fonts/Roboto_Condensed-Bold.ttf
