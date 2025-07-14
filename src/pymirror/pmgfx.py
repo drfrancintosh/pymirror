@@ -17,7 +17,7 @@ class PMGfx:
     _text_color: int = tocolor("#fff")  # default text color
     _text_bg_color: int = None  # default text background color
     line_width: int = 1
-    font_name: str = "TOS_Title"
+    font_name: str = "DejaVuSans"  # default font name
     font_size: int = 64
     antialias: bool = True
     font: Optional[ImageFont.FreeTypeFont] = None

@@ -15,6 +15,7 @@ class PMCardText:
 		width: int = 0
 		halign: str = "center"
 		valign: str = "center"
+		wrap: str = "words"  # "chars", "words", or None
 		text: str = None
 		last_text: str = None
 
@@ -28,7 +29,6 @@ class PMCard(PMModule):
 		self._card.header = PMCardText(**self._card.header.__dict__) if self._card.header else PMCardText()
 		self._card.body = PMCardText(**self._card.body.__dict__) if self._card.body else PMCardText()
 		self._card.footer = PMCardText(**self._card.footer.__dict__) if self._card.footer else PMCardText()
-
 	def update(self, header: str, body: str, footer: str) -> None:
 		self._card.header.text = header
 		self._card.body.text = body
@@ -58,7 +58,7 @@ class PMCard(PMModule):
 				## so use the default screen colors but invert them
 				gfx2.text_color = gfx.text_bg_color
 				gfx2.text_bg_color = gfx.text_color
-		self.bitmap.text_box(gfx2, msg, rect, halign=card_text.halign, valign=card_text.valign)
+		self.bitmap.text_box(gfx2, msg, rect, halign=card_text.halign, valign=card_text.valign, wrap=card_text.wrap)
 		return rect[3] + 1 # next y position after rendering the text box
 
 	def render(self, force: bool = False) -> bool:

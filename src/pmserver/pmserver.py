@@ -1,10 +1,18 @@
 from flask import Flask, request, jsonify, render_template
 from threading import Thread
+import logging
 
 class PMServer:
     def __init__(self, config, event_queue, host="0.0.0.0", port=8080):
         self.app = Flask(__name__)
         self.app.logger.disabled = True
+
+        # Disable Werkzeug (Flask development server) access logs
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.ERROR)
+
+        # Also disable Flask's logger if needed
+        self.app.logger.setLevel(logging.ERROR)
 
         # Enable template auto-reload
         self.app.config['TEMPLATES_AUTO_RELOAD'] = True

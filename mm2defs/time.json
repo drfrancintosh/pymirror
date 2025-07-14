@@ -6,7 +6,8 @@
         "text_bg_color": null,
         "position": "time_strip",
         "font_name": "Roboto-Light",
-        "font_size": 96
+        "font_size": 96,
+        "disabled": false
     },
     "clock": {
         "date_format": "%I:%M",
