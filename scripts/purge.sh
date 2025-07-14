@@ -1,2 +1,2 @@
-rm -rf caches/*
-rm -rf src/pmserver/static/output.*
+rm caches/*
+rm src/pmserver/static/output.*
