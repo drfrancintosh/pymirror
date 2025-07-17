@@ -4,7 +4,7 @@
   "force_render": false,
   "screen": {
     "output_file": null,
-    "frame_buffer": "/dev/fb0",
+    "frame_buffer": null,
     "font_name": "Roboto_Condensed-ExtraLight.ttf",
     "font_size": 64,
     "color": "#fff",
