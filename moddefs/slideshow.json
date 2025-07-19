@@ -9,7 +9,7 @@
         "scale": "fit",
         "valign": "center",
         "halign": "center",
-        "interval_secs": 1,
+        "interval_secs": 5,
         "randomize": true
       }
     }
