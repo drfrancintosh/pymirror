@@ -47,7 +47,7 @@
       "module": "image",
       "moddef": {
         "name": "test_image",
-        "position": "middle_center"
+        "position": "bottom_left"
       },
       "image": {
         "path": "./images/lena.jpg",
@@ -63,33 +63,13 @@
         "position": "middle_right"
       },
       "image": {
-        "path": "./images/lena.jpg",
+        "path": "./images/lena_bw.png",
         "scale": "fit",
         "valign": "center",
         "halign": "center"
       }
     },
-    {
-      "module": "slideshow",
-      "moddef": {
-        "name": "test_slideshow",
-        "position": "bottom_left"
-      },
-      "slideshow": {
-        "folder": "./images",
-        "scale": "fit",
-        "valign": "center",
-        "halign": "center",
-        "interval_secs": 1
-      }
-    },
-    {
-      "module": "fps",
-      "moddef": {
-        "name": "test_fps",
-        "position": "fps_strip"
-      }
-    },
+    "moddefs/slideshow.json",
     "moddefs/fps.json"
   ]
 }

@@ -1,11 +1,15 @@
-{
-    "module": "image",
-    "moddef": {
-        "name": "test_image",
+    {
+      "module": "slideshow",
+      "moddef": {
+        "name": "test_slideshow",
         "position": "middle_center"
-    },
-    "image": {
-        "path": "./images/lena.jpg",
-        "scale": "fit"
+      },
+      "slideshow": {
+        "folder": "./images",
+        "scale": "fit",
+        "valign": "center",
+        "halign": "center",
+        "interval_secs": 1,
+        "randomize": true
+      }
     }
-}
