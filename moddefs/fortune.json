@@ -5,7 +5,7 @@
         "position": "top_strip"
     },
     "cli": {
-        "cycle_seconds": 10,
+        "cycle_seconds": 30,
         "command": "fortune",
         "header": "",
         "body": "{{stdout}}",
