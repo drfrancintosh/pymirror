@@ -15,6 +15,7 @@
 - `sudo apt install fortune`
 - `sudo apt install libdrm-tests`
   - `modetest` (will display hardware information on the displays)
+- `sudo apt install calendar`
 
 ## Installing Libraries
 

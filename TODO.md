@@ -2,12 +2,6 @@
 
 ## MVP - before launch on Dr. Francintosh
 
-9. Code Cleanup
-4. update README.md
-    1. where to get API Keys
-    2. setup rpi zero 2
-5. README.md for each module
-
 ## Other Notes
 
 - add github ssh private key to .ssh
@@ -27,6 +21,8 @@ cd git/pymirror
 ./run.sh
 
 ## Backlog
+
+
 8. if alert card is 'timed', show timer percent. bar
 
 6. Hot Reload of config.json

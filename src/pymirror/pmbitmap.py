@@ -2,10 +2,16 @@ from PIL import Image, ImageDraw
 from pymirror.pmgfx import PMGfx, tocolor
 
 class PMBitmap:
-    def __init__(self, width, height, bg_color=0):
+    def __init__(self, width=None, height=None, bg_color=0):
+        if width is None or height is None:
+            return
         self.img = Image.new("I", (width, height), bg_color)
         self.draw = ImageDraw.Draw(self.img)
         self._bg_color = bg_color
+
+    def set_image(self, img: Image) -> None:
+        """ Set the bitmap to an Image object """
+        self.img = img
 
     def clear(self) -> None:
         self.draw.rectangle((0, 0, self.img.width, self.img.height), fill=self._bg_color)

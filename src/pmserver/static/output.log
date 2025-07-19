@@ -1,24 +1,52 @@
-Module date position: date_strip, dimensions: 0.00,0.00,0.33,0.10
-Module time position: time_strip, dimensions: 0.00,0.10,0.20,0.20
-Module time position: seconds_strip, dimensions: 0.20,0.10,0.33,0.20
-Module Complements position: lower_third, dimensions: 0.00,0.65,1.00,0.80
-Module newsapi.com position: news_strip, dimensions: 0.00,0.80,1.00,1.00
-Module calendar position: calendar_strip1, dimensions: 0.00,0.20,0.25,0.50
-Module calendar2 position: calendar_strip2, dimensions: 0.26,0.20,0.33,0.50
+Module Alert position: alert_strip, dimensions: 0.30,0.30,0.7,0.7
 Module PymirrorController has no rect defined, cannot allocate bitmap.
+Module weather position: middle_left, dimensions: 0.0,0.33,0.33,0.66
+Module FORTUNE COOKIES position: top_strip, dimensions: 0.00,0.0,1.0,0.15
+Module newsapi.com position: middle_right, dimensions: 0.66,0.33,1.00,1.00
+Module date position: top_right, dimensions: 0.66,0.15,1.00,0.33
+Module time position: top_left, dimensions: 0.0,0.15,0.33,0.33
+Module week_text position: top_center_left, dimensions: 0.33,0.15,0.55,0.33
+Module day_of_week position: bottom_center, dimensions: 0.33,0.85,0.66,1.00
+Module week_of_year position: top_center_right, dimensions: 0.55,0.15,0.66,0.33
+Module test_slideshow position: middle_center, dimensions: 0.33,0.33,0.66,0.85
+Loaded 287 images from ./.pix
+Module Weather Alert position: bottom_left, dimensions: 0.0,0.66,0.33,0.95
+Module fps position: fps_strip, dimensions: 0.0,0.95,0.33,1.00
  * Serving Flask app 'pmserver.pmserver'
  * Debug mode: off
-Traceback (most recent call last):
-  File "/Users/greg/git/pymirror/src/pymirror/pymirror.py", line 172, in run
+Scaling image to fit within 634x562
+Rendering image: <PIL.Image.Image image mode=I size=634x418 at 0x752DB7D0> at (0, 72))
+Scaling image to fit within 634x562
+Rendering image: <PIL.Image.Image image mode=I size=634x409 at 0x7292F0F0> at (0, 76))
+Scaling image to fit within 634x562
+de
+  File "/home/greg/git/pymirror/src/pymirror/pymirror.py", line 216, in <module>
+    main()
+  File "/home/greg/git/pymirror/src/pymirror/pymirror.py", line 213, in main
+    pm.run()
+  File "/home/greg/git/pymirror/src/pymirror/pymirror.py", line 172, in run
     modules_changed = self._exec_modules() # update / check the state of all modules
-  File "/Users/greg/git/pymirror/src/pymirror/pymirror.py", line 144, in _exec_modules
+                      ^^^^^^^^^^^^^^^^^^^^
+  File "/home/greg/git/pymirror/src/pymirror/pymirror.py", line 144, in _exec_modules
     state_changed = module.exec() # update module state (returns True if the state has changed)
-  File "/Users/greg/git/pymirror/src/modules/web_api.py", line 67, in exec
-    self.result = self._read_api()
-                  ~~~~~~~~~~~~~~^^
-  File "/Users/greg/git/pymirror/src/modules/web_api.py", line 51, in _read_api
-    self._read_items()
-    ~~~~~~~~~~~~~~~~^^
-  File "/Users/greg/git/pymirror/src/modules/web_api.py", line 33, in _read_items
-    total_items = int(display.get("total", "1"))
-ValueError: invalid literal for int() with base 10: "{{payload.totalResults.split(' - ')[0] }}"
+                    ^^^^^^^^^^^^^
+  File "/home/greg/git/pymirror/src/modules/slideshow.py", line 37, in exec
+    self.image = self.load(self._image.path)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/greg/git/pymirror/src/modules/image.py", line 15, in load
+    self.image = PMImage(path, self.gfx.width, self.gfx.height, self._image.scale)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/greg/git/pymirror/src/pymirror/pmimage.py", line 8, in __init__
+    self.load(path, width, height, scale)
+  File "/home/greg/git/pymirror/src/pymirror/pmimage.py", line 49, in load
+    image = image.convert("RGBA")  # Ensure the image is in RGB format
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/PIL/Image.py", line 937, in convert
+    self.load()
+  File "/usr/lib/python3/dist-packages/PIL/ImageFile.py", line 249, in load
+    s = read(self.decodermaxblock)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/PIL/JpegImagePlugin.py", line 410, in load_read
+    s = self.fp.read(read_bytes)
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
