@@ -43,8 +43,8 @@ document.getElementById('controlForm').onsubmit = function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('result').innerHTML =
-            '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        // Redirect immediately after success
+        window.location.href = '/display';
     })
     .catch(error => {
         document.getElementById('result').innerHTML =

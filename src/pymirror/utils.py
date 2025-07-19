@@ -145,3 +145,16 @@ def tocolor(t) -> int:
     b = (b >> 3) & 0x1F  # Convert to 5 bits
     x = r << 19 | (g1 << 16 | g0 << 5 | b)
     return x
+
+def getter(obj, path, default=None):
+    keys = path.split(".")
+    current = obj
+    for key in keys:
+        print(f"Accessing key: {key} in {current}")
+        if isinstance(current, dict):
+            current = current.get(key, default)
+        elif isinstance(current, list):
+            current = current[int(key)]
+        else:
+            return default
+    return current
