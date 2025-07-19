@@ -13,7 +13,7 @@
         "cache_file": "./caches/news.json",
         "cache_timeout_secs": 840,
         "update_mins": 15,
-        "cycle_seconds": 15,
+        "cycle_seconds": 30,
         "url": "https://newsapi.org/v2/top-headlines",
         "params": {
             "apiKey": "$NEWSAPI_KEY",

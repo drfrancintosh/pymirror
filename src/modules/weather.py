@@ -6,9 +6,11 @@ import json
 from datetime import datetime
 from types import SimpleNamespace
 from dataclasses import dataclass
+from pymirror.pmbitmap import PMBitmap
 from pymirror.pmcard import PMCard
 from events import AlertEvent
 from pymirror.pmwebapi import PMWebApi
+from pymirror.utils import SafeNamespace
 
 @dataclass
 class OpenWeatherMapConfig:
@@ -58,24 +60,36 @@ class Weather(PMCard):
             units=self._weather.units,
             lang=self._weather.lang
         )
+
     def exec(self) -> bool:
         is_dirty = super().exec()
         if not self.timer.is_timedout():
             return is_dirty # early exit if not timed out
         self.timer.set_timeout(self._weather.refresh_minutes * 60 * 1000)
-        self.weather_response = self.api.get_json(self.owm_config.__dict__)
+        self.weather_response = SafeNamespace(**self.api.get_json(self.owm_config.__dict__))
         # print(f"Weather response: {self.weather_response}")  # Debugging line
-        w = SimpleNamespace(**self.weather_response.get("current"))
+        w = self.weather_response.current
+        d = self.weather_response.daily
+        cfg = self._weather
         # convert w.current.dt to a datetime object
-        dt_str = datetime.fromtimestamp(w.dt).strftime(self._weather.datetime_format)
+        dt_str = f"({d[0].weather[0].description})\n{datetime.fromtimestamp(w.dt).strftime(cfg.datetime_format)}"
         self.update(
             "WEATHER",
-            f"{w.temp}{self._weather.degrees}\n{w.humidity} %\n{w.feels_like}{self._weather.degrees}",
+            f"{w.temp}{cfg.degrees}\n{w.humidity} %\n{w.feels_like}{cfg.degrees}",
             dt_str,
         )
 
-        if self.weather_response.get("alerts"):
-            alerts = self.weather_response["alerts"]
+        if d:
+            # Publish the weather data as an event
+            event = {
+                "event": "WeatherForecastEvent",
+                "data": self.weather_response,
+            }
+            print(f"Publishing weather forecast event: {event['event']}")
+            self.publish_event(event)
+
+        if w.alerts:
+            alerts = w.alerts
             if alerts:
                 alert = alerts[0]
                 event = {

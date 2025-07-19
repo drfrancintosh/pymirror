@@ -52,8 +52,14 @@ document.getElementById('commandForm').onsubmit = function(e) {
     })
     .then(response => response.json())
     .then(data => {
+        // Show success message briefly, then redirect
         document.getElementById('result').innerHTML =
-            '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            '<div class="alert alert-success">Alert sent successfully! Redirecting to display...</div>';
+        
+        // Redirect to display page after 1 second
+        setTimeout(() => {
+            window.location.href = '/display';
+        }, 1000);
     })
     .catch(error => {
         document.getElementById('result').innerHTML =

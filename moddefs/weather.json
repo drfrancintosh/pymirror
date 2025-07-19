@@ -36,9 +36,9 @@
         "footer": {
             "font_size": 36,
             "text_color": "#cc0",
-            "text_bg_color": "#000",
+            "text_bg_color": "#330",
             "valign": "top",
-            "height": 48
+            "height": 72
         }
     }
 
