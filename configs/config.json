@@ -40,7 +40,7 @@
     "moddefs/week.json",
     "moddefs/day_of_week.json",
     "moddefs/week_of_year.json",
-    "moddefs/analog_clock.json",
+    "moddefs/slideshow.json",
     "moddefs/weather_alert.json",
     "moddefs/fps.json"
   ]
