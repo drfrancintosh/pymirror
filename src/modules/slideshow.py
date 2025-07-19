@@ -26,11 +26,10 @@ class Slideshow(Image):
 	
 	def exec(self):
 		if self.timer.is_timedout():
-			if self.images:
-				self.timer.set_timeout(self._slideshow.interval_secs * 1000)  # Convert seconds to milliseconds
-				self._image.path = os.path.join(self.folder, self.images[self.image_number])
-				self.image = self.load(self._image.path)
-				self.image_number = (self.image_number + 1) % len(self.images)
-				self.dirty = True
+			self.timer.set_timeout(self._slideshow.interval_secs * 1000)  # Convert seconds to milliseconds
+			self._image.path = os.path.join(self.folder, self.images[self.image_number])
+			self.image = self.load(self._image.path)
+			self.image_number = (self.image_number + 1) % len(self.images)
+			self.dirty = True
 		return self.dirty
 

@@ -5,9 +5,10 @@ from pymirror.pmimage import PMImage
 class Image(PMModule):
 	def __init__(self, pm, config: SafeNamespace):
 		super().__init__(pm, config)
-		self._image = config.image
-		self.dirty = False
-		self.image = self.load(self._image.path)
+		if config.image:
+			self._image = config.image
+			self.image = self.load(self._image.path)
+			self.dirty = True
 
 	def load(self, path: str):
 		""" Load an image from the given path """

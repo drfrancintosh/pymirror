@@ -45,36 +45,32 @@ class PMImage(PMBitmap):
         return scaled_image.crop((left, top, right, bottom))
 
     def load(self, image_path, width=None, height=None, scale=None):
-        try:
-            image = Image.open(image_path)
-            image = image.convert("RGBA")  # Ensure the image is in RGB format
-            if width is not None and height is not None:
-                if scale == "fit":
-                    print(f"Scaling image to fit within {width}x{height}")
-                    image = self.scale_to_fit(image, width, height)
-                elif scale == "fill":
-                    print(f"Scaling image to fill {width}x{height}")
-                    image = self.scale_to_fill(image, width, height)
-                elif scale == "stretch":
-                    # Default to resizing without aspect ratio preservation
-                    print(f"Stretching image to {width}x{height}")
-                    image = image.resize((width, height), Image.LANCZOS)
-            bytes = image.tobytes("raw")
-            ### Convert raw bytes to RGB565 format
-            arr = bytearray(bytes)
-            # print(f"Image bytes length: {len(arr)}")
-            for i in range(0, len(arr), 4):
-                r = (arr[i] >> 3) & 0x1F
-                g = (arr[i+1] >> 2) & 0x3F
-                b = (arr[i+2] >> 3) & 0x1F
-                arr[i + 2] = (r << 3) | (g >> 3)
-                arr[i + 1] = 0
-                arr[i + 0] = ((g & 0x07) << 5) | b
-                arr[i + 3] = 0
-            image = Image.frombytes("I", (image.width, image.height), arr)
-            self.set_image(image)
-            return image
-
-        except Exception as e:
-            print(f"Error loading image: {e}")
-            return False
+        image = Image.open(image_path)
+        image = image.convert("RGBA")  # Ensure the image is in RGB format
+        if width is not None and height is not None:
+            if scale == "fit":
+                print(f"Scaling image to fit within {width}x{height}")
+                image = self.scale_to_fit(image, width, height)
+            elif scale == "fill":
+                print(f"Scaling image to fill {width}x{height}")
+                image = self.scale_to_fill(image, width, height)
+            elif scale == "stretch":
+                # Default to resizing without aspect ratio preservation
+                print(f"Stretching image to {width}x{height}")
+                image = image.resize((width, height), Image.LANCZOS)
+        raw_bytes = image.tobytes("raw")
+        ### Convert raw bytes to RGB565 format
+        arr = bytearray(raw_bytes)
+        # print(f"Image bytes length: {len(arr)}")
+        for i in range(0, len(arr), 4):
+            r = (arr[i] >> 3) & 0x1F
+            g = (arr[i+1] >> 2) & 0x3F
+            b = (arr[i+2] >> 3) & 0x1F
+            arr[i + 2] = (r << 3) | (g >> 3)
+            arr[i + 1] = 0
+            arr[i + 0] = ((g & 0x07) << 5) | b
+            arr[i + 3] = 0
+        bytes_data = bytes(arr)  # make it immutable
+        image = Image.frombytes("I", (image.width, image.height), bytes_data)
+        self.set_image(image)
+        return image
