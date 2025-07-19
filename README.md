@@ -37,6 +37,11 @@
   - https://fontawesome.com/search?o=r&s=solid&ip=classic
   - https://fontawesome.com/search?o=r&s=regular&ip=classic
   - https://fontawesome.com/search?ic=brands
+
+## Images folder
+
+- Thanks to `https://github.com/yavuzceliker/sample-images` for sample images
+
 ## Running
 - `cd ./pymirror`
 - `./run.sh`
