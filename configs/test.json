@@ -1,0 +1,95 @@
+{
+  "debug": true,
+  "secrets": ".secrets",
+  "force_render": false,
+  "screen": {
+    "output_file": "./src/pmserver/static/output.jpg",
+    "frame_buffer": null,
+    "font_name": "Roboto-Thin",
+    "font_size": 64,
+    "color": "#fff",
+    "bg_color": "#000",
+    "text_color": "#fff",
+    "text_bg_color": null
+  },
+  "positions": {
+    "None": "0.0,0.0,0.0,0.0",
+    "top_strip": "0.00,0.0,1.0,0.15",
+    "alert_strip": "0.30,0.30,0.7,0.7",
+    "fps_strip": "0.0,0.95,0.33,1.00",
+    "top_left": "0.0,0.15,0.33,0.33",
+    "top_center_left": "0.33,0.15,0.55,0.33",
+    "top_center_right": "0.55,0.15,0.66,0.33",
+    "top_right": "0.66,0.15,1.00,0.33",
+    "middle_left": "0.0,0.33,0.33,0.66",
+    "middle_center": "0.33,0.33,0.66,0.85",
+    "middle_right": "0.66,0.33,1.00,1.00",
+    "bottom_left": "0.0,0.66,0.33,0.95",
+    "bottom_center": "0.33,0.85,0.66,1.00",
+    "bottom_right_center": "0.7,0.66,1.00,0.90",
+    "bottom_right": "0.66,0.90,1.00,1.00"
+  },
+  "modules": [
+    {
+      "module": "image",
+      "moddef": {
+        "name": "test_image",
+        "position": "middle_left"
+      },
+      "image": {
+        "path": "./images/lena.jpg",
+        "scale": "fit",
+        "valign": "center",
+        "halign": "center"
+      }
+    },
+    {
+      "module": "image",
+      "moddef": {
+        "name": "test_image",
+        "position": "middle_center"
+      },
+      "image": {
+        "path": "./images/lena.jpg",
+        "scale": null,
+        "valign": "center",
+        "halign": "center"
+      }
+    },
+    {
+      "module": "image",
+      "moddef": {
+        "name": "test_image",
+        "position": "middle_right"
+      },
+      "image": {
+        "path": "./images/lena.jpg",
+        "scale": "fit",
+        "valign": "center",
+        "halign": "center"
+      }
+    },
+    {
+      "module": "slideshow",
+      "moddef": {
+        "name": "test_slideshow",
+        "position": "bottom_left"
+      },
+      "slideshow": {
+        "folder": "./images",
+        "scale": "fit",
+        "valign": "center",
+        "halign": "center",
+        "interval_secs": 1
+      }
+    },
+    {
+      "module": "fps",
+      "moddef": {
+        "name": "test_fps",
+        "position": "fps_strip"
+      }
+    },
+    "moddefs/fps.json"
+  ]
+}
