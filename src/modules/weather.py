@@ -72,10 +72,10 @@ class Weather(PMCard):
         d = self.weather_response.daily
         cfg = self._weather
         # convert w.current.dt to a datetime object
-        dt_str = datetime.fromtimestamp(w.dt).strftime(cfg.datetime_format)
+        dt_str = f"({d[0].weather[0].description})\n{datetime.fromtimestamp(w.dt).strftime(cfg.datetime_format)}"
         self.update(
             "WEATHER",
-            f"{w.temp}{cfg.degrees}\n{w.humidity} %\n{w.feels_like}{cfg.degrees}\n({d[0].weather[0].description})",
+            f"{w.temp}{cfg.degrees}\n{w.humidity} %\n{w.feels_like}{cfg.degrees}",
             dt_str,
         )
 

@@ -29,16 +29,16 @@
             "text_bg_color": "#ff0"
         },
         "body": {
-            "font_size": 48,
+            "font_size": 64,
             "text_color": "#cc0",
             "text_bg_color": "#000"
         },
         "footer": {
             "font_size": 36,
             "text_color": "#cc0",
-            "text_bg_color": "#000",
+            "text_bg_color": "#330",
             "valign": "top",
-            "height": 48
+            "height": 72
         }
     }
 

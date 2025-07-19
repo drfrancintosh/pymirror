@@ -45,7 +45,7 @@ class Forecast(PMCard):
             date = datetime.fromtimestamp(self.weather_response["daily"][i]["dt"])
             if rect: self.bitmap.img.paste(icon, (x0 + dx, y0 + dy))
             self.gfx.color = "#fff"
-            if rect: self.bitmap.rect(self.gfx, (x0 + dx, y0 + dy, x0 + icon.width + dx, y0 + icon.height + dy), fill=None)
+            # if rect: self.bitmap.rect(self.gfx, (x0 + dx, y0 + dy, x0 + icon.width + dx, y0 + icon.height + dy), fill=None)
             day = date.strftime("%a")
             desc =  self.weather_response.daily[i].weather[0].description
             temp = self.weather_response["daily"][i]["temp"]["day"]
