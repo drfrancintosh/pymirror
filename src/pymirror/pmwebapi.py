@@ -42,7 +42,8 @@ class PMWebApi:
             if result: return result
         
         # If no cache or cache failed, fetch from URL
-        # print(f"Fetching data from {self.url} with params: {params}")
+        now = time.time()
+        print(f"{now}: Fetching data from {self.url} with params: {params}")
         response = requests.get(self.url, params=params)
         if response.ok:
             self._save_to_cache(response.text)

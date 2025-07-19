@@ -5,11 +5,11 @@
         "position": "middle_center"
       },
       "slideshow": {
-        "folder": "./images",
+        "folder": "./.pix",
         "scale": "fit",
         "valign": "center",
         "halign": "center",
-        "interval_secs": 5,
+        "interval_secs": 15,
         "randomize": true
       }
     }
