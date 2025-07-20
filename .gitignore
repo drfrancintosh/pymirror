@@ -1,0 +1,7 @@
+__pycache__/
+.pix/
+.DS_Store
+.venv/
+*.jnk
+.secrets
+.env

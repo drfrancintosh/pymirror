@@ -1,0 +1,15 @@
+    {
+      "module": "slideshow",
+      "moddef": {
+        "name": "slideshow",
+        "position": "slideshow_strip"
+      },
+      "slideshow": {
+        "folder": "./images",
+        "scale": "fit",
+        "valign": "top",
+        "halign": "center",
+        "interval_secs": 15,
+        "randomize": true
+      }
+    }

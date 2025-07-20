@@ -1,0 +1,40 @@
+{
+    "module": "compliments",
+    "moddef": {
+        "name": "Complements",
+        "position": "lower_third",
+        "font_name": "Roboto-Light",
+        "font_size": 128,
+        "disabled": false
+
+    },
+    "compliments": {
+        "morning_start_time": 3,
+        "afternoon_start_time": 12,
+        "evening_start_time": 18,
+        "night_start_time": 22,
+        "update_interval_secs": 30,
+        "morning": [
+            "Good morning!",
+            "Rise and shine!",
+            "Have a great day ahead!",
+            "Make today amazing!"
+        ],
+        "afternoon": [
+            "Good afternoon!",
+            "Hope your day is going well!",
+            "Keep up the great work!",
+            "You're doing fantastic!"
+        ],
+        "evening": [
+            "Good evening!",
+            "Relax and unwind!",
+            "You've earned some rest!",
+            "Reflect on your day with pride!"
+        ],
+        "night": [
+            "Good night!",
+            "Sleep well!"
+        ]
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "module": "cli",
+    "moddef": {
+        "name": "calendar0",
+        "position": "calendar_strip0",
+        "font_name": "fonts/Font Awesome 6 Free-Regular-400"
+    },
+    "cli": {
+        "cycle_seconds": 3600,
+        "command": "/usr/bin/calendar -f ./mm2defs/calendar.usholiday -A 365 | sed 's/.*/\uf133/g' ",
+        "header": "  ",
+        "body": "{{ stdout }}",
+        "footer": ""
+    },
+    "card": {
+        "header": {
+            "text_color": "#aaa",
+            "font_size": 24,
+            "valign": "bottom",
+            "halign": "left"
+        },
+        "body": {
+            "text_color": "#888",
+            "font_size": 32,
+            "valign": "bottom",
+            "halign": "left",
+            "wrap": null
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "module": "clock",
+    "moddef": {
+        "name": "date",
+        "position": "date_strip",
+        "font_name": "Roboto-Light",
+        "font_size": 48,
+        "text_color": "#ccc",
+        "disabled": false
+
+    },
+    "clock": {
+        "date_format": "%A, %B %d, %Y",
+        "valign": "bottom",
+        "halign": "center"
+    }
+}

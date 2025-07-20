@@ -1,0 +1,46 @@
+{
+  "debug": false,
+  "secrets": ".secrets",
+  "force_render": false,
+  "screen": {
+    "output_file": null,
+    "frame_buffer": null,
+    "font_name": "Roboto_Condensed-ExtraLight.ttf",
+    "font_size": 64,
+    "color": "#fff",
+    "bg_color": "#000",
+    "text_color": "#fff",
+    "text_bg_color": null
+  },
+  "positions": {
+    "top_left":     "0.00,0.00,0.33,0.20",
+    "top_center":   "0.33,0.00,0.66,0.20",
+    "top_right":    "0.66,0.00,1.00,0.20",
+    "upper_third":  "0.00,0.20,1.00,0.35",
+    "middle_center":"0.35,0.35,0.75,0.65",
+    "lower_third":  "0.00,0.65,1.00,0.80",
+    "bottom_left":  "0.00,0.80,0.33,1.00",
+    "bottom_center":"0.33,0.80,0.66,1.00",
+    "bottom_right": "0.66,0.80,1.00,1.00",
+    "date_strip":   "0.00,0.00,0.33,0.10",
+    "time_strip":   "0.00,0.10,0.20,0.20",
+    "seconds_strip": "0.20,0.10,0.33,0.20",
+    "news_strip":    "0.00,0.80,1.00,1.00",
+    "calendar_strip0": "0.00,0.20,0.02,0.50",
+    "calendar_strip1": "0.02,0.20,0.25,0.50",
+    "calendar_strip2": "0.26,0.20,0.33,0.50",
+    "slideshow_strip":  "0.35,0.20,0.66,0.50"
+    },
+  "modules": [
+    "mm2defs/date.json",
+    "mm2defs/time.json",
+    "mm2defs/seconds.json",
+    "mm2defs/compliments.json",
+    "mm2defs/news.json",
+    "mm2defs/calendar0.json",
+    "mm2defs/calendar1.json",
+    "mm2defs/calendar2.json",
+    "mm2defs/pymirror_controller.json",
+    "mm2defs/slideshow.json"
+  ]
+}

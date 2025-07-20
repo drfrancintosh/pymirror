@@ -1,0 +1,15 @@
+    {
+      "module": "slideshow",
+      "moddef": {
+        "name": "test_slideshow",
+        "position": "middle_center"
+      },
+      "slideshow": {
+        "folder": "./images",
+        "scale": "fit",
+        "valign": "center",
+        "halign": "center",
+        "interval_secs": 15,
+        "randomize": true
+      }
+    }

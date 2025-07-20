@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto-Refreshing Output Image</title>
+  <style>
+    body { background: #222; color: #fff; text-align: center; }
+    img { max-width: 90vw; max-height: 90vh; border: 2px solid #fff; }
+  </style>
+</head>
+<body>
+  <h1>Auto-Refreshing Output Image</h1>
+  <img id="output" src="output.jpg" alt="Output Image">
+  <script>
+    setInterval(function() {
+      const img = document.getElementById('output');
+      // Add a cache-busting query string
+      img.src = 'output.jpg?t=' + new Date().getTime();
+    }, 100);
+  </script>
+</body>
+</html>

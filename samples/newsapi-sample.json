@@ -1,0 +1,110 @@
+{
+  "status": "ok",
+  "totalResults": 33,
+  "articles": [
+    {
+      "source": {
+        "id": "the-wall-street-journal",
+        "name": "The Wall Street Journal"
+      },
+      "author": "WSJ",
+      "title": "Stock Market Today: Nasdaq, S&P 500 Hit New Records \u2014 Live Updates - WSJ",
+      "description": null,
+      "url": "https://www.wsj.com/livecoverage/stock-market-today-inflation-data-06-27-2025",
+      "urlToImage": null,
+      "publishedAt": "2025-06-27T20:06:00Z",
+      "content": null
+    },
+    {
+      "source": {
+        "id": "cnn",
+        "name": "CNN"
+      },
+      "author": "Elisabeth Buchwald",
+      "title": "Trump is ending trade talks with Canada - CNN",
+      "description": "President Donald Trump ceased trade talks with Canada and will soon announce a new tariff rate the country will have to pay, he said in a Truth Social post on Friday.",
+      "url": "https://www.cnn.com/2025/06/27/business/trump-breaks-off-canada-trade-talks",
+      "urlToImage": "https://media.cnn.com/api/v1/images/stellar/prod/gettyimages-2218163648.jpg?c=16x9&q=w_800,c_fill",
+      "publishedAt": "2025-06-27T19:48:00Z",
+      "content": "President Donald Trump said Friday he has put an end to trade talks with Canada and will soon announce a new tariff rate for that country, he said in a Truth Social post on Friday.\r\nThe decision to e\u2026 [+5812 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "BBC News"
+      },
+      "author": "https://www.facebook.com/bbcnews",
+      "title": "Diddy charges 'badly exaggerated', his lawyer says in trial's closing argument - BBC",
+      "description": "Hip-hop mogul Sean 'Diddy' Combs could face life in prison if found guilty in the New York court.",
+      "url": "https://www.bbc.com/news/live/c5ygxlzng62t",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/8c85/live/04cd4cc0-535e-11f0-b4be-8f7caf53b80c.jpg",
+      "publishedAt": "2025-06-27T19:41:15Z",
+      "content": "Nada TawfikReporting from court\r\nThis Manhattan courthouse has pulled back the curtain on the private life of one of hip hops biggest icons. \r\nThe mogul and producer admits that he beat his partners \u2026 [+1465 chars]"
+    },
+    {
+      "source": {
+        "id": "nbc-news",
+        "name": "NBC News"
+      },
+      "author": "Matt Lavietes",
+      "title": "Minnesota Rep. Melissa Hortman, husband and dog lie in state; suspected killer appears in court - NBC News",
+      "description": "Former Minnesota House Speaker Melissa Hortman became the first woman to lie in state at the Minnesota Capitol rotunda on Friday, hours after her suspected killer appeared in court",
+      "url": "https://www.nbcnews.com/news/us-news/minnesota-rep-melissa-hortman-husband-dog-lie-state-suspected-killer-c-rcna215503",
+      "urlToImage": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2025-06/250614-Melissa-Mark-Hortman-mn-1510-2893be.jpg",
+      "publishedAt": "2025-06-27T19:34:16Z",
+      "content": "Former Minnesota House Speaker Melissa Hortman became the first woman to lie in state at the Minnesota Capitol rotunda on Friday, hours after her suspected killer appeared in court.\r\nHortman and her \u2026 [+3798 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Hollywood Reporter"
+      },
+      "author": "Lily Ford, Aldo Luigi Mancusi",
+      "title": "Jeff Bezos and Lauren S\u00e1nchez Say \u201cI Do\u201d in Venice Wedding Marred by Billionaire-Bashing Protests - The Hollywood Reporter",
+      "description": "One of the world's richest men, Bezos was able to commandeer many of the Italian city's resources. But a small portion of locals were not so welcoming.",
+      "url": "http://www.hollywoodreporter.com/lifestyle/lifestyle-news/jeff-bezos-lauren-sanchez-married-1236297860/",
+      "urlToImage": "https://www.hollywoodreporter.com/wp-content/uploads/2025/06/FotoJet-2025-06-24T101359.053.jpg?w=1440&h=810&crop=1",
+      "publishedAt": "2025-06-27T19:19:40Z",
+      "content": "Jeff Bezos and Lauren S\u00e1nchez are officially married.\r\nThe Amazon billionaire and former TV anchor tied the knot Friday in a lavish celebration in Venice, Italy.\r\nThe three-day, $10 million extravaga\u2026 [+4238 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "NPR"
+      },
+      "author": "",
+      "title": "Judge orders Abrego Garcia to remain in jail after his lawyers raise deportation concerns - NPR",
+      "description": "A federal judge agreed to delay Kilmar Abrego Garcia's release after his lawyers pointed to conflicting reports from federal officials about whether he would remain in the U.S. while he awaits trial.",
+      "url": "https://www.npr.org/2025/06/27/g-s1-74925/abrego-garcia-tennessee-judge-delay-release-deportation",
+      "urlToImage": "https://npr.brightspotcdn.com/dims3/default/strip/false/crop/1920x1080+0+0/resize/1400/quality/100/format/jpeg/?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2F41%2F98%2Faa55deb04fe39df84ccc41dc0a01%2Fap25177010306445.jpg",
+      "publishedAt": "2025-06-27T18:49:08Z",
+      "content": "A federal judge in Tennessee has ordered a delay in the release of Kilmar Abrego Garcia after his legal team raised concerns that the Salvadoran native could be deported upon release.\r\nAbrego Garcia \u2026 [+2906 chars]"
+    },
+    {
+      "source": {
+        "id": "the-washington-post",
+        "name": "The Washington Post"
+      },
+      "author": "Justin Jouvenal, Will Oremus",
+      "title": "Supreme Court allows law requiring age checks for porn sites - The Washington Post",
+      "description": "Pornhub was among the plaintiffs challenging a Texas law that requires users of adult sites to submit personal information proving they are 18 or older.",
+      "url": "https://www.washingtonpost.com/politics/2025/06/27/porn-online-age-verification-supreme-court-decision/",
+      "urlToImage": "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/GCPDUKSQ67PL5IK5J5W4NFYLAQ.JPG&w=1440",
+      "publishedAt": "2025-06-27T18:36:40Z",
+      "content": "An ideologically divided Supreme Court on Friday affirmed a Texas law that requires users to verify their age to access porn sites, the first major legal test of statutesin two dozen states aimed at \u2026 [+7985 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "MLB.com"
+      },
+      "author": "Jim Callis",
+      "title": "Inbox: Who might be drafting their new top prospect? - MLB.com",
+      "description": "Sixteen days until the Draft ... so you know what the main focus of the Pipeline Inbox will be.",
+      "url": "https://www.mlb.com/news/pipeline-inbox-explores-which-teams-might-be-drafting-their-new-top-prospect-and-more",
+      "urlToImage": "https://img.mlbstatic.com/mlb-images/image/upload/t_2x1/t_w1536/mlb/nno1erqdngfwzk7dzrjk.jpg",
+      "publishedAt": "2025-06-27T18:29:48Z",
+      "content": "Sixteen days until the Draft ... so you know what the main focus of the Pipeline Inbox will be.\r\nWhich clubs could see a 2025 Draft pick immediately become their No. 1 prospect when we re-rank the li\u2026 [+4836 chars]"
+    }
+  ]
+}
