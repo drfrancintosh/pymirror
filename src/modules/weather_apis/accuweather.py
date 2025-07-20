@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
 from logging import config
+
+from flask import json
 from pymirror.pmwebapi import PMWebApi
 from pymirror.utils import SafeNamespace
 from .pmweatherdata import PMWeatherAlert, PMWeatherCurrent, PMWeatherDaily, PMWeatherData, PMWeatherSummary
@@ -17,9 +19,18 @@ class AccuWeatherParams:
 class AccuWeatherConfig:
     name: str = "AccuWeather"
     url: str = "http://dataservice.accuweather.com/currentconditions/v1/"
-    cache_file: str  = "./caches/weather.json"
+    forecast_url: str = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/"
+    cache_file: str  = "./caches/accuweather.json"
     cache_timeout_secs: int = 3600  # Default cache timeout in seconds
 
+@dataclass
+class AccuWeatherForecastConfig:
+    name: str = "AccuWeather"
+    url: str = "http://dataservice.accuweather.com/forecasts/v1/daily/5day"
+    cache_file: str  = "./caches/accuweather_forecast.json"
+    cache_timeout_secs: int = 3600  # Default cache timeout in seconds
+
+@dataclass
 class AccuWeatherLocationConfig:
     name: str = "AccuWeather Location"
     url: str = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search"
@@ -37,13 +48,45 @@ class AccuWeatherApi(PMWebApi):
         print(f"AccuWeatherApi initialized with params: {config}")
         self.params = AccuWeatherParams(**config.__dict__)
         self.location_key = None
-    
+
+    def _to_daily(self, r, f, d):        
+        return {
+            "dt": f.EpochDate,
+            "summary": f.Day.IconPhrase,
+            "temp": {
+                "day": (f.Temperature.Minimum.Value + f.Temperature.Maximum.Value) / 2,
+                "min": f.Temperature.Minimum.Value,
+                "max": f.Temperature.Maximum.Value,
+                "night": f.Temperature.Maximum.Value,
+                "eve": f.Temperature.Maximum.Value,
+                "morn": f.Temperature.Minimum.Value,
+            },
+            "feels_like": {
+                "day": (f.Temperature.Minimum.Value + f.Temperature.Maximum.Value) / 2,
+                "night": f.Temperature.Maximum.Value,
+                "eve": f.Temperature.Maximum.Value,
+                "morn": f.Temperature.Minimum.Value,
+            },
+            "pressure": d["pressure"],
+            "humidity": d["humidity"],
+            "dew_point": d["dew_point"],
+            "wind_speed": d["wind_speed"],
+            "wind_deg": d["wind_deg"],
+            "wind_gust": d["wind_gust"],
+            "weather": [PMWeatherSummary(id=1, main=f.Day.IconPhrase, description=f.Day.IconPhrase, icon=f"{f.Day.Icon:02d}-s").__dict__],
+            "clouds": r.CloudCover,
+            "pop": 0.0,
+            "rain": 0.0,
+            "uvi": d["uvi"]
+        }
+
     def get_weather_data(self, params = None) -> PMWeatherData:
         """
         Fetches weather data from the AccuWeather API.
         If params are provided, they will be used in the request.
         """
         self.get_location_data() ## get the location key if not already set
+        self.get_forecast_data() ## get the forecast data if not already set
         params = {
             "_resource_id": self.location_key,
             "apikey": self.params.apikey,
@@ -68,45 +111,17 @@ class AccuWeatherApi(PMWebApi):
             "wind_deg":  r.Wind.Direction.Degrees,
             "wind_gust":  r.WindGust.Speed[units].Value
         }
-        d = {
-            "dt": int(r.EpochTime),
-            "summary": r.WeatherText,
-            "temp": {
-                "day": c["temp"],
-                "min": c["temp"],
-                "max": c["temp"],
-                "night": c["temp"],
-                "eve": c["temp"],
-                "morn": c["temp"]
-            },
-            "feels_like": {
-                "day": c["feels_like"],
-                "night": c["feels_like"],
-                "eve": c["feels_like"],
-                "morn": c["feels_like"]
-            },
-            "pressure": c["pressure"],
-            "humidity": c["humidity"],
-            "dew_point": c["dew_point"],
-            "wind_speed": c["wind_speed"],
-            "wind_deg": c["wind_deg"],
-            "wind_gust": c["wind_gust"],
-            "weather": [PMWeatherSummary(id=1, main=r.WeatherText, description=r.WeatherText, icon="").__dict__],
-            "clouds": r.CloudCover,
-            "pop": 0.0,
-            "rain": 0.0,
-            "uvi": c["uvi"]
-        }
+        f = [self._to_daily(r, f, c) for f in self.forecast_data.DailyForecasts if f.EpochDate >= r.EpochTime]
         w = {
             "lat": float(self.params.lat),
             "lon":  float(self.params.lon),
             "timezone": self.location_data.TimeZone.Name,
             "timezone_offset": self.location_data.TimeZone.GmtOffset * 3600,
             "current":  c,
-            "daily":  [d],
+            "daily":  f,
             "alerts": None
         }
-        print(f"AccuWeatherApi response: {w}")
+        print(f"AccuWeatherApi response: {json.dumps(w, indent=2)}")
         weather = PMWeatherData.from_dict(w)
         return weather
 
@@ -124,3 +139,17 @@ class AccuWeatherApi(PMWebApi):
         self.location_key = location_data["Key"]
         print(f"AccuWeather location key: {self.location_key}")
         return self.location_key
+
+    def get_forecast_data(self) -> str:
+        config = AccuWeatherForecastConfig()
+        forecast_api = PMWebApi(config.url, config.cache_file, config.cache_timeout_secs)
+        forecast_data = forecast_api.get_json({
+            "_resource_id": self.location_key,
+            "apikey": self.params.apikey,
+            "details": True,
+            "language": self.params.language,
+            "metric": self.params.units.lower() == "metric"
+        })
+        self.forecast_data = SafeNamespace(**forecast_data)
+        print(f"AccuWeather forecast_data: {self.forecast_data}")
+        return self.forecast_data

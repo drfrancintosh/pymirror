@@ -8,7 +8,6 @@
     },
     "forecast": {
         "days": 3,
-        "days_offset": 1,
-        "icon_size": "large"
+        "days_offset": 0
     }
 }
