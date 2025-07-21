@@ -97,8 +97,10 @@ class PMBitmap:
             self.draw.text((text_x0, text_y0), line, fill=gfx._text_color, font=gfx.font)
             text_y0 += gfx.font_height
 
-    def paste(self, gfx, src: 'PMBitmap') -> None:
-        self.img.paste(src.img, (gfx.x0, gfx.y0))
+    def paste(self, gfx, src: 'PMBitmap', x0 = None, y0 = None) -> None:
+        if x0 is None: x0 = gfx.x0
+        if y0 is None: y0 = gfx.y0
+        self.img.paste(src.img, (x0, y0))
 
 def _height(rect: tuple) -> int:
     return rect[3] - rect[1]

@@ -1,6 +1,6 @@
 {
     "module": "alert",
-    "debug": true,
+    "debug": false,
     "moddef": {
         "name": "Weather Alert",
         "position": "bottom_left",
@@ -10,7 +10,7 @@
         "header": "Weather Alert",
         "body": "Weather Alerts Go Here.",
         "footer": "Alert Footer",
-        "timeout": 10000
+        "timeout": 1000
     },
     "card": {
         "header": {

@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Method 1: Using an array
-# numbers=(01 02 03 04 09 10 11 13 50)
-numbers=(50)
-
-for num in "${numbers[@]}"; do
-    printf "Processing: %s\n" $num
-    curl "https://openweathermap.org/img/wn/${num}d@2x.png" > "weather_icons/${num}d@2x.png"
+for i in {1..44}; do
+    printf "Processing: %s\n" $i
+    curl --http1.1 \
+         --retry 3 \
+         --retry-delay 1 \
+         --connect-timeout 10 \
+         --max-time 30 \
+         "https://www.accuweather.com/images/weathericons/${i}.svg" \
+         -o "weather_icons/${i}.svg"
 done
