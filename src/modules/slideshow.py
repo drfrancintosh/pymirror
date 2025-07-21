@@ -36,16 +36,24 @@ class Slideshow(Image):
 			else:
 				self.image_number = (self.image_number + 1) % len(self.images)
 			self._image.path = os.path.join(self.folder, self.images[self.image_number])
-			self.image = self.load(self._image.path)
-			if self._slideshow.frame and not self.frame_img:
-				img = PILImage.open(self._image.path)
-				img = self.image.scale(img, self.gfx.width, self.gfx.height, self._slideshow.scale).convert("RGBA")
-				frame_img = PILImage.open(self._slideshow.frame)
-				self.frame_img = self.image.scale(frame_img, self.gfx.width, self.gfx.height, "stretch").convert("RGBA")
-			if self.frame_img:
-				img.paste(self.frame_img, (0, 0), self.frame_img)
-				img = self.image.convert_internal(img)
-				self.image.set_img(img)
+			if self._slideshow.frame:
+				if not self.frame_img:
+					self.image = PMImage(None, SafeNamespace())
+					img = PILImage.open(self._image.path)
+					img = self.image.scale(img, self.gfx.width, self.gfx.height, self._slideshow.scale).convert("RGBA")
+					frame_img = PILImage.open(self._slideshow.frame)
+					frame_img = self.image.scale(frame_img, self.gfx.width, self.gfx.height, "stretch").convert("RGBA")
+					self.frame_img = frame_img
+					img.paste(self.frame_img, (0, 0), self.frame_img)
+					self.image.img = self.image.convert_internal(img)
+				else:
+					self.image = PMImage(None, SafeNamespace())
+					img = PILImage.open(self._image.path)
+					img = self.image.scale(img, self.gfx.width, self.gfx.height, self._slideshow.scale).convert("RGBA")
+					img.paste(self.frame_img, (0, 0), self.frame_img)
+					self.image.img = self.image.convert_internal(img)
+			else:
+				self.image = self.load(self._image.path)
 			self.dirty = True
 		return self.dirty
 

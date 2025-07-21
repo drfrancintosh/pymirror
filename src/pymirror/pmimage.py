@@ -4,7 +4,7 @@ from pymirror.pmbitmap import PMBitmap
 class PMImage(PMBitmap):
     def __init__(self, path: str = None, width: int = None, height: int = None, scale: str = None):
         super().__init__()
-        if path is not None:
+        if path != None:
             self.load(path, width, height, scale)
 
     def scale_to_fit(self, image, target_width, target_height):
