@@ -8,6 +8,7 @@
     },
     "forecast": {
         "days": 3,
-        "days_offset": 0
+        "days_offset": 0,
+        "lines": 1
     }
 }

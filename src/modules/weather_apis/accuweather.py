@@ -73,7 +73,7 @@ class AccuWeatherApi(PMWebApi):
             "wind_speed": d["wind_speed"],
             "wind_deg": d["wind_deg"],
             "wind_gust": d["wind_gust"],
-            "weather": [PMWeatherSummary(id=1, main=f.Day.IconPhrase, description=f.Day.IconPhrase, icon=f"{f.Day.Icon:02d}-s").__dict__],
+            "weather": [PMWeatherSummary(id=1, main=f.Day.IconPhrase, description=f.Day.IconPhrase, icon=f"{f.Day.Icon}").__dict__],
             "clouds": r.CloudCover,
             "pop": 0.0,
             "rain": 0.0,

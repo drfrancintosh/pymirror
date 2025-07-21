@@ -46,18 +46,20 @@ class PMImage(PMBitmap):
 
     def load(self, image_path, width=None, height=None, scale=None):
         image = Image.open(image_path)
+        print(f"Loading image from {image_path}, size: {image.size}, scale: {scale}")
         image = image.convert("RGBA")  # Ensure the image is in RGB format
         if width is not None and height is not None:
             if scale == "fit":
-                # print(f"Scaling image to fit within {width}x{height}")
+                print(f"Scaling image to fit within {width}x{height}")
                 image = self.scale_to_fit(image, width, height)
             elif scale == "fill":
-                # print(f"Scaling image to fill {width}x{height}")
+                print(f"Scaling image to fill {width}x{height}")
                 image = self.scale_to_fill(image, width, height)
             elif scale == "stretch":
                 # Default to resizing without aspect ratio preservation
-                # print(f"Stretching image to {width}x{height}")
+                print(f"Stretching image to {width}x{height}")
                 image = image.resize((width, height), Image.LANCZOS)
+        print(f"Final image size: {image.size}")
         raw_bytes = image.tobytes("raw")
         ### Convert raw bytes to RGB565 format
         arr = bytearray(raw_bytes)
@@ -72,5 +74,7 @@ class PMImage(PMBitmap):
             arr[i + 3] = 0
         bytes_data = bytes(arr)  # make it immutable
         image = Image.frombytes("I", (image.width, image.height), bytes_data)
+        self.width = width
+        self.height = height
         self.set_image(image)
-        return image
+        return self
