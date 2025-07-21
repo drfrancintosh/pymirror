@@ -13,12 +13,12 @@
         "degrees": "°F",
         "datetime_format": "%A, %I:%M:%S %p"
     },
-    "_openweathermap": {
+    "openweathermap": {
         "appid": "$OPENWEATHERMAP_API_KEY",
         "lat": 37.50598,
         "lon": -77.64916
     },
-    "accuweather": {
+    "_accuweather": {
         "apikey": "$ACCUWEATHER_API_KEY",
         "lat": 37.50598,
         "lon": -77.64916,

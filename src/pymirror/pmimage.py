@@ -44,10 +44,7 @@ class PMImage(PMBitmap):
         
         return scaled_image.crop((left, top, right, bottom))
 
-    def load(self, image_path, width=None, height=None, scale=None):
-        image = Image.open(image_path)
-        print(f"Loading image from {image_path}, size: {image.size}, scale: {scale}")
-        image = image.convert("RGBA")  # Ensure the image is in RGB format
+    def scale(self, image, width=None, height=None, scale=None):
         if width is not None and height is not None:
             if scale == "fit":
                 print(f"Scaling image to fit within {width}x{height}")
@@ -59,7 +56,10 @@ class PMImage(PMBitmap):
                 # Default to resizing without aspect ratio preservation
                 print(f"Stretching image to {width}x{height}")
                 image = image.resize((width, height), Image.LANCZOS)
-        print(f"Final image size: {image.size}")
+        return image
+    
+    def convert_internal(self, image):
+        """Convert image to internal format (RGB565)"""
         raw_bytes = image.tobytes("raw")
         ### Convert raw bytes to RGB565 format
         arr = bytearray(raw_bytes)
@@ -74,7 +74,16 @@ class PMImage(PMBitmap):
             arr[i + 3] = 0
         bytes_data = bytes(arr)  # make it immutable
         image = Image.frombytes("I", (image.width, image.height), bytes_data)
+        return image 
+    
+    def load(self, image_path, width=None, height=None, scale=None):
+        img = Image.open(image_path)
+        print(f"Loading image from {image_path}, size: {img.size}, scale: {scale}")
+        img = img.convert("RGBA")  # Ensure the image is in RGB format
+        img = self.scale(img, width, height, scale)
+        print(f"Final image size: {img.size}")
+        img = self.convert_internal(img)
         self.width = width
         self.height = height
-        self.set_image(image)
+        self.set_img(img)
         return self
