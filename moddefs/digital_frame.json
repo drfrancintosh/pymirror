@@ -1,15 +1,15 @@
     {
       "module": "slideshow",
       "moddef": {
-        "name": "test_slideshow",
-        "position": "middle_center"
+        "name": "digital frame",
+        "position": "full_screen"
       },
       "slideshow": {
-        "folder": "./images",
+        "folder": "../../CameraPix",
         "scale": "fill",
         "valign": "center",
         "halign": "center",
-        "interval_secs": 30,
+        "interval_secs": 5,
         "randomize": true,
         "frame": "./frames/frame.png"
       }

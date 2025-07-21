@@ -3,8 +3,8 @@
   "secrets": ".secrets",
   "force_render": false,
   "screen": {
-    "output_file": null,
-    "frame_buffer": "/dev/fb0",
+    "output_file": "./src/pmserver/static/output.jpg",
+    "frame_buffer": null,
     "font_name": "Roboto-Thin",
     "font_size": 64,
     "color": "#fff",
@@ -14,6 +14,7 @@
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
+    "full_screen": "0.00,0.00,1.0,1.0",
     "top_strip": "0.00,0.0,1.0,0.15",
     "alert_strip": "0.30,0.30,0.7,0.7",
     "fps_strip": "0.0,0.95,0.33,1.00",
@@ -31,18 +32,6 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
     },
   "modules": [
-    "moddefs/alert.json",
-    "moddefs/time.json",
-    "moddefs/date.json",
-    "moddefs/day_of_week.json",
-    "moddefs/slideshow.json",
-    "moddefs/fortune.json",
-    "moddefs/news.json",
-    "moddefs/weather.json",
-    "moddefs/weather_alert.json",
-    "moddefs/forecast.json",
-    "moddefs/pymirror_controller.json",
-    "moddefs/fps.json",
-    "moddefs/cron_test.json"
+    "moddefs/digital_frame.json"
   ]
 }
