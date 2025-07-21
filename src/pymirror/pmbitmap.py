@@ -9,7 +9,7 @@ class PMBitmap:
         self.draw = ImageDraw.Draw(self.img)
         self._bg_color = bg_color
 
-    def set_image(self, img: Image) -> None:
+    def set_img(self, img: Image) -> None:
         """ Set the bitmap to an Image object """
         self.img = img
 
