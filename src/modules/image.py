@@ -33,6 +33,7 @@ class Image(PMModule):
 			x0 = self.gfx.width - self.image.img.width
 		elif self._image.halign == "center":
 			x0 = (self.gfx.width - self.image.img.width) // 2
+		self.image_rect = (x0, y0, x0 + self.image.img.width, y0 + self.image.img.height)
 		self.bitmap.img.paste(self.image.img, (x0, y0))
 		self.dirty = False
 		return True

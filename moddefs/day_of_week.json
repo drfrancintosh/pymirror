@@ -2,11 +2,11 @@
     "module": "clock",
     "moddef": {
         "name": "day_of_week",
-        "position": "bottom_center",
-        "font_name": "TNG_Credits",
-        "font_size": 96
+        "position": "top_center",
+        "font_name": "7segment",
+        "font_size": 128
     },
     "clock": {
-        "date_format": "%A"
+        "date_format": "%A: %W"
     }
 }

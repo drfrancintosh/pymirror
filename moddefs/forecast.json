@@ -7,8 +7,9 @@
         "text_color": "#ff0"
     },
     "forecast": {
-        "days": 9,
+        "days": 4,
         "days_offset": 0,
-        "lines": 2
+        "lines": 2,
+        "icon_size": "large"
     }
 }
