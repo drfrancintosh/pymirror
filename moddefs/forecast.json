@@ -7,7 +7,7 @@
         "text_color": "#ff0"
     },
     "forecast": {
-        "days": 3,
+        "days": 9,
         "days_offset": 0,
         "lines": 2
     }
