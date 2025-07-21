@@ -6,7 +6,7 @@
       },
       "slideshow": {
         "folder": "./images",
-        "scale": "fit",
+        "scale": "fill",
         "valign": "center",
         "halign": "center",
         "interval_secs": 15,
