@@ -9,5 +9,5 @@ fi
 PYTHONPATH=src \
     python3 -u -m pymirror.pymirror\
     --config "$CONFIG" \
-    --output_file "./src/pmserver/static/output.jpg" \
-    --frame_buffer null \
+    --output_file="./src/pmserver/static/output.jpg" \
+    --frame_buffer=null \

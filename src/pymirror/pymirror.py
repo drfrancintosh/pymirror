@@ -25,11 +25,13 @@ class PyMirror:
         ## by convention, all objects get a copy of the config
         ## so that they can access it without having to pass it around
         ## and they "pluck out" the values they need
+        print(f"args: {args}")
         self._config = self._load_config(config_fname)
         if args.output_file:
-            self._config.output_file = _to_null(args.output_file)
+            self._config.screen.output_file = _to_null(args.output_file)
         if args.frame_buffer:
-            self._config.frame_buffer = _to_null(args.frame_buffer)
+            self._config.screen.frame_buffer = _to_null(args.frame_buffer)
+        print(f"Using config: {self._config}")
         self.screen = PMScreen(self._config)
         self.force_render = False
         self.debug = self._config.debug
@@ -235,8 +237,9 @@ def main():
             "Overrides the output_file setting in config."
     )
     args = parser.parse_args()
-    
-    pm = PyMirror(args.config, args)
+    args = parser.parse_args()
+
+    pm = PyMirror(args.config, SafeNamespace(**vars(args)))
     pm.run()
 
 if __name__ == "__main__":
