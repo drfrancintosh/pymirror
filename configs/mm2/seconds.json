@@ -1,0 +1,17 @@
+{
+    "module": "clock",
+    "moddef": {
+        "name": "time",
+        "text_color": "#888",
+        "text_bg_color": null,
+        "position": "seconds_strip",
+        "font_name": "Roboto-Light",
+        "font_size": 48,
+        "disabled": false
+    },
+    "clock": {
+        "date_format": "%S",
+        "valign": "top",
+        "halign": "left"
+    }
+}

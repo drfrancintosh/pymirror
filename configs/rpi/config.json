@@ -31,18 +31,18 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
     },
   "modules": [
-    "moddefs/alert.json",
-    "moddefs/time.json",
-    "moddefs/date.json",
-    "moddefs/day_of_week.json",
-    "moddefs/slideshow.json",
-    "moddefs/fortune.json",
-    "moddefs/news.json",
-    "moddefs/weather.json",
-    "moddefs/weather_alert.json",
-    "moddefs/forecast.json",
-    "moddefs/pymirror_controller.json",
-    "moddefs/fps.json",
-    "moddefs/cron_test.json"
+    "./configs/rpi/alert.json",
+    "./configs/rpi/time.json",
+    "./configs/rpi/date.json",
+    "./configs/rpi/day_of_week.json",
+    "./configs/rpi/slideshow.json",
+    "./configs/rpi/fortune.json",
+    "./configs/rpi/news.json",
+    "./configs/rpi/weather.json",
+    "./configs/rpi/weather_alert.json",
+    "./configs/rpi/forecast.json",
+    "./configs/rpi/pymirror_controller.json",
+    "./configs/rpi/fps.json",
+    "./configs/rpi/cron_test.json"
   ]
 }
