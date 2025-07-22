@@ -11,6 +11,6 @@
         "halign": "center",
         "interval_secs": 30,
         "randomize": true,
-        "frame": "./frames/iphone.png"
+        "frame": "./frames/round_frame.png"
       }
     }
