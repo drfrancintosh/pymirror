@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -eq 0 ]; then
-    CONFIG="./configs/demo/config.json"
+    CONFIG="./configs/rpi/config.json"
 else
     CONFIG="$1"
 fi
