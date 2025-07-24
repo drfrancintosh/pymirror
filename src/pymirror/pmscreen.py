@@ -48,19 +48,19 @@ class PMScreen:
         """Write the image to the framebuffer."""
         # self._screen.frame_buffer = "./fb0.jpg"
         if self._screen.frame_buffer:
-            print(f"Writing to framebuffer: {self._screen.frame_buffer}")
+            # print(f"Writing to framebuffer: {self._screen.frame_buffer}")
             from clib import rgba_to_rgb16, free_rgb16
-            print(f"Image size: {img.size}, mode: {img.mode}")
+            # print(f"Image size: {img.size}, mode: {img.mode}")
             raw = img.tobytes("raw")
-            print(f"Raw image size: {len(raw)} bytes")
+            # print(f"Raw image size: {len(raw)} bytes")
             rgb565 = rgba_to_rgb16(raw, img.width, img.height)
-            print(f"Converted to RGB565 size: {len(rgb565)} bytes")
+            # print(f"Converted to RGB565 size: {len(rgb565)} bytes")
             with open(self._screen.frame_buffer, "wb") as f:
-                print(f"Saving RGB565 image to {self._screen.frame_buffer}")
+                # print(f"Saving RGB565 image to {self._screen.frame_buffer}")
                 f.write(rgb565)
-            print("Freeing RGB565 memory")
+            # print("Freeing RGB565 memory")
             # free_rgb16(rgb565)
-            print("Framebuffer write complete")
+            # print("Framebuffer write complete")
 
     def _atomic_write(self, img: Image.Image) -> None:
         if self._screen.output_file:
