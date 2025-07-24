@@ -3,7 +3,7 @@
   "secrets": ".secrets",
   "force_render": false,
   "screen": {
-    "output_file": null,
+    "output_file": "./src/pmserver/static/output.jpg",
     "frame_buffer": null,
     "font_name": "Roboto_Condensed-ExtraLight.ttf",
     "font_size": 64,
@@ -32,15 +32,15 @@
     "slideshow_strip":  "0.35,0.20,0.66,0.50"
     },
   "modules": [
-    "mm2defs/date.json",
-    "mm2defs/time.json",
-    "mm2defs/seconds.json",
-    "mm2defs/compliments.json",
-    "mm2defs/news.json",
-    "mm2defs/calendar0.json",
-    "mm2defs/calendar1.json",
-    "mm2defs/calendar2.json",
-    "mm2defs/pymirror_controller.json",
-    "mm2defs/slideshow.json"
+    "configs/mm2/date.json",
+    "configs/mm2/time.json",
+    "configs/mm2/seconds.json",
+    "configs/mm2/compliments.json",
+    "configs/mm2/news.json",
+    "configs/mm2/calendar0.json",
+    "configs/mm2/calendar1.json",
+    "configs/mm2/calendar2.json",
+    "configs/mm2/pymirror_controller.json",
+    "configs/mm2/slideshow.json"
   ]
 }

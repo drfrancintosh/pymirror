@@ -7,7 +7,7 @@
     },
     "cli": {
         "cycle_seconds": 3600,
-        "command": "/usr/bin/calendar -f ./mm2defs/calendar.usholiday -A 365 | sed 's/.*/\uf133/g' ",
+        "command": "/usr/bin/calendar -f ./configs/mm2/calendar.usholiday -A 365 | sed 's/.*/\uf133/g' ",
         "header": "  ",
         "body": "{{ stdout }}",
         "footer": ""

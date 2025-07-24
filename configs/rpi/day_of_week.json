@@ -7,6 +7,6 @@
         "font_size": 128
     },
     "clock": {
-        "date_format": "%A: %W"
+        "date_format": "+%a: %W"
     }
 }

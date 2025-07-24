@@ -45,13 +45,13 @@ class Slideshow(Image):
 					frame_img = self.image.scale(frame_img, self.gfx.width, self.gfx.height, "stretch").convert("RGBA")
 					self.frame_img = frame_img
 					img.paste(self.frame_img, (0, 0), self.frame_img)
-					self.image.img = self.image.convert_internal(img)
+					self.image.img = img
 				else:
 					self.image = PMImage(None, SafeNamespace())
 					img = PILImage.open(self._image.path)
 					img = self.image.scale(img, self.gfx.width, self.gfx.height, self._slideshow.scale).convert("RGBA")
 					img.paste(self.frame_img, (0, 0), self.frame_img)
-					self.image.img = self.image.convert_internal(img)
+					self.image.img = img
 			else:
 				self.image = self.load(self._image.path)
 			self.dirty = True

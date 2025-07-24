@@ -82,7 +82,6 @@ class PMImage(PMBitmap):
         img = img.convert("RGBA")  # Ensure the image is in RGB format
         img = self.scale(img, width, height, scale)
         print(f"Final image size: {img.size}")
-        img = self.convert_internal(img)
         self.width = width
         self.height = height
         self.set_img(img)

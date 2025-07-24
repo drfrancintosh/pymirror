@@ -2,6 +2,7 @@ __pycache__/
 .pix/
 .venv/
 caches/
+build/
 src/pmserver/static/
 .DS_Store
 *.jnk

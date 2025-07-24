@@ -16,11 +16,19 @@
 - `sudo apt install libdrm-tests`
   - `modetest` (will display hardware information on the displays)
 - `sudo apt install calendar`
+- `sudo apt install python3-setuptools`
 
 ## Installing Libraries
 
 - Install with `pip install -r requirements.txt`
 - or `source ./scripts/install-libs.sh` (for RPi OS)
+
+### clib
+# If using Homebrew Python
+brew install python@3.13-dev
+
+# Or reinstall Python with dev headers
+brew reinstall python@3.13
 
 ## Fontlist.txt
 

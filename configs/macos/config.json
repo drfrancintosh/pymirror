@@ -14,7 +14,6 @@
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
-    "full_screen": "0.00,0.00,1.0,1.0",
     "top_strip": "0.00,0.0,1.0,0.15",
     "alert_strip": "0.30,0.30,0.7,0.7",
     "fps_strip": "0.0,0.95,0.33,1.00",
@@ -32,6 +31,18 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
     },
   "modules": [
-    "moddefs/digital_frame.json"
+    "./configs/rpi/alert.json",
+    "./configs/rpi/time.json",
+    "./configs/rpi/date.json",
+    "./configs/rpi/day_of_week.json",
+    "./configs/rpi/slideshow.json",
+    "./configs/rpi/fortune.json",
+    "./configs/rpi/news.json",
+    "./configs/rpi/weather.json",
+    "./configs/rpi/weather_alert.json",
+    "./configs/rpi/forecast.json",
+    "./configs/rpi/pymirror_controller.json",
+    "./configs/rpi/fps.json",
+    "./configs/rpi/cron_test.json"
   ]
 }
