@@ -46,7 +46,7 @@ class PMScreen:
 
     def _write_framebuffer(self, img: Image.Image) -> None:
         """Write the image to the framebuffer."""
-        self._screen.frame_buffer = "./fb0.jpg"
+        # self._screen.frame_buffer = "./fb0.jpg"
         if self._screen.frame_buffer:
             print(f"Writing to framebuffer: {self._screen.frame_buffer}")
             from clib import rgba_to_rgb16, free_rgb16
