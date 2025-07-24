@@ -22,6 +22,13 @@
 - Install with `pip install -r requirements.txt`
 - or `source ./scripts/install-libs.sh` (for RPi OS)
 
+### clib
+# If using Homebrew Python
+brew install python@3.13-dev
+
+# Or reinstall Python with dev headers
+brew reinstall python@3.13
+
 ## Fontlist.txt
 
 - One font per line
