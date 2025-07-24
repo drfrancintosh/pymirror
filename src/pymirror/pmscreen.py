@@ -46,28 +46,26 @@ class PMScreen:
 
     def _write_framebuffer(self, img: Image.Image) -> None:
         """Write the image to the framebuffer."""
+        # self._screen.frame_buffer = "./fb0.jpg"
         if self._screen.frame_buffer:
+            # print(f"Writing to framebuffer: {self._screen.frame_buffer}")
+            from clib import rgba_to_rgb16, free_rgb16
+            # print(f"Image size: {img.size}, mode: {img.mode}")
             raw = img.tobytes("raw")
+            # print(f"Raw image size: {len(raw)} bytes")
+            rgb565 = rgba_to_rgb16(raw, img.width, img.height)
+            # print(f"Converted to RGB565 size: {len(rgb565)} bytes")
             with open(self._screen.frame_buffer, "wb") as f:
-                f.write(raw[0::2])  # Write every second byte for RGB565 format
+                # print(f"Saving RGB565 image to {self._screen.frame_buffer}")
+                f.write(rgb565)
+            # print("Freeing RGB565 memory")
+            # free_rgb16(rgb565)
+            # print("Framebuffer write complete")
 
     def _atomic_write(self, img: Image.Image) -> None:
         if self._screen.output_file:
-            raw = img.tobytes("raw")[0::2]
-            arr = np.frombuffer(raw, dtype=np.uint16).reshape((self.gfx.height, self.gfx.width))
-
-            # Unpack RGB565 to 8-bit RGB
-            r = ((arr >> 11) & 0x1F) << 3
-            g = ((arr >> 5) & 0x3F) << 2
-            b = (arr & 0x1F) << 3
-
-            rgb = np.dstack((r, g, b)).astype(np.uint8)
-
-            # Create a PIL Image
-            img = Image.fromarray(rgb, "RGB")
-            img.save(self._screen.output_file+".tmp", "JPEG")
+            self.bitmap.img.convert("RGB").save(self._screen.output_file+".tmp", "JPEG")
             os.rename(self._screen.output_file+".tmp", self._screen.output_file)
-
 
     def flush(self) -> None:
         img = self.bitmap.img

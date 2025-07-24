@@ -1,3 +1,11 @@
+##
+## This is the PyMirror implementation-independent bitmap class.
+## This implementation uses the Pillow library for image manipulation.
+## It's intended that other bitmap implementations can be created
+## for different graphics libraries.
+## But the interface should remain the same.
+##
+
 from PIL import Image, ImageDraw
 from pymirror.pmgfx import PMGfx, tocolor
 
@@ -5,7 +13,7 @@ class PMBitmap:
     def __init__(self, width=None, height=None, bg_color=0):
         if width is None or height is None:
             return
-        self.img = Image.new("RGBA", (width, height), bg_color)
+        self.img = Image.new("I", (width, height), bg_color)
         self.draw = ImageDraw.Draw(self.img)
         self._bg_color = bg_color
 
