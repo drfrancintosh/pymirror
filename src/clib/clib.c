@@ -1,5 +1,7 @@
-// clib.c
+#define PY_SSIZE_T_CLEAN  // Add this line BEFORE #include <Python.h>
 #include <Python.h>
+#include <stdlib.h>
+#include <string.h>
 
 static PyObject* rgba_to_rgb16(PyObject* self, PyObject* args) {
     const char* rgba;

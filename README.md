@@ -16,6 +16,7 @@
 - `sudo apt install libdrm-tests`
   - `modetest` (will display hardware information on the displays)
 - `sudo apt install calendar`
+- `sudo apt install python3-setuptools`
 
 ## Installing Libraries
 
