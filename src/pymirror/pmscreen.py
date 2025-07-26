@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from PIL import Image
 from pymirror.pmgfx import PMGfx
 from pymirror.pmbitmap import PMBitmap
-import numpy as np
 
 @dataclass
 class PMScreenConfig:
