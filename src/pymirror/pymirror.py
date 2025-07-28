@@ -148,7 +148,7 @@ class PyMirror:
             if module.disabled: continue
             if not module.bitmap: continue
             module.render(force=True)
-            self.screen.bitmap.paste(module.gfx, module.bitmap)
+            self.screen.bitmap.paste(module.bitmap)
         if self.debug: self._debug(module)
         self.screen.flush()  # Flush the screen to show all modules at once
 
@@ -177,7 +177,7 @@ class PyMirror:
         self.screen.bitmap.clear()  # Clear the bitmap before rendering
         for module in reversed(self.modules):
             if not module.disabled and module.bitmap:
-                self.screen.bitmap.paste(module.gfx, module.bitmap)
+                self.screen.bitmap.paste(module.bitmap)
                 if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
         self.screen.flush()
 
@@ -197,9 +197,9 @@ class PyMirror:
     def _error_screen(self, e):
         """ Display an error screen with the exception details """
         self.screen.bitmap.clear()
-        self.screen.gfx.text_color = "#f00"
-        self.screen.gfx.text_bg_color = "#ff0"
-        self.screen.bitmap.text_box(self.screen.gfx, f"Exception:\n\n{str(e)}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="center", halign="center")
+        self.screen.bitmap.gfx.text_color = "#f00"
+        self.screen.bitmap.gfx.text_bg_color = "#ff0"
+        self.screen.bitmap.text_box(f"Exception:\n\n{str(e)}")
         self.screen.flush()
 
     def _bsod(self, e):

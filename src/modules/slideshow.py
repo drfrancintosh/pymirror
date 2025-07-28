@@ -40,9 +40,9 @@ class Slideshow(Image):
 				if not self.frame_img:
 					self.image = PMImage(None, SafeNamespace())
 					img = PILImage.open(self._image.path)
-					img = self.image.scale(img, self.gfx.width, self.gfx.height, self._slideshow.scale).convert("RGBA")
+					img = self.image.scale(img, self.bitmap.gfx.width, self.bitmap.gfx.height, self._slideshow.scale).convert("RGBA")
 					frame_img = PILImage.open(self._slideshow.frame)
-					frame_img = self.image.scale(frame_img, self.gfx.width, self.gfx.height, "stretch").convert("RGBA")
+					frame_img = self.image.scale(frame_img, self.bitmap.gfx.width, self.bitmap.gfx.height, "stretch").convert("RGBA")
 					self.frame_img = frame_img
 					img.paste(self.frame_img, (0, 0), self.frame_img)
 					self.image.img = img

@@ -24,17 +24,17 @@ class Image(PMModule):
 		if self._image.valign == "top":
 			y0 = 0
 		elif self._image.valign == "bottom":
-			y0 = self.gfx.height - self.image.img.height
+			y0 = self.bitmap.gfx.height - self.image.img.height
 		elif self._image.valign == "center":
-			y0 = (self.gfx.height - self.image.img.height) // 2
+			y0 = (self.bitmap.gfx.height - self.image.img.height) // 2
 		if self._image.halign == "left":
 			x0 = 0
 		elif self._image.halign == "right":
-			x0 = self.gfx.width - self.image.img.width
+			x0 = self.bitmap.gfx.width - self.image.img.width
 		elif self._image.halign == "center":
-			x0 = (self.gfx.width - self.image.img.width) // 2
+			x0 = (self.bitmap.gfx.width - self.image.img.width) // 2
 		self.image_rect = (x0, y0, x0 + self.image.img.width, y0 + self.image.img.height)
-		self.bitmap.img.paste(self.image.img, (x0, y0))
+		self.bitmap._img.paste(self.image.img, (x0, y0))
 		self.dirty = False
 		return True
 

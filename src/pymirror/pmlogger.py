@@ -188,4 +188,5 @@ if __name__ == "__main__":
         _error("This is an error message.")
         _critical("This is a critical message.")
 
-main()
+if __name__ == "__main__":
+    main()

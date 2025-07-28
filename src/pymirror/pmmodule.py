@@ -2,10 +2,9 @@ from abc import ABC, abstractmethod
 import copy
 from dataclasses import dataclass
 
-from pymirror.pmbitmap import PMBitmap
+from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
-from pymirror.pmgfx import PMGfx
-from pymirror.utils import SafeNamespace
+from pymirror.utils import SafeNamespace, _height, _width
 
 @dataclass
 class PMModuleDef(ABC):
@@ -34,22 +33,22 @@ class PMModule(ABC):
 		self.force_render = _moddef.force_render
 		self.timer = PMTimer(0)
 		self.subscriptions = []
-		self.gfx = PMGfx() ## default graphics context
-		self.gfx.rect = self._compute_rect(self.position)
-		self.gfx.color = _moddef.color or self.screen.gfx.color or self.gfx.color
-		self.gfx.bg_color = _moddef.bg_color or self.screen.gfx.bg_color or self.gfx.bg_color
-		self.gfx.text_color = _moddef.text_color or self.screen.gfx.text_color or self.gfx.text_color
-		self.gfx.text_bg_color = _moddef.text_bg_color or self.screen.gfx.text_bg_color or self.gfx.text_bg_color
-		self.gfx.font_name = _moddef.font_name or self.screen.gfx.font_name or self.gfx.font_name
-		self.gfx.font_size = _moddef.font_size or self.screen.gfx.font_size or self.gfx.font_size
-		self.gfx.set_font(self.gfx.font_name, self.gfx.font_size)
-		self.bitmap = self._allocate_bitmap()
+		rect = self._compute_rect(self.position)
+		self.bitmap = PMBitmap(_width(rect), _height(rect))
+		gfx = self.bitmap.gfx
+		gfx.color = _moddef.color or self.screen.bitmap.gfx.color or gfx.color
+		gfx.bg_color = _moddef.bg_color or self.screen.bitmap.gfx.bg_color or gfx.bg_color
+		gfx.text_color = _moddef.text_color or self.screen.bitmap.gfx.text_color or gfx.text_color
+		gfx.text_bg_color = _moddef.text_bg_color or self.screen.bitmap.gfx.text_bg_color or gfx.text_bg_color
+		font_name = _moddef.font_name or self.screen.bitmap.gfx.font_name or gfx.font_name
+		font_size = _moddef.font_size or self.screen.bitmap.gfx.font_size or gfx.font_size
+		gfx.font.set_font(font_name, font_size)
 		self.subscribe(_moddef.subscriptions or [])
 
 	def _compute_rect(self, position: str = None) -> tuple:
 		# compute rect based on "position"
 		rect = (0,0,0,0)
-		if not position or position == "None": return None
+		if not position or position == "None": return rect
 		dim_str = self.pm._config.positions[position]
 		if dim_str:
 			print(f"Module {self._moddef.name} position: {position}, dimensions: {dim_str}")
@@ -59,10 +58,10 @@ class PMModule(ABC):
 			## these are in percentages of the screen size
 			## so we need to multiply to get the actual pixel values
 			rect = (
-				int((self.pm.screen.gfx.width - 1) * dims[0]),
-				int((self.pm.screen.gfx.height - 1) * dims[1]),
-				int((self.pm.screen.gfx.width - 1) * dims[2]),
-				int((self.pm.screen.gfx.height - 1) * dims[3])
+				int((self.pm.screen.bitmap.gfx.width - 1) * dims[0]),
+				int((self.pm.screen.bitmap.gfx.height - 1) * dims[1]),
+				int((self.pm.screen.bitmap.gfx.width - 1) * dims[2]),
+				int((self.pm.screen.bitmap.gfx.height - 1) * dims[3])
 			)
 		return rect
 	
@@ -73,7 +72,7 @@ class PMModule(ABC):
 		width = self.gfx.x1 - self.gfx.x0 + 1
 		height = self.gfx.y1 - self.gfx.y0 + 1
 		print(f"Allocating bitmap for module {self._moddef.name} at {self.gfx.rect} with size {width}x{height}")
-		return PMBitmap(width, height, self.gfx.bg_color)
+		return PMBitmap(width, height)
 
 	@abstractmethod
 	def render(self, force: bool = False) -> bool:

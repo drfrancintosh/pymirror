@@ -12,8 +12,8 @@ static PyObject* rgba_to_rgb16(PyObject* self, PyObject* args) {
         return NULL;
     }
     // Convert RGBA to RGB565
-    int rgb565_len = width * height * sizeof(unsigned short);
-    unsigned short *rgb565 = malloc(rgb565_len);
+    int rgb565_size = width * height * sizeof(unsigned short);
+    unsigned short *rgb565 = malloc(rgb565_size);
     if (!rgb565) return NULL;
 
     for (int i = 0; i < width * height; ++i)
@@ -25,18 +25,36 @@ static PyObject* rgba_to_rgb16(PyObject* self, PyObject* args) {
         // Convert to RGB565 format
         rgb565[i] = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
     }
-    PyObject *result = PyBytes_FromStringAndSize((char*)rgb565, rgb565_len);
-    free(rgb565);
+    PyObject *result = PyBytes_FromStringAndSize((char*)rgb565, rgb565_size);
+    free(rgb565); // Free the C buffer after creating the Python object
     return result;
 }
 
-static PyObject* free_rgb16(PyObject* self, PyObject* args) {
-    void *rgb565;
-    if (!PyArg_ParseTuple(args, "O", &rgb565)) {
+static PyObject* rgb_to_rgb16(PyObject* self, PyObject* args) {
+    const char* rgb;
+    Py_ssize_t data_len;
+    int width, height;
+
+    if (!PyArg_ParseTuple(args, "y#ii", &rgb, &data_len, &width, &height)) {
         return NULL;
     }
-    free(rgb565);
-    Py_RETURN_NONE;
+    // Convert RGB to RGB565
+    int rgb565_size = width * height * sizeof(unsigned short);
+    unsigned short *rgb565 = malloc(rgb565_size);
+    if (!rgb565) return NULL;
+
+    for (int i = 0; i < width * height; ++i)
+    {
+        unsigned char r = rgb[i * 3];
+        unsigned char g = rgb[i * 3 + 1];
+        unsigned char b = rgb[i * 3 + 2];
+
+        // Convert to RGB565 format
+        rgb565[i] = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+    }
+    PyObject *result = PyBytes_FromStringAndSize((char*)rgb565, rgb565_size);
+    free(rgb565);  // Free the C buffer after creating the Python object
+    return result;
 }
 
 static PyMethodDef clib_methods[] = {
