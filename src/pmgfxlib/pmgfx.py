@@ -9,12 +9,12 @@ class PMGfx:
     _color: tuple = (255, 255, 255) 
     _bg_color: tuple = (0, 0, 0) 
     _text_color: tuple = (255, 255, 255)
-    _text_bg_color: tuple = (0, 0, 0)  
+    _text_bg_color: tuple = None  
     line_width: int = 1
-    font = PMFont("DejaVuSans", 64)
+    font: PMFont = None
 
     def __post_init__(self):
-        pass
+        self.font = PMFont("DejaVuSans", 64)
 
     @property
     def color(self) -> tuple[int, int, int]:

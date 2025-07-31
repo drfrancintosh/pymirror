@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
 from pymirror.utils import SafeNamespace, _height, _width
+from pymirror.pmlogger import _trace, _debug
 
 @dataclass
 class PMModuleDef(ABC):
@@ -36,6 +37,7 @@ class PMModule(ABC):
 		rect = self._compute_rect(self.position)
 		self.bitmap = PMBitmap(_width(rect), _height(rect))
 		gfx = self.bitmap.gfx
+		gfx.rect = rect
 		gfx.color = _moddef.color or self.screen.bitmap.gfx.color or gfx.color
 		gfx.bg_color = _moddef.bg_color or self.screen.bitmap.gfx.bg_color or gfx.bg_color
 		gfx.text_color = _moddef.text_color or self.screen.bitmap.gfx.text_color or gfx.text_color
@@ -50,8 +52,9 @@ class PMModule(ABC):
 		rect = (0,0,0,0)
 		if not position or position == "None": return rect
 		dim_str = self.pm._config.positions[position]
+		_trace(f"Module {self._moddef.name} position: {position}, dimensions: {dim_str}")
 		if dim_str:
-			print(f"Module {self._moddef.name} position: {position}, dimensions: {dim_str}")
+			_debug(f"Module {self._moddef.name} position: {position}, dimensions: {dim_str}")
 			dims = [float(x) for x in dim_str.split(",")]
 			## this is the bounding box for the module on-screen
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner

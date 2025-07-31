@@ -5,7 +5,6 @@ from pymirror.utils import _height, _width
 from pymirror.pmlogger import trace, _debug
 
 @dataclass
-@trace
 class PMFont:
     ## Class variables
     FONT_LIST: ClassVar[Optional[list]] = None
@@ -74,7 +73,9 @@ class PMFont:
 
     def set_font(self, font_name: str, pitch: int = 64) -> bool:
         if not pitch:
-            pitch = 64
+            pitch = self._pitch
+        if not font_name:
+            font_name = self._name
         for font_path in PMFont.FONT_LIST:
             try:
                 if font_name in font_path:

@@ -39,6 +39,7 @@ class Forecast(PMCard):
         c.text_rect = (text_x0, text_y0, text_x0 + c.cell_width - 1, text_y0 + c.text_height - 1)
         print(f"Forecast text rect: {c.text_rect}, msg: {msg}")
         self.bitmap.text_box(
+            c.text_rect,
             msg,
             valign="center",
             halign="center"

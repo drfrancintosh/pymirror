@@ -12,9 +12,9 @@ class Clock(PMModule):
 		self.curr_time = datetime.now().strftime(self.date_format)
 	
 	def render(self, force: bool = False) -> bool:
-		gfx = self.bitmap.gfx
 		self.bitmap.clear()
-		self.bitmap.text_box(self.curr_time,
+		self.bitmap.text_box((0, 0, self.bitmap.gfx.width-1, self.bitmap.gfx.height-1),
+			self.curr_time,
 			halign=self._clock.halign,
 			valign=self._clock.valign)
 		self.last_time = self.curr_time

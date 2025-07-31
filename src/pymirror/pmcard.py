@@ -46,21 +46,18 @@ class PMCard(PMModule):
 				self._card.footer.is_dirty())
 
 	def _render_text(self, msg, rect, card_text, maybe_invert_colors=False) -> int: # returns next y position
-		gfx = self.bitmap.gfx
-		gfx2 = copy.copy(gfx)
-		self.bitmap.gfx = gfx2
-		gfx2.font.set_font(card_text.font_name or gfx.font._name, card_text.font_size or gfx.font.font_size)
-		gfx2.text_color = card_text.text_color
-		gfx2.text_bg_color = card_text.text_bg_color
+		gfx = self.bitmap.gfx_push()
+		gfx.font.set_font(card_text.font_name, card_text.font_size)
+		gfx.text_color = card_text.text_color
+		gfx.text_bg_color = card_text.text_bg_color
 
 		if maybe_invert_colors:
 			if card_text.text_color == None and card_text.text_bg_color == None:
 				## no colors were specified for the text
 				## so use the default screen colors but invert them
-				gfx2.text_color = gfx.text_bg_color
-				gfx2.text_bg_color = gfx.text_color
-		self.bitmap.text_box(msg, halign=card_text.halign, valign=card_text.valign)
-		self.bitmap.gfx = gfx  # restore original gfx
+				gfx.text_color, gfx.text_bg_color = gfx.text_bg_color, gfx.text_color
+		self.bitmap.text_box(rect, msg, halign=card_text.halign, valign=card_text.valign)
+		self.bitmap.gfx_pop()
 		return rect[3] + 1 # next y position after rendering the text box
 
 	def render(self, force: bool = False) -> bool:
