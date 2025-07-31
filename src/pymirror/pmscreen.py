@@ -56,8 +56,6 @@ class PMScreen:
             with open(self._screen.frame_buffer, "wb") as f:
                 # print(f"Saving RGB565 image to {self._screen.frame_buffer}")
                 f.write(rgb565)
-            # print("Freeing RGB565 memory")
-            # free_rgb16(rgb565)
             # print("Framebuffer write complete")
 
     def _atomic_write(self, img: Image.Image) -> None:
