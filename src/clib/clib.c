@@ -59,7 +59,7 @@ static PyObject* rgb_to_rgb16(PyObject* self, PyObject* args) {
 
 static PyMethodDef clib_methods[] = {
     {"rgba_to_rgb16", rgba_to_rgb16, METH_VARARGS, "Convert RGBA to RGB565"},
-    {"free_rgb16", free_rgb16, METH_VARARGS, "Free RGB565 data"},
+    {"rgb_to_rgb16", rgb_to_rgb16, METH_VARARGS, "Convert RGB to RGB565"},
     {NULL, NULL, 0, NULL}
 };
 
