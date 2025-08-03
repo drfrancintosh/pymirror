@@ -57,10 +57,10 @@ class PMScreen:
             # print(f"Writing to framebuffer: {self._screen.frame_buffer}")
             from clib import rgba_to_rgb16
             # print(f"Image size: {img.size}, mode: {img.mode}")
+            if self._screen.rotate:
+                img = img.rotate(self._screen.rotate, expand=True)
             raw = img.tobytes("raw")
             # print(f"Raw image size: {len(raw)} bytes"
-            if self._screen.rotate:
-                raw = raw.rotate(self._screen.rotate, expand=True)
             # Convert the image to RGB565 format
             rgb565 = rgba_to_rgb16(raw, img.width, img.height)
             # print(f"Converted to RGB565 size: {len(rgb565)} bytes")
