@@ -23,6 +23,14 @@ class PMScreen:
         self._config = _config
         ## by convention the config for an object is _classname
         self._screen = _screen = PMScreenConfig(**_config.screen.__dict__) if _config.screen else PMScreenConfig()
+        if self._screen.rotate:
+            if self._screen.rotate not in [0, 90, 180, 270]:
+                raise ValueError(f"Invalid rotation angle: {self._screen.rotate}. Must be one of 0, 90, 180, or 270 degrees.")
+            if self._screen.rotate == 90 or self._screen.rotate == 270:
+                self._screen.width, self._screen.height = self._screen.height, self._screen.width
+        # Initialize the bitmap with the screen dimensions
+        self.bitmap = PMBitmap(_screen.width, _screen.height)
+        self.bitmap.gfx = PMGfx()
         self.bitmap = PMBitmap(_screen.width, _screen.height)
         gfx = self.bitmap.gfx
         gfx.rect = (0, 0, _screen.width-1, _screen.height-1)
@@ -65,7 +73,5 @@ class PMScreen:
 
     def flush(self) -> None:
         img = self.bitmap._img
-        if self._screen.rotate:
-            img = img.rotate(self._screen.rotate, expand=True).convert("RGBA") 
         self._write_framebuffer(img)
         self._atomic_write(img)
