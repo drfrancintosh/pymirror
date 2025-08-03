@@ -2,12 +2,23 @@ from PIL import Image
 from pmgfxlib import PMBitmap
 from pymirror.pmlogger import _trace
 
-class PMImage(PMBitmap):
+class _PMImage(PMBitmap):
     def __init__(self, path: str = None, width: int = None, height: int = None, scale: str = None):
         super().__init__()
         if path != None:
             self.load(path, width, height, scale)
 
+    def load(self, image_path, width=None, height=None, scale=None):
+        img = Image.open(image_path)
+        print(f"Loading image from {image_path}, size: {img.size}, scale: {scale}")
+        img = img.convert("RGBA")  # Ensure the image is in RGB format
+        img = self.scale(img, width, height, scale)
+        print(f"Final image size: {img.size}")
+        self.width = width
+        self.height = height
+        self._img = img
+        return self
+    
     def scale_to_fit(self, image, target_width, target_height):
         """Scale image to fit within bounds, maintaining aspect ratio"""
         original_width, original_height = image.size
@@ -79,14 +90,3 @@ class PMImage(PMBitmap):
         bytes_data = bytes(arr)  # make it immutable
         image = Image.frombytes("I", (image.width, image.height), bytes_data)
         return image 
-    
-    def load(self, image_path, width=None, height=None, scale=None):
-        img = Image.open(image_path)
-        print(f"Loading image from {image_path}, size: {img.size}, scale: {scale}")
-        img = img.convert("RGBA")  # Ensure the image is in RGB format
-        img = self.scale(img, width, height, scale)
-        print(f"Final image size: {img.size}")
-        self.width = width
-        self.height = height
-        self._img = img
-        return self

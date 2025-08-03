@@ -7,7 +7,7 @@ from pymirror.utils import SafeNamespace, expand_dict
 from pymirror.pmtimer import PMTimer
 from pymirror.pmwebapi import PMWebApi
 
-class WebApi(PMCard):
+class WebApiModule(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._web_api = config.web_api

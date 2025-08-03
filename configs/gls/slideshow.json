@@ -5,11 +5,12 @@
         "position": "middle_center"
       },
       "slideshow": {
+        "rect": "0.25,0.15,0.75,0.85",
         "folder": "./.pix",
         "scale": "fill",
         "valign": "center",
         "halign": "center",
-        "interval_secs": 30,
+        "interval_secs": 5,
         "randomize": true,
         "frame": "./frames/iphone.png"
       }

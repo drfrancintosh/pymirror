@@ -12,7 +12,7 @@ class WeatherConfig:
     datetime_format: str = "%I:%M:%S %p"
 
 
-class Weather(PMCard):
+class WeatherModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._weather = WeatherConfig(**config.weather.__dict__)

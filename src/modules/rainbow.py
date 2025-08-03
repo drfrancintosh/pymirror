@@ -2,7 +2,7 @@ from datetime import datetime
 from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMGfx
 
-class Rainbow(PMModule):
+class RainbowModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._rainbow = config.rainbow

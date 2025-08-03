@@ -1,7 +1,7 @@
 import time
 from pymirror.pmmodule import PMModule
 
-class Cron(PMModule):
+class CronModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._cron = config.cron

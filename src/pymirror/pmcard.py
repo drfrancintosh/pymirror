@@ -5,7 +5,7 @@ from pymirror.pmmodule import PMModule
 from pymirror.utils import _NONE_PROXY, SafeNamespace
 
 @dataclass
-class PMCardText:
+class PMCardTextModule:
 		font_name: str = None
 		font_size: int = 24
 		start_color: str = None
@@ -26,9 +26,9 @@ class PMCard(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._card = self._config.card
-		self._card.header = PMCardText(**self._card.header.__dict__) if self._card.header else PMCardText()
-		self._card.body = PMCardText(**self._card.body.__dict__) if self._card.body else PMCardText()
-		self._card.footer = PMCardText(**self._card.footer.__dict__) if self._card.footer else PMCardText()
+		self._card.header = PMCardTextModule(**self._card.header.__dict__) if self._card.header else PMCardTextModule()
+		self._card.body = PMCardTextModule(**self._card.body.__dict__) if self._card.body else PMCardTextModule()
+		self._card.footer = PMCardTextModule(**self._card.footer.__dict__) if self._card.footer else PMCardTextModule()
 	def update(self, header: str, body: str, footer: str) -> None:
 		self._card.header.text = header
 		self._card.body.text = body

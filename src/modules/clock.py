@@ -2,7 +2,7 @@ from datetime import datetime
 from pymirror.pmmodule import PMModule, PMModuleDef
 from pymirror.utils import SafeNamespace
 
-class Clock(PMModule):
+class ClockModule(PMModule):
 	def __init__(self, pm, config: SafeNamespace):
 		super().__init__(pm, config)
 		self._clock = config.clock

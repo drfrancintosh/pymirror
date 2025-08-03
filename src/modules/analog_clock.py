@@ -31,7 +31,7 @@ def _compute_hand_posn(x0, y0, r, value, divisor, offset):
 	angle = 2 * math.pi * value / divisor 
 	return (x0 + r * math.cos(angle), y0 + r * math.sin(angle))
 
-class AnalogClock(PMModule):
+class AnalogClockModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._analog_clock = config.analog_clock

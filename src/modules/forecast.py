@@ -5,7 +5,6 @@ from datetime import datetime
 from dataclasses import dataclass
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
-from pymirror.pmimage import PMImage
 from pymirror.utils import SafeNamespace
 from pymirror.pmlogger import _debug, trace
 
@@ -16,7 +15,7 @@ class ForecastConfig:
     icon_size: str = "small"  # Size of the forecast icons (None, small, medium, large)
     lines: int = 3
 
-class Forecast(PMCard):
+class ForecastModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._forecast = ForecastConfig(**config.forecast.__dict__)
@@ -28,7 +27,7 @@ class Forecast(PMCard):
         size = {"small": "", "medium": "@2x", "large": "@4x"}.get(size, "")
         icon_path = f"./weather_icons/{icon_code}{size}.png"
         print(f"Loading weather icon from {icon_path}")
-        return PMImage().load(icon_path, width=width, height=height, scale=scale)
+        return PMBitmap().load(icon_path, width=width, height=height, scale=scale)
 
     def _render_text(self, c: SafeNamespace) -> None:
         text_x0 = c.cell_width * c.col

@@ -1,6 +1,6 @@
 from pymirror.pmmodule import PMModule
 
-class PymirrorController(PMModule):
+class PymirrorControllerModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._pymirror = config.pymirror
