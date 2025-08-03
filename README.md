@@ -24,12 +24,13 @@
 - or `source ./scripts/install-libs.sh` (for RPi OS)
 
 ### clib
-# If using Homebrew Python
-brew install python@3.13-dev
-
-# Or reinstall Python with dev headers
-brew reinstall python@3.13
-
+- If using Homebrew Python
+  - `brew install python@3.13-dev`
+- Or reinstall Python with dev headers
+  - `brew reinstall python@3.13`
+- Run python setup.py
+  - python3 setup.py build_ext --inplace
+  
 ## Fontlist.txt
 
 - One font per line

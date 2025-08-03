@@ -46,24 +46,23 @@ class PMCard(PMModule):
 				self._card.footer.is_dirty())
 
 	def _render_text(self, msg, rect, card_text, maybe_invert_colors=False) -> int: # returns next y position
-		gfx = self.gfx
-		gfx2 = copy.copy(self.gfx)
-		gfx2.set_font(card_text.font_name or gfx.font_name, card_text.font_size or gfx.font_size)
-		gfx2.text_color = card_text.text_color
-		gfx2.text_bg_color = card_text.text_bg_color
+		gfx = self.bitmap.gfx_push()
+		gfx.font.set_font(card_text.font_name, card_text.font_size)
+		gfx.text_color = card_text.text_color
+		gfx.text_bg_color = card_text.text_bg_color
 
 		if maybe_invert_colors:
 			if card_text.text_color == None and card_text.text_bg_color == None:
 				## no colors were specified for the text
 				## so use the default screen colors but invert them
-				gfx2.text_color = gfx.text_bg_color
-				gfx2.text_bg_color = gfx.text_color
-		self.bitmap.text_box(gfx2, msg, rect, halign=card_text.halign, valign=card_text.valign, wrap=card_text.wrap)
+				gfx.text_color, gfx.text_bg_color = gfx.text_bg_color, gfx.text_color
+		self.bitmap.text_box(rect, msg, halign=card_text.halign, valign=card_text.valign)
+		self.bitmap.gfx_pop()
 		return rect[3] + 1 # next y position after rendering the text box
 
 	def render(self, force: bool = False) -> bool:
 		self.bitmap.clear()
-		gfx = self.gfx
+		gfx = self.bitmap.gfx
 		header_height = self._card.header.height or self._card.header.font_size or gfx.font_size
 		footer_height = self._card.footer.height or self._card.footer.font_size or gfx.font_size
 		next_y0 = 0

@@ -1,5 +1,6 @@
 from PIL import Image
-from pymirror.pmbitmap import PMBitmap
+from pmgfxlib import PMBitmap
+from pymirror.pmlogger import _trace
 
 class PMImage(PMBitmap):
     def __init__(self, path: str = None, width: int = None, height: int = None, scale: str = None):
@@ -19,7 +20,10 @@ class PMImage(PMBitmap):
         # Calculate new dimensions
         new_width = int(original_width * scale)
         new_height = int(original_height * scale)
-        
+
+        _trace("GLS - CHECK THIS")
+        if new_width < 0: new_width = 1
+        if new_height < 0: new_height = 1
         return image.resize((new_width, new_height), Image.LANCZOS)
 
     def scale_to_fill(self, image, target_width, target_height):
@@ -84,5 +88,5 @@ class PMImage(PMBitmap):
         print(f"Final image size: {img.size}")
         self.width = width
         self.height = height
-        self.set_img(img)
+        self._img = img
         return self

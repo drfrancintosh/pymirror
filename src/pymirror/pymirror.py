@@ -9,6 +9,7 @@ import queue
 import argparse
 import traceback
 
+from pymirror.pmlogger import trace, _debug, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
@@ -132,15 +133,21 @@ class PyMirror:
             self.events.append(event)
         else:
             raise TypeError(f"Event must be a dict or SafeNamespace, got {type(event)}")
-    
+
     def _debug(self, module):
-        scrn_gfx = copy.copy(self.screen.gfx)
-        if not module.gfx.rect: return
-        self.screen.bitmap.rect(scrn_gfx, module.gfx.rect, fill=None)
-        scrn_gfx.set_font(scrn_gfx.font_name, 24)
-        module._time = module._time if hasattr(module, '_time') else 0.0
-        self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name} ({module._time:.2f}s)", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
-        self.screen.bitmap.text_box(scrn_gfx, f"{module._moddef.position}", module.gfx.rect, halign="right", valign="top")
+        if not module.bitmap: 
+            ## non-rendering modules will not have a bitmap (eg: cron)
+            return
+        sbm = self.screen.bitmap
+        mbm = module.bitmap
+        sgfx = sbm.gfx_push()
+        mgfx = mbm.gfx
+        sgfx.font.set_font("DejaVuSans", 24)
+        sbm.rect(mgfx.rect, fill=None)
+        _time = module._time or 0.0
+        sbm.text(f"{module._moddef.name} ({_time:.2f}s)", mgfx.x0 + sgfx.line_width, mgfx.y0 + sgfx.line_width)
+        sbm.text_box(mgfx.rect, f"{module._moddef.position}", halign="right", valign="top")
+        self.screen.bitmap.gfx_pop()
 
     def full_render(self):
         self.screen.bitmap.clear()
@@ -148,7 +155,7 @@ class PyMirror:
             if module.disabled: continue
             if not module.bitmap: continue
             module.render(force=True)
-            self.screen.bitmap.paste(module.gfx, module.bitmap)
+            self.screen.bitmap.paste(module.bitmap)
         if self.debug: self._debug(module)
         self.screen.flush()  # Flush the screen to show all modules at once
 
@@ -177,7 +184,7 @@ class PyMirror:
         self.screen.bitmap.clear()  # Clear the bitmap before rendering
         for module in reversed(self.modules):
             if not module.disabled and module.bitmap:
-                self.screen.bitmap.paste(module.gfx, module.bitmap)
+                self.screen.bitmap.paste(module.bitmap)
                 if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
         self.screen.flush()
 
@@ -197,9 +204,10 @@ class PyMirror:
     def _error_screen(self, e):
         """ Display an error screen with the exception details """
         self.screen.bitmap.clear()
-        self.screen.gfx.text_color = "#f00"
-        self.screen.gfx.text_bg_color = "#ff0"
-        self.screen.bitmap.text_box(self.screen.gfx, f"Exception:\n\n{str(e)}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="center", halign="center")
+        gfx = self.screen.bitmap.gfx
+        gfx.text_color = "#f00"
+        gfx.text_bg_color = "#ff0"
+        self.screen.bitmap.text_box(gfx.rect, f"Exception:\n\n{str(e)}")
         self.screen.flush()
 
     def _bsod(self, e):

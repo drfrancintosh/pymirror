@@ -92,11 +92,11 @@ def _norm(t1):
 	## take the norm of the tuple
 	return sum(x * x for x in t1) ** 0.5
 
-def fromcolor(t) -> str:
-    return t
+def _height(rect: tuple) -> int:
+    return rect[3] - rect[1]
 
-def tocolor(t):
-    return t
+def _width(rect: tuple) -> int:
+    return rect[2] - rect[0]
 
 def getter(obj, path, default=None):
     keys = path.split(".")

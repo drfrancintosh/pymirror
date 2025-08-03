@@ -1,17 +1,9 @@
 # weather.py
 # https://openweathermap.org/api/one-call-3#current
 
-import requests
-import json
 from datetime import datetime
-from types import SimpleNamespace
 from dataclasses import dataclass
-from pymirror.pmbitmap import PMBitmap
 from pymirror.pmcard import PMCard
-from events import AlertEvent
-from pymirror.pmwebapi import PMWebApi
-from pymirror.utils import SafeNamespace
-from .weather_apis.pmweatherdata import PMWeatherData
 
 @dataclass
 class WeatherConfig:
