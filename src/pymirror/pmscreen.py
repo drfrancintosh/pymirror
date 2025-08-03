@@ -66,6 +66,6 @@ class PMScreen:
     def flush(self) -> None:
         img = self.bitmap._img
         if self._screen.rotate:
-            img = img.rotate(self._screen.rotate, expand=True) 
+            img = img.rotate(self._screen.rotate, expand=True).convert("RGBA") 
         self._write_framebuffer(img)
         self._atomic_write(img)
