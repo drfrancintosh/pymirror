@@ -86,11 +86,11 @@ class PMModule(ABC):
 	
 	def _allocate_bitmap(self):
 		if not self.gfx.rect:
-			print(f"Module {self._moddef.name} has no rect defined, cannot allocate bitmap.")
+			_debug(f"Module {self._moddef.name} has no rect defined, cannot allocate bitmap.")
 			return None
 		width = self.gfx.x1 - self.gfx.x0 + 1
 		height = self.gfx.y1 - self.gfx.y0 + 1
-		print(f"Allocating bitmap for module {self._moddef.name} at {self.gfx.rect} with size {width}x{height}")
+		_debug(f"Allocating bitmap for module {self._moddef.name} at {self.gfx.rect} with size {width}x{height}")
 		return PMBitmap(width, height)
 
 	@abstractmethod
@@ -130,7 +130,7 @@ class PMModule(ABC):
 		if method:
 			method(event)
 		else:
-			print(f"No handler for event {event.event} in module {self._moddef.name}")
+			_debug(f"No handler for event {event.event} in module {self._moddef.name}")
 
 	def publish_event(self, event) -> None:
 		""" Publish an event to the PM.

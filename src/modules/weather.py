@@ -4,6 +4,7 @@
 from datetime import datetime
 from dataclasses import dataclass
 from pymirror.pmcard import PMCard
+from pymirror.pmlogger import _debug
 
 @dataclass
 class WeatherConfig:
@@ -49,7 +50,7 @@ class WeatherModule(PMCard):
                 "event": "WeatherForecastEvent",
                 "data": self.weather_response,
             }
-            print(f"Publishing weather forecast event: {event['event']}")
+            _debug(f"Publishing weather forecast event: {event['event']}")
             self.publish_event(event)
 
         if alerts:
@@ -61,7 +62,7 @@ class WeatherModule(PMCard):
                 "footer": f"Expires: {datetime.fromtimestamp(alert.end).strftime(self._weather.datetime_format)}",
                 "timeout": self._weather.refresh_minutes * 60 * 1000
             }
-            print(f"Publishing weather alert event: {event['event']}")
+            _debug(f"Publishing weather alert event: {event['event']}")
             self.publish_event(event)
 
         self.weather_response = None  # Clear response after rendering

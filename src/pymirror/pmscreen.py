@@ -2,6 +2,7 @@ import os
 from dataclasses import dataclass
 from PIL import Image
 from pmgfxlib import PMBitmap, PMGfx
+from .pmlogger import _debug
 
 @dataclass
 class PMScreenConfig:
@@ -54,26 +55,26 @@ class PMScreen:
         """Write the image to the framebuffer."""
         # self._screen.frame_buffer = "./fb0.jpg"
         if self._screen.frame_buffer:
-            # print(f"Writing to framebuffer: {self._screen.frame_buffer}")
+            _debug(f"Writing to framebuffer: {self._screen.frame_buffer}")
             from clib import rgba_to_rgb16
-            # print(f"Image size: {img.size}, mode: {img.mode}")
+            _debug(f"Image size: {img.size}, mode: {img.mode}")
             if self._screen.rotate:
                 img = img.rotate(self._screen.rotate, expand=True)
             raw = img.tobytes("raw")
-            # print(f"Raw image size: {len(raw)} bytes"
+            _debug(f"Raw image size: {len(raw)} bytes")
             # Convert the image to RGB565 format
             rgb565 = rgba_to_rgb16(raw, img.width, img.height)
-            # print(f"Converted to RGB565 size: {len(rgb565)} bytes")
+            _debug(f"Converted to RGB565 size: {len(rgb565)} bytes")
             with open(self._screen.frame_buffer, "wb") as f:
-                # print(f"Saving RGB565 image to {self._screen.frame_buffer}")
+                _debug(f"Saving RGB565 image to {self._screen.frame_buffer}")
                 f.write(rgb565)
-            # print("Framebuffer write complete")
+            _debug("Framebuffer write complete")
             rgb565 = rgba_to_rgb16(raw, img.width, img.height)
-            # print(f"Converted to RGB565 size: {len(rgb565)} bytes")
+            _debug(f"Converted to RGB565 size: {len(rgb565)} bytes")
             with open(self._screen.frame_buffer, "wb") as f:
-                # print(f"Saving RGB565 image to {self._screen.frame_buffer}")
+                _debug(f"Saving RGB565 image to {self._screen.frame_buffer}")
                 f.write(rgb565)
-            # print("Framebuffer write complete")
+            _debug("Framebuffer write complete")
 
     def _atomic_write(self, img: Image.Image) -> None:
         if self._screen.output_file:

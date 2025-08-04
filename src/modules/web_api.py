@@ -6,6 +6,7 @@ from pymirror.pmcard import PMCard
 from pymirror.utils import SafeNamespace, expand_dict
 from pymirror.pmtimer import PMTimer
 from pymirror.pmwebapi import PMWebApi
+from pymirror.pmlogger import _debug
 
 class WebApiModule(PMCard):
 	def __init__(self, pm, config):
@@ -46,7 +47,7 @@ class WebApiModule(PMCard):
 	def _read_api(self):
 		self.response = self.api.get_json(self._web_api.params.__dict__)
 		if not self.response:
-			print(f"Error fetching data")
+			_debug(f"Error fetching data")
 			return False
 		self._read_items()
 

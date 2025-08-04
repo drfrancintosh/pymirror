@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
 from pymirror.utils import SafeNamespace
-from pymirror.pmlogger import _debug, trace
+from pymirror.pmlogger import _debug
 
 @dataclass
 class ForecastConfig:
@@ -26,7 +26,7 @@ class ForecastModule(PMCard):
         # Load the weather icon bitmap based on the icon code and size
         size = {"small": "", "medium": "@2x", "large": "@4x"}.get(size, "")
         icon_path = f"./weather_icons/{icon_code}{size}.png"
-        print(f"Loading weather icon from {icon_path}")
+        _debug(f"Loading weather icon from {icon_path}")
         return PMBitmap().load(icon_path, width=width, height=height, scale=scale)
 
     def _render_text(self, c: SafeNamespace) -> None:
@@ -36,7 +36,7 @@ class ForecastModule(PMCard):
         msg += f", {self.weather_response.daily[c.id].temp.day}°F"
         msg += f"\n{self.weather_response.daily[c.id].weather[0].description}"
         c.text_rect = (text_x0, text_y0, text_x0 + c.cell_width - 1, text_y0 + c.text_height - 1)
-        print(f"Forecast text rect: {c.text_rect}, msg: {msg}")
+        _debug(f"Forecast text rect: {c.text_rect}, msg: {msg}")
         self.bitmap.text_box(
             c.text_rect,
             msg,
@@ -57,7 +57,7 @@ class ForecastModule(PMCard):
             9: ((0, 1, 2), (3, 4, 5), (6, 7, 8),)
         }
         c.rows = dims[c.days]
-        print(f"Forecast rows: {self._forecast.days}: {c.rows}")
+        _debug(f"Forecast rows: {self._forecast.days}: {c.rows}")
         c.n_rows = len(c.rows)
 
     def _initial_values(self, c: SafeNamespace) -> None:
@@ -71,11 +71,11 @@ class ForecastModule(PMCard):
         self._select_row_config(c)
         c.cell_height = c.h // c.n_rows
         c.max_icon_height = c.cell_height - c.text_height - c.py * 2
-        print(f"Forecast cell_height: {c.cell_height}")
-        print(f"Forecast max_icon_height: {c.max_icon_height}")
+        _debug(f"Forecast cell_height: {c.cell_height}")
+        _debug(f"Forecast max_icon_height: {c.max_icon_height}")
 
     def _render_icon(self, c: SafeNamespace):
-        print(f"render icon {c.id} for {c.max_icon_width}x{c.max_icon_height}")
+        _debug(f"render icon {c.id} for {c.max_icon_width}x{c.max_icon_height}")
         bm = self._load_icon(
             self.weather_response.daily[c.id].weather[0].icon,
             self._forecast.icon_size,

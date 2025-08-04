@@ -4,6 +4,7 @@ from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
 from pymirror.utils import SafeNamespace, _height, _str_to_rect, _width
 from pmgfxlib.pmbitmap import PMBitmap
+from pymirror.pmlogger import _debug, _trace
 import os
 from PIL import Image as PILImage
 
@@ -28,7 +29,7 @@ class SlideshowModule(PMModule):
 		for photo_path in os.listdir(folder):
 			path = os.path.join(folder, photo_path)
 			paths.append(path)
-		print(f"Loaded {len(paths)} photos from {folder}")
+		_debug(f"Loaded {len(paths)} photos from {folder}")
 		return paths
 
 	def render(self, force: bool = False) -> bool:

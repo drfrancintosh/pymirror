@@ -10,7 +10,7 @@
         "header": "Weather Alert",
         "body": "Weather Alerts Go Here.",
         "footer": "Alert Footer",
-        "timeout": 1000
+        "timeout": 1
     },
     "card": {
         "header": {

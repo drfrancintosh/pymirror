@@ -3,7 +3,7 @@
       "moddef": {
         "disabled": false,
         "name": "test_slideshow",
-        "position": "0.33,0.33,0.66,1.00"
+        "position": "0.33,0.15,0.66,1.00"
       },
       "slideshow": {
         "folder": "./.pix",
@@ -12,7 +12,6 @@
         "halign": "center",
         "interval_secs": 5,
         "randomize": true,
-        "frame": "./frames/iphone.png",
-        "rect": "0.15,0.15,0.80,0.90"
+        "frame": "./frames/white_frame.png"
       }
     }

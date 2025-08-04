@@ -3,6 +3,7 @@ import os
 import time
 import requests
 import json
+from .pmlogger import _debug
 
 @dataclass
 class PMWebApi:
@@ -48,19 +49,19 @@ class PMWebApi:
         if "_resource_id" in params:
             url = f"{self.url}/{params['_resource_id']}"
             del params["_resource_id"]
-        print(f"{now}: Fetching data from {url} with params: {params}")
+        _debug(f"{now}: Fetching data from {url} with params: {params}")
         response = requests.get(url, params=params)
         if response.ok:
             self._save_to_cache(response.text)
             result = response.text
         else:
-            print(f"Error fetching data: {response.status_code} - {response.text}")
+            _debug(f"Error fetching data: {response.status_code} - {response.text}")
             result = None
         return result
 
     def get_json(self, params=None):
         text = self.get_text(params)
-        # print(f"Response text: {text}")
+        _debug(f"Response text: {text}")
         if text:
             result = json.loads(text)
         else:

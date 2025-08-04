@@ -26,13 +26,13 @@ class PyMirror:
         ## by convention, all objects get a copy of the config
         ## so that they can access it without having to pass it around
         ## and they "pluck out" the values they need
-        print(f"args: {args}")
+        _debug(f"args: {args}")
         self._config = self._load_config(config_fname)
         if args.output_file:
             self._config.screen.output_file = _to_null(args.output_file)
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
-        print(f"Using config: {self._config}")
+        _debug(f"Using config: {self._config}")
         self.screen = PMScreen(self._config)
         self.force_render = False
         self.debug = self._config.debug
@@ -76,7 +76,7 @@ class PyMirror:
                         expand_dict(config, {})  # Expand environment variables in the config
                         module_config = SafeNamespace(**config)
                     except Exception as e:
-                        print(f"Error loading module config from {module_config}: {e}")
+                        _debug(f"Error loading module config from {module_config}: {e}")
                         sys.exit(1)
             ## import the module using its name
             ## all modules should be in the "modules" directory
@@ -100,7 +100,7 @@ class PyMirror:
         ## add any messages that have come from the web server
         try:
             while event := self.server_queue.get(0):
-                print(f"Received event from server: {event}")
+                _debug(f"Received event from server: {event}")
                 self.publish_event(event)
         except queue.Empty:
             # No new events in the queue
@@ -111,7 +111,7 @@ class PyMirror:
         if not module.subscriptions: return
         for event in events:
             if event.event in module.subscriptions:
-                print(f"... Event {event.event} to module {module._moddef.name}")
+                _debug(f"... Event {event.event} to module {module._moddef.name}")
                 module.onEvent(event)
 
     def _convert_events_to_namespace(self):
@@ -182,9 +182,9 @@ class PyMirror:
                     module._time += end_time - start_time  # add on the time taken for module rendering
 
     def _update_screen(self):
-        # self.screen.bitmap.clear()  # Clear the bitmap before rendering
+        self.screen.bitmap.clear()  # Clear the bitmap before rendering
         for module in reversed(self.modules):
-            if (not module.disabled) and module.bitmap and module._time:
+            if (not module.disabled) and module.bitmap:
                 start_time = time.time()  # Start timing the module rendering
                 self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering
@@ -202,7 +202,7 @@ class PyMirror:
                 self._update_screen()  # Update the screen with the rendered modules
                 time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
         except Exception as e:
-            traceback.print_exc()  # <-- This prints the full stack trace to stdout
+            traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
             self._error_screen(e)  # Display the error on the screen
 
     def _error_screen(self, e):

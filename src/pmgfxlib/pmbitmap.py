@@ -35,7 +35,7 @@ class PMBitmap:
         self._draw = ImageDraw.Draw(self._img)
 
     def load(self, photo_path, width=None, height=None, scale=None) -> 'PMBitmap':
-        print("...Loading bitmap from", photo_path)
+        _trace("...Loading bitmap from", photo_path)
         self._img = Image.open(photo_path).convert("RGBA")  # Ensure the image is in RGBA format
         self._draw = ImageDraw.Draw(self._img)
         self.gfx.rect = (0, 0, self._img.width - 1, self._img.height - 1)
@@ -148,7 +148,7 @@ class PMBitmap:
         elif valign == BOTTOM:
             text_y0 = y1 - text_height
         else:
-            print(
+            _debug(
                 f"Invalid valign '{type(valign), valign}' in text_box, using 'center' instead."
             )
 
@@ -163,7 +163,7 @@ class PMBitmap:
                 elif halign == RIGHT:
                     text_x0 = x0 + int(_width(rect) - width)
                 else:
-                    print(
+                    _debug(
                         f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead."
                     )
                 self._draw.text(
@@ -228,13 +228,13 @@ class PMBitmap:
     def scale(self, width=None, height=None, scale=None):
         if width is not None and height is not None:
             if scale == "fit":
-                # print(f"Scaling image to fit within {width}x{height}")
+                _debug(f"Scaling image to fit within {width}x{height}")
                 self.scale_to_fit(width, height)
             elif scale == "fill":
-                # print(f"Scaling image to fill {width}x{height}")
+                _debug(f"Scaling image to fill {width}x{height}")
                 self.scale_to_fill(width, height)
             elif scale == "stretch":
                 # Default to resizing without aspect ratio preservation
-                print(f"...Stretching image to {width}x{height}")
+                _debug(f"...Stretching image to {width}x{height}")
                 self._img = self._img.resize((width, height), Image.LANCZOS)
             self.gfx.rect = (self.gfx.x0, self.gfx.y0, self.gfx.x0 + width, self.gfx.y0 + height)

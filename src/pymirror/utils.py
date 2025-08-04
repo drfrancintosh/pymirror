@@ -1,6 +1,7 @@
 import os
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
+from .pmlogger import _debug
 
 def snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
@@ -14,7 +15,7 @@ def expand_string(s: str, context: dict, dflt: str = None) -> str:
 	try:
 		s = template.render(**context)
 	except Exception as e:
-		# print(f"Error rendering string '{s}' with context {context}: {e}")
+		# _debug(f"Error rendering string '{s}' with context {context}: {e}")
 		return dflt if dflt is not None else s
 	return s
 
@@ -111,7 +112,7 @@ def getter(obj, path, default=None):
     keys = path.split(".")
     current = obj
     for key in keys:
-        print(f"Accessing key: {key} in {current}")
+        _debug(f"Accessing key: {key} in {current}")
         if isinstance(current, dict):
             current = current.get(key, default)
         elif isinstance(current, list):

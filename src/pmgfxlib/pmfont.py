@@ -85,7 +85,7 @@ class PMFont:
                     self._font_metrics = self._font.getbbox("M")
                     return True  # successfully set the font
             except Exception as e:
-                print(f"Error setting font '{font_path}': {e}")
+                _debug(f"Error setting font '{font_path}': {e}")
         return False
 
     def getbbox(self, text: str) -> tuple:
@@ -150,14 +150,25 @@ class PMFont:
             n += l
         return lines
 
-    def text_split(self, s, rect:tuple, split_fn=None) -> list[str]:
+    def text_no_split(self, s, rect: tuple) -> list[str]:
+        return [s]  # No splitting, return the whole string as a single line
+
+    def text_split(self, s, rect:tuple, split=None) -> list[str]:
+        if s == None or not s.strip():
+            s = ""
+        split_fns = {
+            "chars": self.text_split_chars,
+            "words": self.text_split_words,
+            "none": self.text_no_split
+        }
+        split_fn = split_fns.get(split or "none", self.text_no_split)
         results = []
         height = 0
         for s in s.splitlines():
             if height >= _height(rect):
                 break
             s = s.strip()
-            split_lines = split_fn(self, s, rect)
+            split_lines = split_fn(s, rect)
             results.extend(split_lines)
-            height += self._font_height
+            height += self.height * len(split_lines)
         return results

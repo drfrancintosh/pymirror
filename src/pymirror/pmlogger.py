@@ -74,7 +74,7 @@ class PMLogger:
     c_fn_stack = [""]
     c_trace = True
 
-    def __init__(self, log_file=None, level=PMLoggerLevel.INFO):
+    def __init__(self, log_file=None, level=PMLoggerLevel.WARNING):
         self.log_file = log_file
         self.c_level = level
 

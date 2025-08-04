@@ -5,7 +5,8 @@ from logging import config
 from flask import json
 from pymirror.pmwebapi import PMWebApi
 from pymirror.utils import SafeNamespace
-from .pmweatherdata import PMWeatherAlert, PMWeatherCurrent, PMWeatherDaily, PMWeatherData, PMWeatherSummary
+from .pmweatherdata import PMWeatherData, PMWeatherSummary
+from pymirror.pmlogger import _debug
 
 @dataclass 
 class AccuWeatherParams:
@@ -45,7 +46,7 @@ class AccuWeatherApi(PMWebApi):
     def __init__(self, config: SafeNamespace):
         self.config = AccuWeatherConfig()
         super().__init__(self.config.url, self.config.cache_file, self.config.cache_timeout_secs)
-        print(f"AccuWeatherApi initialized with params: {config}")
+        _debug(f"AccuWeatherApi initialized with params: {config}")
         self.params = AccuWeatherParams(**config.__dict__)
         self.location_key = None
 
@@ -121,7 +122,7 @@ class AccuWeatherApi(PMWebApi):
             "daily":  f,
             "alerts": None
         }
-        print(f"AccuWeatherApi response: {json.dumps(w, indent=2)}")
+        _debug(f"AccuWeatherApi response: {json.dumps(w, indent=2)}")
         weather = PMWeatherData.from_dict(w)
         return weather
 
@@ -137,7 +138,7 @@ class AccuWeatherApi(PMWebApi):
         })
         self.location_data = SafeNamespace(**location_data)
         self.location_key = location_data["Key"]
-        print(f"AccuWeather location key: {self.location_key}")
+        _debug(f"AccuWeather location key: {self.location_key}")
         return self.location_key
 
     def get_forecast_data(self) -> str:
@@ -151,5 +152,5 @@ class AccuWeatherApi(PMWebApi):
             "metric": self.params.units.lower() == "metric"
         })
         self.forecast_data = SafeNamespace(**forecast_data)
-        print(f"AccuWeather forecast_data: {self.forecast_data}")
+        _debug(f"AccuWeather forecast_data: {self.forecast_data}")
         return self.forecast_data
