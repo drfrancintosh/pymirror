@@ -38,7 +38,8 @@ class PMBitmap:
         print("...Loading bitmap from", photo_path)
         self._img = Image.open(photo_path).convert("RGBA")  # Ensure the image is in RGBA format
         self._draw = ImageDraw.Draw(self._img)
-        self.scale(width, height, scale)
+        self.gfx.rect = (0, 0, self._img.width - 1, self._img.height - 1)
+        self.scale(width or self._img.width, height or self._img.height, scale or "stretch")
         return self
 
     def gfx_push(self) -> PMGfx:
