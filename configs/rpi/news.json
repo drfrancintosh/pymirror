@@ -19,7 +19,7 @@
             "apiKey": "$NEWSAPI_KEY",
             "country": "us",
             "pageSize": 10,
-            "category": "business,health,science,technology"
+            "category": "business"
         },
         "display": {
             "total": "{{payload.totalResults}}",
