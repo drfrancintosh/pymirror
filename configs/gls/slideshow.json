@@ -1,17 +1,18 @@
     {
       "module": "slideshow",
       "moddef": {
+        "disabled": false,
         "name": "test_slideshow",
-        "position": "middle_center"
+        "position": "0.33,0.33,0.66,1.00"
       },
       "slideshow": {
-        "rect": "0.25,0.15,0.75,0.85",
         "folder": "./.pix",
         "scale": "fill",
         "valign": "center",
         "halign": "center",
         "interval_secs": 5,
         "randomize": true,
-        "frame": "./frames/iphone.png"
+        "frame": "./frames/iphone.png",
+        "rect": "0.15,0.15,0.80,0.90"
       }
     }

@@ -32,16 +32,14 @@ class SlideshowModule(PMModule):
 		return paths
 
 	def render(self, force: bool = False) -> bool:
+		img_width, img_height = int(self.bitmap.gfx.width * _width(self.alt_rect)), int(self.bitmap.gfx.height * _height(self.alt_rect))
+		img_bm = PMBitmap().load(self.photos[self.photo_number], img_width, img_height, self._slideshow.scale)
+		new_x0 = (self.bitmap.gfx.width - img_bm.gfx.width) // 2
+		new_y0 = (self.bitmap.gfx.height - img_bm.gfx.height) // 2
+		self.bitmap.clear()
+		self.bitmap.paste(img_bm, new_x0, new_y0, img_bm)
 		if self.frame_bm:
-			img_width, img_height = int(self.bitmap.gfx.width * _width(self.alt_rect)), int(self.bitmap.gfx.height * _height(self.alt_rect))
-			img_bm = PMBitmap().load(self.photos[self.photo_number], img_width, img_height, self._slideshow.scale)
-			new_x0 = (self.bitmap.gfx.width - img_bm.gfx.width) // 2
-			new_y0 = (self.bitmap.gfx.height - img_bm.gfx.height) // 2
-			self.bitmap.clear()
-			self.bitmap.paste(img_bm, new_x0, new_y0, img_bm)
 			self.bitmap.paste(self.frame_bm, 0, 0, self.frame_bm) ## overlay the frame
-		else:
-			self.bitmap.load(self.photos[self.photo_number], self.bitmap.gfx.width, self.bitmap.gfx.height, self._slideshow.scale)
 		self.dirty = False
 		return False
 	

@@ -20,6 +20,7 @@ class PMModuleDef(ABC):
 	subscriptions: list[str] = None
 	disabled: bool = False
 	force_render: bool = False
+	force_update: bool = False
 
 class PMModule(ABC):
 	def __init__(self, pm, config: SafeNamespace):
@@ -32,8 +33,10 @@ class PMModule(ABC):
 		self.position = _moddef.position
 		self.disabled = _moddef.disabled
 		self.force_render = _moddef.force_render
+		self.force_update = _moddef.force_update
 		self.timer = PMTimer(0)
 		self.subscriptions = []
+		self._time = 0.0  # time taken for module execution
 		rect = self._compute_rect(self.position)
 		self.bitmap = PMBitmap(_width(rect), _height(rect))
 		gfx = self.bitmap.gfx
@@ -51,6 +54,19 @@ class PMModule(ABC):
 		# compute rect based on "position"
 		rect = (0,0,0,0)
 		if not position or position == "None": return rect
+		if "," in position:
+			# position is a string with comma-separated values
+			# e.g. "0.25,0.15,0.75,0.85"
+			dims = [float(x) for x in position.split(",")]
+			if len(dims) != 4:
+				raise ValueError(f"Invalid position format: {position}. Expected 4 comma-separated values.")
+			rect = (
+				int((self.pm.screen.bitmap.gfx.width - 1) * dims[0]),
+				int((self.pm.screen.bitmap.gfx.height - 1) * dims[1]),
+				int((self.pm.screen.bitmap.gfx.width - 1) * dims[2]),
+				int((self.pm.screen.bitmap.gfx.height - 1) * dims[3])
+			)
+			return rect
 		dim_str = self.pm._config.positions[position]
 		_trace(f"Module {self._moddef.name} position: {position}, dimensions: {dim_str}")
 		if dim_str:

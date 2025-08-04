@@ -152,39 +152,43 @@ class PyMirror:
     def full_render(self):
         self.screen.bitmap.clear()
         for module in self.modules:
-            if module.disabled: continue
-            if not module.bitmap: continue
+            if module.disabled or not module.bitmap: continue
             module.render(force=True)
-            self.screen.bitmap.paste(module.bitmap)
+            self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
         if self.debug: self._debug(module)
         self.screen.flush()  # Flush the screen to show all modules at once
 
     def _exec_modules(self):
         modules_changed = []
         for module in self.modules:
-            module._time = 0.0  # Reset the time for each module
             if not module.disabled:
+                module._time = 0.0  # Reset the time for each module
                 start_time = time.time()  # Start timing the module execution
                 state_changed = module.exec() # update module state (returns True if the state has changed)
-                if state_changed: modules_changed.append(module)
                 end_time = time.time()  # End timing the module execution
-                module._time = end_time - start_time  # Calculate the time taken for module execution
+                if state_changed or module.force_render: 
+                    modules_changed.append(module)
+                    module._time += end_time - start_time  # Calculate the time taken for module execution
         return modules_changed
 
     def _render_modules(self, modules_changed):
         """ Render all modules that have changed state """
         for module in modules_changed:
-            if not module.disabled and module.bitmap:
+            if (not module.disabled) and module.bitmap:
                 start_time = time.time()  # Start timing the module rendering
                 module.render(force=self.force_render)
                 end_time = time.time()  # End timing the module rendering
-                module._time += end_time - start_time  # add on the time taken for module rendering
+                if module._time:
+                    module._time += end_time - start_time  # add on the time taken for module rendering
 
     def _update_screen(self):
-        self.screen.bitmap.clear()  # Clear the bitmap before rendering
+        # self.screen.bitmap.clear()  # Clear the bitmap before rendering
         for module in reversed(self.modules):
-            if not module.disabled and module.bitmap:
-                self.screen.bitmap.paste(module.bitmap)
+            if (not module.disabled) and module.bitmap and module._time:
+                start_time = time.time()  # Start timing the module rendering
+                self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
+                end_time = time.time()  # End timing the module rendering
+                module._time += end_time - start_time  # add on the time taken for module rendering
                 if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
         self.screen.flush()
 
