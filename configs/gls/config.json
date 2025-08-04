@@ -1,5 +1,5 @@
 {
-  "debug": false,
+  "debug": true,
   "secrets": ".secrets",
   "force_render": false,
   "screen": {
@@ -14,13 +14,13 @@
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
-    "top_strip": "0.00,0.0,1.0,0.15",
+    "top_strip": "0.33,0.0,1.0,0.15",
     "alert_strip": "0.30,0.30,0.7,0.7",
     "fps_strip": "0.0,0.95,0.33,1.00",
     "top_left": "0.0,0.15,0.33,0.33",
-    "top_center": "0.33,0.15,0.66,0.33",
-    "top_center_left": "0.33,0.15,0.55,0.33",
-    "top_center_right": "0.55,0.15,0.66,0.33",
+    "top_center": "0.00,0.00,0.33,0.15",
+    "top_center_left": "0.0,0.0,0.15,0.15",
+    "top_center_right": "0.15,0.33,0.66,0.33",
     "top_right": "0.66,0.15,1.00,0.33",
     "middle_left": "0.0,0.33,0.33,0.66",
     "middle_center": "0.33,0.33,0.66,1.00",
@@ -34,7 +34,7 @@
     "./configs/rpi/alert.json",
     "./configs/rpi/time.json",
     "./configs/rpi/date.json",
-    "./configs/rpi/day_of_week.json",
+    "./configs/gls/day_of_week.json",
     "./configs/gls/slideshow.json",
     "./configs/rpi/fortune.json",
     "./configs/rpi/news.json",

@@ -1,6 +1,7 @@
 import os
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
+from .pmlogger import _debug
 
 def snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
@@ -14,7 +15,7 @@ def expand_string(s: str, context: dict, dflt: str = None) -> str:
 	try:
 		s = template.render(**context)
 	except Exception as e:
-		# print(f"Error rendering string '{s}' with context {context}: {e}")
+		# _debug(f"Error rendering string '{s}' with context {context}: {e}")
 		return dflt if dflt is not None else s
 	return s
 
@@ -92,17 +93,26 @@ def _norm(t1):
 	## take the norm of the tuple
 	return sum(x * x for x in t1) ** 0.5
 
-def fromcolor(t) -> str:
-    return t
+def _height(rect: tuple) -> int:
+    return rect[3] - rect[1]
 
-def tocolor(t):
-    return t
+def _width(rect: tuple) -> int:
+    return rect[2] - rect[0]
+
+def _str_to_rect(rect: str) -> tuple:
+    """Convert a rectangle string to a tuple of floats."""
+    if not rect:
+        return (0.0, 0.0, 1.0, 1.0)
+    try:
+        return tuple(float(x) for x in rect.split(','))
+    except ValueError as e:
+        raise ValueError(f"Invalid rectangle format: {rect}") from e
 
 def getter(obj, path, default=None):
     keys = path.split(".")
     current = obj
     for key in keys:
-        print(f"Accessing key: {key} in {current}")
+        _debug(f"Accessing key: {key} in {current}")
         if isinstance(current, dict):
             current = current.get(key, default)
         elif isinstance(current, list):

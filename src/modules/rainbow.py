@@ -1,15 +1,16 @@
 from datetime import datetime
 from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMGfx
+from pymirror.pmlogger import _debug, _trace
 
-class Rainbow(PMModule):
+class RainbowModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._rainbow = config.rainbow
 		self.first_time = True
 
 	def render(self, force: bool = False) -> bool:
-		print(f"Rainbow module render at {datetime.now()}")
+		_debug(f"Rainbow module render at {datetime.now()}")
 		self.bitmap.clear()
 		gfx = self.gfx
 		x = gfx.x0
@@ -38,7 +39,7 @@ class Rainbow(PMModule):
 		return True
 
 	def exec(self):
-		print(f"Rainbow module exec at {datetime.now()}")
+		_debug(f"Rainbow module exec at {datetime.now()}")
 		if self.first_time:
 			self.first_time = False
 			return 1

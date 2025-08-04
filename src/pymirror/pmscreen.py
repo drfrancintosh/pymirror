@@ -1,9 +1,8 @@
 import os
 from dataclasses import dataclass
 from PIL import Image
-from pymirror.pmgfx import PMGfx
-from pymirror.pmbitmap import PMBitmap
-import numpy as np
+from pmgfxlib import PMBitmap, PMGfx
+from .pmlogger import _debug
 
 @dataclass
 class PMScreenConfig:
@@ -25,15 +24,23 @@ class PMScreen:
         self._config = _config
         ## by convention the config for an object is _classname
         self._screen = _screen = PMScreenConfig(**_config.screen.__dict__) if _config.screen else PMScreenConfig()
-        self.bitmap = PMBitmap(_screen.width, _screen.height, _screen.bg_color)
-        self.gfx = gfx = PMGfx()
+        if self._screen.rotate:
+            if self._screen.rotate not in [0, 90, 180, 270]:
+                raise ValueError(f"Invalid rotation angle: {self._screen.rotate}. Must be one of 0, 90, 180, or 270 degrees.")
+            if self._screen.rotate == 90 or self._screen.rotate == 270:
+                self._screen.width, self._screen.height = self._screen.height, self._screen.width
+        # Initialize the bitmap with the screen dimensions
+        self.bitmap = PMBitmap(_screen.width, _screen.height)
+        self.bitmap.gfx = PMGfx()
+        self.bitmap = PMBitmap(_screen.width, _screen.height)
+        gfx = self.bitmap.gfx
         gfx.rect = (0, 0, _screen.width-1, _screen.height-1)
         gfx.color = _screen.color or gfx.color
         gfx.bg_color = _screen.bg_color or gfx.bg_color
         gfx.text_color = _screen.text_color or gfx.text_color
         gfx.text_bg_color = _screen.text_bg_color or gfx.text_bg_color
         gfx.line_width = _screen.line_width or gfx.line_width
-        gfx.set_font(gfx.font_name, gfx.font_size)
+        gfx.font.set_font(self._screen.font_name, self._screen.font_size)
 
         self._hard_clear()
 
@@ -48,28 +55,33 @@ class PMScreen:
         """Write the image to the framebuffer."""
         # self._screen.frame_buffer = "./fb0.jpg"
         if self._screen.frame_buffer:
-            # print(f"Writing to framebuffer: {self._screen.frame_buffer}")
-            from clib import rgba_to_rgb16, free_rgb16
-            # print(f"Image size: {img.size}, mode: {img.mode}")
+            _debug(f"Writing to framebuffer: {self._screen.frame_buffer}")
+            from clib import rgba_to_rgb16
+            _debug(f"Image size: {img.size}, mode: {img.mode}")
+            if self._screen.rotate:
+                img = img.rotate(self._screen.rotate, expand=True)
             raw = img.tobytes("raw")
-            # print(f"Raw image size: {len(raw)} bytes")
+            _debug(f"Raw image size: {len(raw)} bytes")
+            # Convert the image to RGB565 format
             rgb565 = rgba_to_rgb16(raw, img.width, img.height)
-            # print(f"Converted to RGB565 size: {len(rgb565)} bytes")
+            _debug(f"Converted to RGB565 size: {len(rgb565)} bytes")
             with open(self._screen.frame_buffer, "wb") as f:
-                # print(f"Saving RGB565 image to {self._screen.frame_buffer}")
+                _debug(f"Saving RGB565 image to {self._screen.frame_buffer}")
                 f.write(rgb565)
-            # print("Freeing RGB565 memory")
-            # free_rgb16(rgb565)
-            # print("Framebuffer write complete")
+            _debug("Framebuffer write complete")
+            rgb565 = rgba_to_rgb16(raw, img.width, img.height)
+            _debug(f"Converted to RGB565 size: {len(rgb565)} bytes")
+            with open(self._screen.frame_buffer, "wb") as f:
+                _debug(f"Saving RGB565 image to {self._screen.frame_buffer}")
+                f.write(rgb565)
+            _debug("Framebuffer write complete")
 
     def _atomic_write(self, img: Image.Image) -> None:
         if self._screen.output_file:
-            self.bitmap.img.convert("RGB").save(self._screen.output_file+".tmp", "JPEG")
+            self.bitmap._img.convert("RGB").save(self._screen.output_file+".tmp", "JPEG")
             os.rename(self._screen.output_file+".tmp", self._screen.output_file)
 
     def flush(self) -> None:
-        img = self.bitmap.img
-        if self._screen.rotate:
-            img = img.rotate(self._screen.rotate, expand=True) 
+        img = self.bitmap._img
         self._write_framebuffer(img)
         self._atomic_write(img)

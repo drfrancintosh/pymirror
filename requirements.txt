@@ -3,4 +3,3 @@ Pillow
 jinja2
 flask
 requests
-numpy

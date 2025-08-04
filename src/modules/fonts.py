@@ -2,7 +2,7 @@ import os
 from pymirror.pmmodule import PMModule
 from pymirror.utils import SafeNamespace
 
-class Fonts(PMModule):
+class FontsModule(PMModule):
 	def __init__(self, pm, config: SafeNamespace):
 		super().__init__(pm, config)
 		self._text = config.fonts

@@ -9,6 +9,7 @@ import queue
 import argparse
 import traceback
 
+from pymirror.pmlogger import trace, _debug, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
@@ -25,13 +26,13 @@ class PyMirror:
         ## by convention, all objects get a copy of the config
         ## so that they can access it without having to pass it around
         ## and they "pluck out" the values they need
-        print(f"args: {args}")
+        _debug(f"args: {args}")
         self._config = self._load_config(config_fname)
         if args.output_file:
             self._config.screen.output_file = _to_null(args.output_file)
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
-        print(f"Using config: {self._config}")
+        _debug(f"Using config: {self._config}")
         self.screen = PMScreen(self._config)
         self.force_render = False
         self.debug = self._config.debug
@@ -75,7 +76,7 @@ class PyMirror:
                         expand_dict(config, {})  # Expand environment variables in the config
                         module_config = SafeNamespace(**config)
                     except Exception as e:
-                        print(f"Error loading module config from {module_config}: {e}")
+                        _debug(f"Error loading module config from {module_config}: {e}")
                         sys.exit(1)
             ## import the module using its name
             ## all modules should be in the "modules" directory
@@ -85,7 +86,7 @@ class PyMirror:
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
             clazz_name = snake_to_pascal(module_config.module)
-            clazz = getattr(mod, clazz_name)
+            clazz = getattr(mod, clazz_name + "Module", None)
 
             ## create an instance of the class (module)
             ## and pass the PyMirror instance and the module config to it
@@ -99,7 +100,7 @@ class PyMirror:
         ## add any messages that have come from the web server
         try:
             while event := self.server_queue.get(0):
-                print(f"Received event from server: {event}")
+                _debug(f"Received event from server: {event}")
                 self.publish_event(event)
         except queue.Empty:
             # No new events in the queue
@@ -110,7 +111,7 @@ class PyMirror:
         if not module.subscriptions: return
         for event in events:
             if event.event in module.subscriptions:
-                print(f"... Event {event.event} to module {module._moddef.name}")
+                _debug(f"... Event {event.event} to module {module._moddef.name}")
                 module.onEvent(event)
 
     def _convert_events_to_namespace(self):
@@ -132,52 +133,62 @@ class PyMirror:
             self.events.append(event)
         else:
             raise TypeError(f"Event must be a dict or SafeNamespace, got {type(event)}")
-    
+
     def _debug(self, module):
-        scrn_gfx = copy.copy(self.screen.gfx)
-        if not module.gfx.rect: return
-        self.screen.bitmap.rect(scrn_gfx, module.gfx.rect, fill=None)
-        scrn_gfx.set_font(scrn_gfx.font_name, 24)
-        module._time = module._time if hasattr(module, '_time') else 0.0
-        self.screen.bitmap.text(scrn_gfx, f"{module._moddef.name} ({module._time:.2f}s)", module.gfx.x0 + scrn_gfx.line_width, module.gfx.y0 + scrn_gfx.line_width)
-        self.screen.bitmap.text_box(scrn_gfx, f"{module._moddef.position}", module.gfx.rect, halign="right", valign="top")
+        if not module.bitmap: 
+            ## non-rendering modules will not have a bitmap (eg: cron)
+            return
+        sbm = self.screen.bitmap
+        mbm = module.bitmap
+        sgfx = sbm.gfx_push()
+        mgfx = mbm.gfx
+        sgfx.font.set_font("DejaVuSans", 24)
+        sbm.rect(mgfx.rect, fill=None)
+        _time = module._time or 0.0
+        sbm.text(f"{module._moddef.name} ({_time:.2f}s)", mgfx.x0 + sgfx.line_width, mgfx.y0 + sgfx.line_width)
+        sbm.text_box(mgfx.rect, f"{module._moddef.position}", halign="right", valign="top")
+        self.screen.bitmap.gfx_pop()
 
     def full_render(self):
         self.screen.bitmap.clear()
         for module in self.modules:
-            if module.disabled: continue
-            if not module.bitmap: continue
+            if module.disabled or not module.bitmap: continue
             module.render(force=True)
-            self.screen.bitmap.paste(module.gfx, module.bitmap)
+            self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
         if self.debug: self._debug(module)
         self.screen.flush()  # Flush the screen to show all modules at once
 
     def _exec_modules(self):
         modules_changed = []
         for module in self.modules:
-            module._time = 0.0  # Reset the time for each module
             if not module.disabled:
+                module._time = 0.0  # Reset the time for each module
                 start_time = time.time()  # Start timing the module execution
                 state_changed = module.exec() # update module state (returns True if the state has changed)
-                if state_changed: modules_changed.append(module)
                 end_time = time.time()  # End timing the module execution
-                module._time = end_time - start_time  # Calculate the time taken for module execution
+                if state_changed or module.force_render: 
+                    modules_changed.append(module)
+                    module._time += end_time - start_time  # Calculate the time taken for module execution
         return modules_changed
 
     def _render_modules(self, modules_changed):
         """ Render all modules that have changed state """
         for module in modules_changed:
-            if not module.disabled and module.bitmap:
+            if (not module.disabled) and module.bitmap:
                 start_time = time.time()  # Start timing the module rendering
                 module.render(force=self.force_render)
                 end_time = time.time()  # End timing the module rendering
-                module._time += end_time - start_time  # add on the time taken for module rendering
+                if module._time:
+                    module._time += end_time - start_time  # add on the time taken for module rendering
 
     def _update_screen(self):
         self.screen.bitmap.clear()  # Clear the bitmap before rendering
         for module in reversed(self.modules):
-            if not module.disabled and module.bitmap:
-                self.screen.bitmap.paste(module.gfx, module.bitmap)
+            if (not module.disabled) and module.bitmap:
+                start_time = time.time()  # Start timing the module rendering
+                self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
+                end_time = time.time()  # End timing the module rendering
+                module._time += end_time - start_time  # add on the time taken for module rendering
                 if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
         self.screen.flush()
 
@@ -191,15 +202,16 @@ class PyMirror:
                 self._update_screen()  # Update the screen with the rendered modules
                 time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
         except Exception as e:
-            traceback.print_exc()  # <-- This prints the full stack trace to stdout
+            traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
             self._error_screen(e)  # Display the error on the screen
 
     def _error_screen(self, e):
         """ Display an error screen with the exception details """
         self.screen.bitmap.clear()
-        self.screen.gfx.text_color = "#f00"
-        self.screen.gfx.text_bg_color = "#ff0"
-        self.screen.bitmap.text_box(self.screen.gfx, f"Exception:\n\n{str(e)}", (0, 0, self.screen.gfx.width, self.screen.gfx.height), valign="center", halign="center")
+        gfx = self.screen.bitmap.gfx
+        gfx.text_color = "#f00"
+        gfx.text_bg_color = "#ff0"
+        self.screen.bitmap.text_box(gfx.rect, f"Exception:\n\n{str(e)}")
         self.screen.flush()
 
     def _bsod(self, e):

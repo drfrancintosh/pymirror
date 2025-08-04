@@ -1,17 +1,10 @@
 # weather.py
 # https://openweathermap.org/api/one-call-3#current
 
-import requests
-import json
 from datetime import datetime
-from types import SimpleNamespace
 from dataclasses import dataclass
-from pymirror.pmbitmap import PMBitmap
 from pymirror.pmcard import PMCard
-from events import AlertEvent
-from pymirror.pmwebapi import PMWebApi
-from pymirror.utils import SafeNamespace
-from .weather_apis.pmweatherdata import PMWeatherData
+from pymirror.pmlogger import _debug
 
 @dataclass
 class WeatherConfig:
@@ -20,7 +13,7 @@ class WeatherConfig:
     datetime_format: str = "%I:%M:%S %p"
 
 
-class Weather(PMCard):
+class WeatherModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._weather = WeatherConfig(**config.weather.__dict__)
@@ -57,7 +50,7 @@ class Weather(PMCard):
                 "event": "WeatherForecastEvent",
                 "data": self.weather_response,
             }
-            print(f"Publishing weather forecast event: {event['event']}")
+            _debug(f"Publishing weather forecast event: {event['event']}")
             self.publish_event(event)
 
         if alerts:
@@ -69,7 +62,7 @@ class Weather(PMCard):
                 "footer": f"Expires: {datetime.fromtimestamp(alert.end).strftime(self._weather.datetime_format)}",
                 "timeout": self._weather.refresh_minutes * 60 * 1000
             }
-            print(f"Publishing weather alert event: {event['event']}")
+            _debug(f"Publishing weather alert event: {event['event']}")
             self.publish_event(event)
 
         self.weather_response = None  # Clear response after rendering

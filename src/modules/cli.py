@@ -8,7 +8,7 @@ from pymirror.pmmodule import PMModule
 from pymirror.utils import expand_dict
 from pymirror.pmcard import PMCard
 
-class Cli(PMCard):
+class CliModule(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._cli = config.cli

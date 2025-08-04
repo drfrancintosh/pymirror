@@ -1,6 +1,6 @@
 from pymirror.pmcard import PMCard
 
-class Alert(PMCard):
+class AlertModule(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._alert = config.alert

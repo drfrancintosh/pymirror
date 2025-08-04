@@ -1,7 +1,7 @@
 from pymirror.pmmodule import PMModule
 from pymirror.utils import SafeNamespace
 
-class Text(PMModule):
+class TextModule(PMModule):
 	def __init__(self, pm, config: SafeNamespace):
 		super().__init__(pm, config)
 		self._text = config.text
