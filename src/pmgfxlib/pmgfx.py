@@ -1,11 +1,13 @@
 from dataclasses import dataclass
+
+from pymirror.pmrect import PMRect
 from .pmfont import PMFont
 from .pmutils import to_color
 
 @dataclass
 class PMGfx:
     ## instance variables
-    rect: tuple = (0, 0, 0, 0)
+    _rect: PMRect = PMRect(0, 0, 0, 0)
     _color: tuple = (255, 255, 255) 
     _bg_color: tuple = (0, 0, 0) 
     _text_color: tuple = (255, 255, 255)
@@ -15,6 +17,19 @@ class PMGfx:
 
     def __post_init__(self):
         self.font = PMFont("DejaVuSans", 64)
+
+    @property
+    def rect(self) -> PMRect:
+        return self._rect
+    
+    @rect.setter
+    def rect(self, value: PMRect) -> None:
+        if isinstance(value, PMRect):
+            self._rect = value
+        elif isinstance(value, tuple) and len(value) == 4:
+            self._rect = PMRect(*value)
+        else:
+            raise TypeError("rect must be an instance of PMRect")
 
     @property
     def color(self) -> tuple[int, int, int]:
@@ -78,11 +93,11 @@ class PMGfx:
 
     @property
     def width(self):
-        return self.rect[2] - self.rect[0] + 1
+        return self.rect.width
 
     @property
     def height(self):
-        return self.rect[3] - self.rect[1] + 1
+        return self.rect.height
 
 
 

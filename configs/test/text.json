@@ -1,0 +1,10 @@
+    {
+      "module": "text",
+      "moddef": {
+        "name": "test",
+        "position": "full_screen"
+      },
+      "text": {
+        "text": "Welcome to PyMirror!"
+      }
+    }

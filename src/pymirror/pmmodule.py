@@ -6,6 +6,7 @@ from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
 from pymirror.utils import SafeNamespace, _height, _width
 from pymirror.pmlogger import _trace, _debug
+from pymirror.pmrect import PMRect
 
 @dataclass
 class PMModuleDef(ABC):
@@ -15,7 +16,7 @@ class PMModuleDef(ABC):
 	bg_color: str = None
 	text_color: str = "#fff"
 	text_bg_color: str = None
-	font_name: str = "DejaVuSans.ttf"
+	font_name: str = "DejaVuSans"
 	font_size: int = 64
 	subscriptions: list[str] = None
 	disabled: bool = False
@@ -52,7 +53,7 @@ class PMModule(ABC):
 
 	def _compute_rect(self, position: str = None) -> tuple:
 		# compute rect based on "position"
-		rect = (0,0,0,0)
+		rect = PMRect(0,0,0,0)
 		if not position or position == "None": return rect
 		if "," in position:
 			# position is a string with comma-separated values
@@ -60,7 +61,7 @@ class PMModule(ABC):
 			dims = [float(x) for x in position.split(",")]
 			if len(dims) != 4:
 				raise ValueError(f"Invalid position format: {position}. Expected 4 comma-separated values.")
-			rect = (
+			rect = PMRect(
 				int((self.pm.screen.bitmap.gfx.width - 1) * dims[0]),
 				int((self.pm.screen.bitmap.gfx.height - 1) * dims[1]),
 				int((self.pm.screen.bitmap.gfx.width - 1) * dims[2]),
@@ -76,7 +77,7 @@ class PMModule(ABC):
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
 			## these are in percentages of the screen size
 			## so we need to multiply to get the actual pixel values
-			rect = (
+			rect = PMRect(
 				int((self.pm.screen.bitmap.gfx.width - 1) * dims[0]),
 				int((self.pm.screen.bitmap.gfx.height - 1) * dims[1]),
 				int((self.pm.screen.bitmap.gfx.width - 1) * dims[2]),

@@ -12,8 +12,8 @@ import copy
 from email.mime import image
 from PIL import Image, ImageDraw, ImageColor
 
-from pymirror.pmlogger import trace, _trace, _debug
-from pymirror.utils import _height, _width
+from pymirror.pmrect import PMRect
+from pymirror.pmlogger import _trace, _debug
 from .pmgfx import PMGfx
 
 CENTER = 0
@@ -42,9 +42,17 @@ class PMBitmap:
         self.scale(width or self._img.width, height or self._img.height, scale or "stretch")
         return self
 
-    def gfx_push(self) -> PMGfx:
+    def gfx_push(self, gfx: PMGfx = None) -> PMGfx:
         """Push the current graphics state onto the stack."""
-        self.gfx_stack.append(copy.copy(self.gfx))
+        # Save the current graphics state
+        self.gfx_stack.append(self.gfx)
+        # If gfx is provided, use it; otherwise, keep the current state
+        if gfx == None:
+            self.gfx = copy.deepcopy(self.gfx)
+        else:
+            self.gfx = gfx
+        # Return the current graphics state
+        # you can modify this gfx object and it will not affect the previous state
         return self.gfx
 
     def gfx_pop(self) -> PMGfx:
@@ -128,6 +136,7 @@ class PMBitmap:
         ## renders text in the entire bitmap area
         ## if you want a cliprect, create a PMBitmap with the cliprect size
         ## then render it and paste it into the parent PMBitmap
+        rect = PMRect(*rect)  # Ensure rect is a PMRect object
         if lines == None:
             return
         if isinstance(lines, str):
@@ -141,7 +150,7 @@ class PMBitmap:
         font = self.gfx.font
         lines, (text_width, text_height) = self.calculate_text_box(lines)
         if valign == CENTER:
-            dy = _height(rect) - text_height + font.baseline
+            dy = rect.height - text_height + font.baseline
             text_y0 = y0 + int(dy / 2)
         elif valign == TOP:
             text_y0 = y0
@@ -157,11 +166,11 @@ class PMBitmap:
             for line in multi_lines:
                 (x_min, baseline, width, font_height) = font.getbbox(line)
                 if halign == CENTER:
-                    text_x0 = x0 + int((_width(rect) - width) / 2)
+                    text_x0 = x0 + int((rect.width - width) / 2)
                 elif halign == LEFT:
                     text_x0 = x0
                 elif halign == RIGHT:
-                    text_x0 = x0 + int(_width(rect) - width)
+                    text_x0 = x0 + int(rect.width - width)
                 else:
                     _debug(
                         f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead."

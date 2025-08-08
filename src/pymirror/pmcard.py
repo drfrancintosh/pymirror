@@ -2,7 +2,6 @@ import copy
 from dataclasses import dataclass
 
 from pymirror.pmmodule import PMModule
-from pymirror.utils import _NONE_PROXY, SafeNamespace
 
 
 @dataclass

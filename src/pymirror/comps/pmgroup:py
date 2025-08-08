@@ -1,0 +1,18 @@
+from dataclasses import dataclass
+from pmcomponent import PMComponent, PMComponentConfig
+from pmgfxlib.pmbitmap import PMBitmap
+from utils import SafeNamespace, _width, _height
+from pmconstants import PMConstants as PMC
+
+class PMGroup(PMComponent):
+	def __init__(self, config: SafeNamespace):
+		super().__init__(config)
+		self.children = []
+
+	def add_child(self, child: PMComponent) -> None:
+		self.children.append(child)
+
+	def render(self, bitmap: PMBitmap) -> None:
+		"""Render the group and its children to the bitmap."""
+		for child in self.children:
+			child.render(bitmap)

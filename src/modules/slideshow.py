@@ -4,15 +4,15 @@ from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
 from pymirror.utils import SafeNamespace, _height, _str_to_rect, _width
 from pmgfxlib.pmbitmap import PMBitmap
-from pymirror.pmlogger import _debug, _trace
+from pymirror.pmlogger import _debug
+from pymirror.pmrect import PMRect
 import os
-from PIL import Image as PILImage
 
 class SlideshowModule(PMModule):
 	def __init__(self, pm, config: SafeNamespace):
 		super().__init__(pm, config)
 		self._slideshow = config.slideshow
-		self.alt_rect = _str_to_rect(self._slideshow.rect)
+		self.alt_rect = PMRect(*_str_to_rect(self._slideshow.rect))
 		self.photo_number = 0
 		self.photos = self.load_folder(self._slideshow.folder)
 		self.timer = PMTimer(1)
