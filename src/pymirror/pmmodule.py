@@ -4,10 +4,11 @@ from dataclasses import dataclass
 
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
-from pymirror.utils import SafeNamespace, _height, _width
+from pymirror.utils import SafeNamespace, _height, _width, from_dict
 from pymirror.pmlogger import _trace, _debug
 from pymirror.pmrect import PMRect
 
+@from_dict
 @dataclass
 class PMModuleDef(ABC):
 	name: str = None
@@ -28,7 +29,7 @@ class PMModule(ABC):
 		self._config = config
 		# GLS - need to remove this dependency on pm
 		self.pm = pm
-		self._moddef = _moddef = PMModuleDef(**config.moddef.__dict__) if config.moddef else PMModuleDef(name=self.__class__.__name__, position="None")
+		self._moddef = _moddef = PMModuleDef.from_dict(config.moddef.__dict__)
 		self.screen = pm.screen
 		self.name = _moddef.name or self.__class__.__name__
 		self.position = _moddef.position
@@ -48,7 +49,7 @@ class PMModule(ABC):
 		gfx.text_bg_color = _moddef.text_bg_color or self.screen.bitmap.gfx.text_bg_color or gfx.text_bg_color
 		font_name = _moddef.font_name or self.screen.bitmap.gfx.font_name or gfx.font_name
 		font_size = _moddef.font_size or self.screen.bitmap.gfx.font_size or gfx.font_size
-		gfx.font.set_font(font_name, font_size)
+		gfx.set_font(font_name, font_size)
 		self.subscribe(_moddef.subscriptions or [])
 
 	def _compute_rect(self, position: str = None) -> tuple:

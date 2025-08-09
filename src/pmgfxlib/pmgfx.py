@@ -1,6 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 
 from pymirror.pmrect import PMRect
+from pymirror.utils import from_dict
 from .pmfont import PMFont
 from .pmutils import to_color
 
@@ -13,10 +14,31 @@ class PMGfx:
     _text_color: tuple = (255, 255, 255)
     _text_bg_color: tuple = None  
     line_width: int = 1
+    font_name: str = "DejaVuSans"
+    font_size: int = 64
     font: PMFont = None
+    wrap: str = "words"  # "chars", "words", or None
+    halign: str = "center"  # "left", "center", "right"
+    valign: str = "center"
 
-    def __post_init__(self):
-        self.font = PMFont("DejaVuSans", 64)
+    @classmethod
+    def from_dict(cls, config: dict):
+        valid_fields = {f.name for f in fields(cls)}
+        filtered_dict = {k: v for k, v in config.items() if k in valid_fields}
+        gfx = cls(**filtered_dict)
+        gfx.rect = PMRect.from_string(config.get('rect', "0,0,0,0"))
+        gfx.color = config.get('color', (255, 255, 255))
+        gfx.bg_color = config.get('bg_color', (0, 0, 0))
+        gfx.text_color = config.get('text_color', (255, 255, 255))
+        gfx.text_bg_color = config.get('text_bg_color', None)
+        gfx.set_font(gfx.font_name, gfx.font_size)
+        return gfx
+
+    def set_font(self, name: str, size: int) -> None:
+        """Set the font for the graphics context."""
+        self.font_name = name
+        self.font_size = size
+        self.font = PMFont(name, size)
 
     @property
     def rect(self) -> PMRect:
@@ -99,5 +121,11 @@ class PMGfx:
     def height(self):
         return self.rect.height
 
+    @width.setter
+    def width(self, value: int):
+        self.rect.width = value
 
+    @height.setter
+    def height(self, value: int):
+        self.rect.height = value
 

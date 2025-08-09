@@ -2,8 +2,10 @@ import os
 from dataclasses import dataclass
 from PIL import Image
 from pmgfxlib import PMBitmap, PMGfx
+from pymirror.utils import from_dict
 from .pmlogger import _debug
 
+@from_dict
 @dataclass
 class PMScreenConfig:
         width: int = 1920
@@ -17,21 +19,19 @@ class PMScreenConfig:
         font_name: str = "Roboto-Regular"
         font_size: int = 64
         output_file: str = None
-        frame_buffer: str = "/dev/fb"  # Path to framebuffer device
+        frame_buffer: str = None # Path to framebuffer device
 
 class PMScreen:
     def __init__(self, _config):
         self._config = _config
         ## by convention the config for an object is _classname
-        self._screen = _screen = PMScreenConfig(**_config.screen.__dict__) if _config.screen else PMScreenConfig()
+        self._screen = _screen = PMScreenConfig.from_dict(_config.__dict__)
         if self._screen.rotate:
             if self._screen.rotate not in [0, 90, 180, 270]:
                 raise ValueError(f"Invalid rotation angle: {self._screen.rotate}. Must be one of 0, 90, 180, or 270 degrees.")
             if self._screen.rotate == 90 or self._screen.rotate == 270:
                 self._screen.width, self._screen.height = self._screen.height, self._screen.width
         # Initialize the bitmap with the screen dimensions
-        self.bitmap = PMBitmap(_screen.width, _screen.height)
-        self.bitmap.gfx = PMGfx()
         self.bitmap = PMBitmap(_screen.width, _screen.height)
         gfx = self.bitmap.gfx
         gfx.rect = (0, 0, _screen.width-1, _screen.height-1)
@@ -40,7 +40,7 @@ class PMScreen:
         gfx.text_color = _screen.text_color or gfx.text_color
         gfx.text_bg_color = _screen.text_bg_color or gfx.text_bg_color
         gfx.line_width = _screen.line_width or gfx.line_width
-        gfx.font.set_font(self._screen.font_name, self._screen.font_size)
+        gfx.set_font(self._screen.font_name, self._screen.font_size)
 
         self._hard_clear()
 

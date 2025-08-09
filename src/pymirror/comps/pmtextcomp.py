@@ -1,49 +1,47 @@
 from pymirror.pmrect import PMRect
+from pymirror.pmtimer import PMTimer
 from pymirror.comps.pmcomponent import PMComponent
-from pmgfxlib import PMGfx, PMBitmap
-from dataclasses import dataclass
-from pymirror.utils import SafeNamespace, _height, _width
-from pymirror.pmconstants import PMConstants
-
-@dataclass
-class PMTextConfig:
-    font_name: str = PMConstants.font_name
-    font_size: int = PMConstants.font_size
-    text_color: str = PMConstants.text_color
-    text_bg_color: str = PMConstants.text_bg_color
-    x0: int = 0
-    y0: int = 0
-    height: int = PMConstants.font_size
-    width: int = PMConstants.font_size * 20
-    halign: str = PMConstants.halign
-    valign: str = PMConstants.valign
-    wrap: str = PMConstants.wrap  # "chars", "words", or None
-    text: str = ""
+from pmgfxlib import PMBitmap
+from pymirror.utils import SafeNamespace
 
 class PMTextComp(PMComponent):
-    def __init__(self, config: SafeNamespace):
-        self._config = PMTextConfig(**config.__dict__)
-        self._config.height = int(self._config.height)
-        self._config.width = int(self._config.width)
-        self._gfx = PMGfx()
-        self._update_rect()
-        self._gfx.text_color = self._config.text_color
-        self._gfx.text_bg_color = self._config.text_bg_color
-        self._gfx.font.set_font(self._config.font_name, self._config.font_size)
-        self._gfx.halign = self._config.halign
-        self._gfx.valign = self._config.valign
-        self._gfx.wrap = self._config.wrap
-        self.text = self._config.text
+    def __init__(self, config: SafeNamespace, x0: int = None, y0: int = None, height: int = None, width: int = None):
+        super().__init__(config)
+        self.text = self._config.text or ""
+        self.gfx.rect.x0 = x0 or self._config.x0 or 0
+        self.gfx.rect.y0 = y0 or self._config.y0 or 0
+        self.gfx.rect.height = height or self._config.height or self.gfx.font.height
+        self.gfx.rect.width = width or self._config.width or self.gfx.font.width * len(self.text)
+        self.hscroll = self._config.hscroll or False
+        self._hscroll_delay = 100
+        self._hscroll_timer = PMTimer(0)
+        if self.hscroll:
+            self._hscroll_timer = PMTimer(self._hscroll_delay)
+        self._hoffset = 0
+        self._dx = -10
+        self._last_text = None
 
-    def _update_rect(self):
-        """Set the rectangle for the text component based on its configuration."""
-        self._gfx.rect = PMRect(
-            self._gfx.rect.x0,
-            self._gfx.rect.y0,
-            self._gfx.rect.x0 + self._config.width - 1,
-            self._gfx.rect.y0 + self._config.height - 1
-        )
     def render(self, bitmap: PMBitmap) -> None:
-        bitmap.gfx_push(self._gfx)
-        bitmap.text_box(self._gfx.rect, self.text, self._gfx.valign, self._gfx.halign)
+        gfx = bitmap.gfx_push(self.gfx)
+        lines = gfx.font.text_split(self.text, gfx.rect, gfx.wrap)
+        bitmap.text_box(self.gfx.rect, lines, gfx.valign, gfx.halign)
         bitmap.gfx_pop()
+        self.clean()
+
+    def update(self, text: str) -> None:
+        self.text = text
+    
+    def is_dirty(self) -> bool:
+        """Check if the text has changed since the last render."""
+        if self._hscroll_timer.is_timedout():
+            self._hoffset += self._dx
+            if self._hoffset < -self.gfx.rect.width:
+                self._hoffset = self.gfx.rect.width
+            self._hscroll_timer.set_timeout(self._hscroll_delay)
+            return True
+        return self.text != self._last_text
+
+    def clean(self) -> bool:
+        """Mark the text as clean, i.e., no changes since last render."""
+        self._last_text = self.text
+        return True

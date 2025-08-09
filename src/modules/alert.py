@@ -22,7 +22,7 @@ class AlertModule(PMCard):
 			## and publish an event to refresh the display
 			self.disabled = True
 			self.update(None, None, None)
-			self.make_clean()  # mark the alert as clean
+			self.clean()  # mark the alert as clean
 		return is_dirty
 
 	def onEvent(self, event) -> None:

@@ -33,7 +33,7 @@ class PyMirror:
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
         _debug(f"Using config: {self._config}")
-        self.screen = PMScreen(self._config)
+        self.screen = PMScreen(self._config.screen)
         self.force_render = False
         self.debug = self._config.debug
         self.modules = []
@@ -41,7 +41,6 @@ class PyMirror:
         self.server_queue = queue.Queue()  # Use a queue to manage events
         self.server = PMServer(self._config.server, self.server_queue)
         self._clear_screen = True  # Flag to clear the screen on each loop
-        self._clear_screen_again = False  # Flag to reset the screen on each loop
         self._load_modules()
         self.server.start()  # Start the server to handle incoming events
 

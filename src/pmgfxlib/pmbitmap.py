@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw, ImageColor
 
 from pymirror.pmrect import PMRect
 from pymirror.pmlogger import _trace, _debug
+from pymirror.utils import SafeNamespace
 from .pmgfx import PMGfx
 
 CENTER = 0
@@ -24,40 +25,52 @@ RIGHT = 2
 
 
 class PMBitmap:
-    def __init__(self, width=None, height=None):
-        self.gfx = PMGfx()
-        self.gfx_stack = []
-        if width is None or height is None:
+    def __init__( self, width: int = None, height: int = None, config: SafeNamespace = {}):
+        self.gfx = PMGfx.from_dict(config)
+        self._gfx_stack = []
+        if width == None or height == None:
             ## create a PMBitmap but don't allocate an underlying PIL Image
             return
         self.gfx.rect = (0, 0, width - 1, height - 1)
         self._img = Image.new("RGBA", (width, height), 0)
         self._draw = ImageDraw.Draw(self._img)
 
-    def load(self, photo_path, width=None, height=None, scale=None) -> 'PMBitmap':
+    @property
+    def width(self) -> int:
+        return self.gfx.width
+
+    @property
+    def height(self) -> int:
+        return self.gfx.height
+
+    def load(self, photo_path, width=None, height=None, scale=None) -> "PMBitmap":
         _trace("...Loading bitmap from", photo_path)
-        self._img = Image.open(photo_path).convert("RGBA")  # Ensure the image is in RGBA format
+        self._img = Image.open(photo_path).convert(
+            "RGBA"
+        )  # Ensure the image is in RGBA format
         self._draw = ImageDraw.Draw(self._img)
         self.gfx.rect = (0, 0, self._img.width - 1, self._img.height - 1)
-        self.scale(width or self._img.width, height or self._img.height, scale or "stretch")
+        self.scale(
+            width or self._img.width, height or self._img.height, scale or "stretch"
+        )
         return self
 
     def gfx_push(self, gfx: PMGfx = None) -> PMGfx:
         """Push the current graphics state onto the stack."""
         # Save the current graphics state
-        self.gfx_stack.append(self.gfx)
+        self._gfx_stack.append(self.gfx)
         # If gfx is provided, use it; otherwise, keep the current state
         if gfx == None:
-            self.gfx = copy.deepcopy(self.gfx)
+            self.gfx = copy.copy(self.gfx)
         else:
-            self.gfx = gfx
+            self.gfx = copy.copy(gfx)
         # Return the current graphics state
         # you can modify this gfx object and it will not affect the previous state
         return self.gfx
 
     def gfx_pop(self) -> PMGfx:
         """Pop the last graphics state from the stack."""
-        self.gfx = self.gfx_stack.pop()
+        self.gfx = self._gfx_stack.pop()
         return self.gfx
 
     def clear(self) -> None:
@@ -185,7 +198,7 @@ class PMBitmap:
                 if text_y0 >= y1:
                     break
 
-    def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap"=None) -> None:
+    def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None) -> None:
         if x0 == None:
             x0 = src.gfx.x0
         if y0 == None:
@@ -246,4 +259,9 @@ class PMBitmap:
                 # Default to resizing without aspect ratio preservation
                 _debug(f"...Stretching image to {width}x{height}")
                 self._img = self._img.resize((width, height), Image.LANCZOS)
-            self.gfx.rect = (self.gfx.x0, self.gfx.y0, self.gfx.x0 + width, self.gfx.y0 + height)
+            self.gfx.rect = (
+                self.gfx.x0,
+                self.gfx.y0,
+                self.gfx.x0 + width,
+                self.gfx.y0 + height,
+            )
