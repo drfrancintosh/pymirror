@@ -1,5 +1,5 @@
 from random import random, randint, choice  # Import the functions you need
-from modules.photo import PhotoModule
+from modules.photo_module import PhotoModule
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
 from pymirror.utils import SafeNamespace, _height, _str_to_rect, _width

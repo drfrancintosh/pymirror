@@ -38,7 +38,7 @@ class Crontab:
         ## pad with wildcards
         ## we might want to preprocess this at __init__ for performance
         while len(cron_parts) < 6:
-            cron_parts = ["*"] + cron_parts
+            cron_parts = ["0"] + cron_parts
         for i in range(len(cron_parts)):
             for pattern in cron_parts[i].split(","):
                 if pattern == "*":

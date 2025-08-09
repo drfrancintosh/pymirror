@@ -12,7 +12,6 @@
         "halign": "center",
         "interval_secs": 15,
         "randomize": true,
-        "frame": "./frames/white_frame.png",
-        "sounds": []
+        "frame": "./frames/white_frame.png"
       }
     }

@@ -79,7 +79,7 @@ class PyMirror:
                         sys.exit(1)
             ## import the module using its name
             ## all modules should be in the "modules" directory
-            mod = importlib.import_module("modules."+module_config.module)
+            mod = importlib.import_module("modules."+module_config.module+"_module")
         
             ## get the class from inside the module
             ## convert the file name to class name inside the module

@@ -2,8 +2,5 @@
     "module": "sound",
     "moddef": {
         "name": "sound_player"
-    },
-    "sound": {
-        "name": "sound_player"
     }
 }
