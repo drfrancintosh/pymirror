@@ -1,13 +1,25 @@
 {
     "module": "cron",
-    "cron": {
-        "name": "sound_cron",
-        "first_delay": 1,
-        "delay": 2000,
-        "repeat": -1,
-        "event": {
-            "event": "SoundEvent",
-            "filename": "sounds/sosumi.wav"
+    "moddef": {
+        "name": "cron"
+    },
+    "alerts": [
+        {
+            "cron": "0,10,20,30,40,50 * * * * *",
+            "event": {
+                "event": "SoundEvent",
+                "filename": "./sounds/begin.wav",
+                "repeat": 1
+            }
+        },
+        {
+            "cron": "5,15,25,35,45,55 * * * * *",
+            "event": {
+                "event": "SoundEvent",
+                "filename": "./sounds/laugh.wav",
+                "repeat": 1
+            }
         }
-    }
+
+    ]
 }

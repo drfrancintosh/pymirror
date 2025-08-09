@@ -1,5 +1,5 @@
 from datetime import datetime
-from pymirror.pmmodule import PMModule, PMModuleDef
+from pymirror.pmmodule import PMModule
 from pymirror.utils import SafeNamespace
 
 class ClockModule(PMModule):
@@ -7,10 +7,10 @@ class ClockModule(PMModule):
 		super().__init__(pm, config)
 		self._clock = config.clock
 		self.date_format = "%I:%M:%S %p"
-		self.date_format = self._clock.date_format if self._clock.date_format else "%I:%M:%S %p"
+		self.date_format = self._clock.date_format or "%I:%M:%S %p"
 		self.last_time = None
 		self.curr_time = datetime.now().strftime(self.date_format)
-	
+
 	def render(self, force: bool = False) -> bool:
 		self.bitmap.clear()
 		self.bitmap.text_box((0, 0, self.bitmap.gfx.width-1, self.bitmap.gfx.height-1),
@@ -54,7 +54,4 @@ class ClockModule(PMModule):
 			self.curr_time = self.curr_time.upper()
 
 		return self.curr_time != self.last_time
-
-	def onEvent(self, event):
-		pass
 

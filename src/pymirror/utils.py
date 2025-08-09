@@ -1,3 +1,4 @@
+import datetime
 import os
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
@@ -133,3 +134,9 @@ def from_dict(cls):
     
     cls.from_dict = from_dict
     return cls
+
+def to_int(s: str, dflt: int = 0) -> int:
+    try:
+        return int(s)
+    except ValueError:
+        return dflt

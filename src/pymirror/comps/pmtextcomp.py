@@ -28,9 +28,12 @@ class PMTextComp(PMComponent):
         bitmap.gfx_pop()
         self.clean()
 
-    def update(self, text: str) -> None:
-        self.text = text
-    
+    def update(self, text: str = None) -> None:
+        if text is not None:
+            self.text = text
+        else:
+            self.text = self._last_text
+
     def is_dirty(self) -> bool:
         """Check if the text has changed since the last render."""
         if self._hscroll_timer.is_timedout():

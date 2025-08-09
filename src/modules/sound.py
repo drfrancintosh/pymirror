@@ -1,6 +1,6 @@
-from pymirror.pmlogger import _error, _debug
 import pygame
 from pymirror.pmmodule import PMModule
+from pymirror.pmlogger import _error, _debug
 
 class SoundModule(PMModule):
     def __init__(self, pm, config):

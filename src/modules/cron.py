@@ -1,3 +1,4 @@
+from pymirror.crontab import Crontab
 from pymirror.pmmodule import PMModule
 from pymirror.pmlogger import _debug
 
@@ -6,25 +7,20 @@ class CronModule(PMModule):
 		super().__init__(pm, config)
 		self._cron = config.cron
 		self.name = self._cron.name
-		self.event = self._cron.event
-		self.repeat = self._cron.repeat ## number of times to repeat, -1 = forever
-		self.delay = self._cron.delay
-		if self._cron.first_delay: self.timer.set_timeout(self._cron.first_delay) ## emit event immediately
-		else: self.timer.set_timeout(self.delay)
+		self.alerts = config.alerts or []
+		if type(self.alerts) is not list:
+			self.alerts = [self.alerts]
+		self.crontab = Crontab([alert.cron for alert in self.alerts])
 
 	def render(self, force: bool = False) -> bool:
 		pass
 
 	def exec(self):
-		if self.timer.is_timedout():
-			_debug(f"CronModule: Executing {self.name} event {self.event} with repeat {self.repeat} and delay {self.delay}")
-			if self.repeat == 0: return 0
-			self.publish_event(self.event)
-			if self.repeat > 0: self.repeat -= 1
-			self.timer.set_timeout(self.delay) # note: self.repeat < 0 repeats forever
-		return 0
-
-	def onEvent(self, event):
-		pass
-	
-
+		alert_indexes = self.crontab.check()
+		if not alert_indexes:
+			return
+		for i in alert_indexes:
+			alert = self.alerts[i]
+			_debug(f"Alert triggered: {alert.event}")
+			self.publish_event(alert.event)
+		return False
