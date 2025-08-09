@@ -32,6 +32,8 @@
     },
   "modules": [
     "./configs/rpi/alert.json",
+    "./configs/gls/cron.json",
+    "./configs/gls/sound.json",
     "./configs/rpi/time.json",
     "./configs/rpi/date.json",
     "./configs/gls/day_of_week.json",
@@ -42,7 +44,6 @@
     "./configs/rpi/weather_alert.json",
     "./configs/rpi/forecast.json",
     "./configs/rpi/pymirror_controller.json",
-    "./configs/rpi/fps.json",
-    "./configs/rpi/cron_test.json"
+    "./configs/rpi/fps.json"
   ]
 }

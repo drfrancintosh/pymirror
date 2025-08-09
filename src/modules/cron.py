@@ -1,5 +1,5 @@
-import time
 from pymirror.pmmodule import PMModule
+from pymirror.pmlogger import _debug
 
 class CronModule(PMModule):
 	def __init__(self, pm, config):
@@ -17,6 +17,7 @@ class CronModule(PMModule):
 
 	def exec(self):
 		if self.timer.is_timedout():
+			_debug(f"CronModule: Executing {self.name} event {self.event} with repeat {self.repeat} and delay {self.delay}")
 			if self.repeat == 0: return 0
 			self.publish_event(self.event)
 			if self.repeat > 0: self.repeat -= 1

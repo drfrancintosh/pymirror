@@ -1,12 +1,12 @@
 {
     "module": "cron",
     "cron": {
-        "name": "example_cron",
+        "name": "sound_cron",
         "first_delay": 1,
-        "delay": 10000,
-        "repeat": 5,
+        "delay": 2000,
+        "repeat": -1,
         "event": {
-            "name": "SoundEvent",
+            "event": "SoundEvent",
             "filename": "sounds/sosumi.wav"
         }
     }
