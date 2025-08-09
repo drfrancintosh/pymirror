@@ -19,6 +19,8 @@ class SlideshowModule(PMModule):
 		self.dirty = False
 		self.path = None
 		self.frame_bm = None
+		self.sounds = config.slideshow.sounds or []
+		self.n_sound = 0
 		if self._slideshow.frame:
 			self.frame_bm = PMBitmap().load(self._slideshow.frame)
 			self.frame_bm.scale(self.bitmap.gfx.width, self.bitmap.gfx.height, "stretch")
@@ -42,6 +44,16 @@ class SlideshowModule(PMModule):
 		if self.frame_bm:
 			self.bitmap.paste(self.frame_bm, 0, 0, self.frame_bm) ## overlay the frame
 		self.dirty = False
+		soundfile = self.sounds[self.n_sound] if self.sounds else None
+		_debug(f"Playing sound {soundfile}")
+		if soundfile:
+			self.n_sound = (self.n_sound + 1) % len(self.sounds)
+			print(f"Playing sound {soundfile}")
+			event = {
+				"event": "SoundEvent",
+				"filename": soundfile
+			}
+			self.pm.publish_event(event)
 		return False
 	
 	def exec(self):

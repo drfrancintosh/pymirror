@@ -10,8 +10,22 @@
         "scale": "fill",
         "valign": "center",
         "halign": "center",
-        "interval_secs": 5,
+        "interval_secs": 2,
         "randomize": true,
-        "frame": "./frames/white_frame.png"
+        "frame": "./frames/white_frame.png",
+        "sounds": [
+          "./sounds/accepted.wav",
+          "./sounds/begin.wav",
+          "./sounds/indigo.wav",
+          "./sounds/invitation.wav",
+          "./sounds/laugh.wav",
+          "./sounds/morse.wav",
+          "./sounds/ping.wav",
+          "./sounds/pulse.wav",
+          "./sounds/purr.wav",
+          "./sounds/signal.wav",
+          "./sounds/sosumi.wav",
+          "./sounds/uh-oh.wav"
+        ]
       }
     }
