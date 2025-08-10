@@ -11,9 +11,9 @@ class PMCard(PMModule):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._card = self._config.card
-        self._header = PMTextComp(self._card.header, width=self.bitmap.gfx.width)
-        self._footer = PMTextComp(self._card.footer, y0=self.bitmap.gfx.height - non_null(self._card.footer.height, self.bitmap.gfx.font.height, 0), width=self.bitmap.gfx.width)
-        self._body = PMTextComp(self._card.body, y0=self._header.height, height=self.bitmap.gfx.height - self._header.height - self._footer.height, width=self.bitmap.gfx.width)
+        self._header = PMTextComp(self.bitmap.gfx, self._card.header, width=self.bitmap.width)
+        self._footer = PMTextComp(self.bitmap.gfx, self._card.footer, y0=self.bitmap.height - non_null(self._card.footer.height, self.bitmap.gfx.font.height, 0), width=self.bitmap.width)
+        self._body = PMTextComp(self.bitmap.gfx, self._card.body, y0=self._header.height, height=self.bitmap.height - self._header.height - self._footer.height, width=self.bitmap.width)
 
     def update(self, header: str, body: str, footer: str) -> None:
         self._header.update(header)

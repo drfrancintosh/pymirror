@@ -184,7 +184,7 @@ class PyMirror:
         for module in reversed(self.modules):
             if (not module.disabled) and module.bitmap:
                 start_time = time.time()  # Start timing the module rendering
-                self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
+                self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering
                 module._time += end_time - start_time  # add on the time taken for module rendering
                 if self.debug: self._debug(module) # draw boxes around each module if debug is enabled

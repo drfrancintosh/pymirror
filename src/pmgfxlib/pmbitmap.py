@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageColor
 
 from pymirror.pmrect import PMRect
 from pymirror.pmlogger import _trace, _debug
-from pymirror.utils import SafeNamespace
+from pymirror.utils import SafeNamespace, non_null
 from .pmgfx import PMGfx
 
 CENTER = 0
@@ -30,20 +30,54 @@ class PMBitmap:
     ):
         self.gfx = PMGfx.from_dict(config)
         self._gfx_stack = []
-        if width == None or height == None:
-            ## create a PMBitmap but don't allocate an underlying PIL Image
-            return
-        self.gfx.rect = (0, 0, width - 1, height - 1)
-        self._img = Image.new("RGBA", (width, height), 0)
+        self._rect = PMRect(0, 0, non_null(width, 1) - 1, non_null(height, 1) - 1)
+        self._img = Image.new("RGBA", (self._rect.width, self._rect.height), 0)
         self._draw = ImageDraw.Draw(self._img)
 
     @property
-    def width(self) -> int:
-        return self.gfx.width
+    def rect(self) -> PMRect:
+        return self._rect
+
+    @rect.setter
+    def rect(self, value: PMRect) -> None:
+        if isinstance(value, PMRect):
+            self._rect = value
+        elif isinstance(value, tuple) and len(value) == 4:
+            self._rect = PMRect(*value)
+        else:
+            raise TypeError("rect must be an instance of PMRect")
 
     @property
-    def height(self) -> int:
-        return self.gfx.height
+    def x0(self):
+        return self.rect[0]
+
+    @property
+    def y0(self):
+        return self.rect[1]
+
+    @property
+    def x1(self):
+        return self.rect[2]
+
+    @property
+    def y1(self):
+        return self.rect[3]
+
+    @property
+    def width(self):
+        return self._rect.width
+
+    @property
+    def height(self):
+        return self._rect.height
+
+    @width.setter
+    def width(self, value: int):
+        self._rect.width = value
+
+    @height.setter
+    def height(self, value: int):
+        self._rect.height = value
 
     def load(self, photo_path, width=None, height=None, scale=None) -> "PMBitmap":
         _trace("...Loading bitmap from", photo_path)
@@ -102,7 +136,7 @@ class PMBitmap:
         bbox = (x0 - r, y0 - r, x0 + r, y0 + r)
         self.ellipse(bbox, fill=fill)
 
-    def rect(self, rect: tuple, fill=-1) -> None:
+    def rectangle(self, rect: tuple, fill=-1) -> None:
         if fill == -1:
             # Use the gfx.background color if specified
             self._draw.rectangle(
@@ -268,9 +302,9 @@ class PMBitmap:
                 # Default to resizing without aspect ratio preservation
                 _debug(f"...Stretching image to {width}x{height}")
                 self._img = self._img.resize((width, height), Image.LANCZOS)
-            self.gfx.rect = (
-                self.gfx.x0,
-                self.gfx.y0,
-                self.gfx.x0 + width,
-                self.gfx.y0 + height,
+            self.rect = (
+                self.x0,
+                self.y0,
+                self.x0 + width,
+                self.y0 + height,
             )

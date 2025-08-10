@@ -11,22 +11,23 @@ class PMComponent(ABC):
 	def __init__(self, config: SafeNamespace):
 		self._config = config
 		self.gfx = PMGfx.from_dict(config.__dict__)
+		self.rect = PMRect(0, 0, 0, 0)
 
 	@property
-	def width(self) -> PMRect:
-		return self.gfx.width
+	def width(self) -> int:
+		return self.rect.width
 
 	@property
-	def height(self) -> PMRect:
-		return self.gfx.height
+	def height(self) -> int:
+		return self.rect.height
 
 	@width.setter
 	def width(self, value: int) -> None:
-		self.gfx.width = value
+		self.rect.width = value
 
 	@height.setter
 	def height(self, value: int) -> None:
-		self.gfx.height = value
+		self.rect.height = value
 
 	def render(self, bitmap: PMBitmap) -> None:
 		"""Render the component to its bitmap."""

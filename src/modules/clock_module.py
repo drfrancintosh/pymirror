@@ -13,7 +13,7 @@ class ClockModule(PMModule):
 
 	def render(self, force: bool = False) -> bool:
 		self.bitmap.clear()
-		self.bitmap.text_box((0, 0, self.bitmap.gfx.width-1, self.bitmap.gfx.height-1),
+		self.bitmap.text_box((0, 0, self.bitmap.rect.width-1, self.bitmap.rect.height-1),
 			self.curr_time,
 			halign=self._clock.halign,
 			valign=self._clock.valign)

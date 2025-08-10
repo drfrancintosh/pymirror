@@ -21,7 +21,7 @@ class SlideshowModule(PMModule):
 		self.frame_bm = None
 		if self._slideshow.frame:
 			self.frame_bm = PMBitmap().load(self._slideshow.frame)
-			self.frame_bm.scale(self.bitmap.gfx.width, self.bitmap.gfx.height, "stretch")
+			self.frame_bm.scale(self.bitmap.width, self.bitmap.height, "stretch")
 
 	def load_folder(self, folder: str):
 		""" Load all photo paths from the given folder """
@@ -33,10 +33,10 @@ class SlideshowModule(PMModule):
 		return paths
 
 	def render(self, force: bool = False) -> bool:
-		img_width, img_height = int(self.bitmap.gfx.width * _width(self.alt_rect)), int(self.bitmap.gfx.height * _height(self.alt_rect))
+		img_width, img_height = int(self.bitmap.width * _width(self.alt_rect)), int(self.bitmap.height * _height(self.alt_rect))
 		img_bm = PMBitmap().load(self.photos[self.photo_number], img_width, img_height, self._slideshow.scale)
-		new_x0 = (self.bitmap.gfx.width - img_bm.gfx.width) // 2
-		new_y0 = (self.bitmap.gfx.height - img_bm.gfx.height) // 2
+		new_x0 = (self.bitmap.width - img_bm.width) // 2
+		new_y0 = (self.bitmap.height - img_bm.height) // 2
 		self.bitmap.clear()
 		self.bitmap.paste(img_bm, new_x0, new_y0, img_bm)
 		if self.frame_bm:
