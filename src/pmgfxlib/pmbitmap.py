@@ -25,7 +25,9 @@ RIGHT = 2
 
 
 class PMBitmap:
-    def __init__( self, width: int = None, height: int = None, config: SafeNamespace = {}):
+    def __init__(
+        self, width: int = None, height: int = None, config: SafeNamespace = {}
+    ):
         self.gfx = PMGfx.from_dict(config)
         self._gfx_stack = []
         if width == None or height == None:
@@ -130,11 +132,12 @@ class PMBitmap:
         width = 0
         height = 0
         results = []
+        (x_min, baseline, line_width, font_height) = self.gfx.font.getbbox("M")
         for multi_line in lines:
             multi_lines = multi_line.split("\n")
             for line in multi_lines:
                 results.append(line)
-                (x_min, baseline, line_width, font_height) = self.gfx.font.getbbox(line)
+                (x_min, baseline, line_width, _font_height) = self.gfx.font.getbbox(line)
                 width = max(width, line_width)
                 height += font_height
         return results, (width, height)
@@ -145,7 +148,11 @@ class PMBitmap:
         lines: str | list[str],
         valign: str = "center",
         halign: str = "center",
+        clip: bool = False,
+        use_baseline: bool = False
     ) -> None:
+        clip = bool(clip) ## make sure it's zero or one
+        use_baseline = bool(use_baseline) ## move the text down to shift descenders
         ## renders text in the entire bitmap area
         ## if you want a cliprect, create a PMBitmap with the cliprect size
         ## then render it and paste it into the parent PMBitmap
@@ -161,9 +168,11 @@ class PMBitmap:
             self._draw.rectangle(rect, fill=self.gfx._text_bg_color)
         gfx = self.gfx
         font = self.gfx.font
+        (x_min, baseline, width, font_height) = font.getbbox("M")
+        baseline *= (not use_baseline) ## sets baseline to zero if use_baseline is False
         lines, (text_width, text_height) = self.calculate_text_box(lines)
         if valign == CENTER:
-            dy = rect.height - text_height + font.baseline
+            dy = rect.height - text_height
             text_y0 = y0 + int(dy / 2)
         elif valign == TOP:
             text_y0 = y0
@@ -177,7 +186,9 @@ class PMBitmap:
         for multi_line in lines:
             multi_lines = multi_line.split("\n")
             for line in multi_lines:
-                (x_min, baseline, width, font_height) = font.getbbox(line)
+                if text_y0 + font_height * clip > y1:
+                    break
+                (_x_min, _baseline, width, _font_height) = font.getbbox(line)
                 if halign == CENTER:
                     text_x0 = x0 + int((rect.width - width) / 2)
                 elif halign == LEFT:
@@ -195,8 +206,6 @@ class PMBitmap:
                     font=gfx.font._font,
                 )
                 text_y0 += font_height
-                if text_y0 >= y1:
-                    break
 
     def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None) -> None:
         if x0 == None:

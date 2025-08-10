@@ -144,3 +144,13 @@ def to_int(s: str, dflt: int = 0) -> int:
 def has_alpha(text):
     """Check if string contains any alphabetic characters"""
     return any(char.isalpha() for char in text)
+
+def non_null(*values: Any) -> Any:
+    """Return the first non-null value from the provided arguments."""
+    for v in values:
+         if v != None:
+              return v
+    return None
+
+if __name__ == "__main__":
+    print(non_null(None, None, 0))
