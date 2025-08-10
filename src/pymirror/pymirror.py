@@ -152,7 +152,7 @@ class PyMirror:
         for module in self.modules:
             if module.disabled or not module.bitmap: continue
             module.render(force=True)
-            self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
+            self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
         if self.debug: self._debug(module)
         self.screen.flush()  # Flush the screen to show all modules at once
 
