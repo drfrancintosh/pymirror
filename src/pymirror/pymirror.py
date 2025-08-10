@@ -33,7 +33,7 @@ class PyMirror:
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
         _debug(f"Using config: {self._config}")
-        self.screen = PMScreen(self._config)
+        self.screen = PMScreen(self._config.screen)
         self.force_render = False
         self.debug = self._config.debug
         self.modules = []
@@ -41,7 +41,6 @@ class PyMirror:
         self.server_queue = queue.Queue()  # Use a queue to manage events
         self.server = PMServer(self._config.server, self.server_queue)
         self._clear_screen = True  # Flag to clear the screen on each loop
-        self._clear_screen_again = False  # Flag to reset the screen on each loop
         self._load_modules()
         self.server.start()  # Start the server to handle incoming events
 
@@ -80,7 +79,7 @@ class PyMirror:
                         sys.exit(1)
             ## import the module using its name
             ## all modules should be in the "modules" directory
-            mod = importlib.import_module("modules."+module_config.module)
+            mod = importlib.import_module("modules."+module_config.module+"_module")
         
             ## get the class from inside the module
             ## convert the file name to class name inside the module
@@ -108,10 +107,10 @@ class PyMirror:
 
 
     def _send_events_to_module(self, module, events):
-        if not module.subscriptions: return
+        if not module.subscriptions: 
+            return
         for event in events:
             if event.event in module.subscriptions:
-                _debug(f"... Event {event.event} to module {module._moddef.name}")
                 module.onEvent(event)
 
     def _convert_events_to_namespace(self):
@@ -122,7 +121,6 @@ class PyMirror:
         if not self.events: return
         self.events = self._convert_events_to_namespace()  # Convert events to SafeNamespace if needed
         for module in self.modules:
-            if not module.subscriptions: continue
             self._send_events_to_module(module, self.events)  # Send all events to the module
         self.events.clear()  # Clear the events after sending them
 
@@ -186,7 +184,7 @@ class PyMirror:
         for module in reversed(self.modules):
             if (not module.disabled) and module.bitmap:
                 start_time = time.time()  # Start timing the module rendering
-                self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
+                self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering
                 module._time += end_time - start_time  # add on the time taken for module rendering
                 if self.debug: self._debug(module) # draw boxes around each module if debug is enabled

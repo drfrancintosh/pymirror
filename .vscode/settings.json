@@ -1,5 +1,7 @@
 {
     "python.analysis.extraPaths": [
         "./src/pymirror"
-    ]
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:pyenv",
+    "python-envs.pythonProjects": []
 }

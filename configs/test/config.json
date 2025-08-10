@@ -3,8 +3,8 @@
   "secrets": ".secrets",
   "force_render": false,
   "screen": {
-    "output_file": null,
-    "frame_buffer": "/dev/fb0",
+    "output_file": "./src/pmserver/static/output.jpg",
+    "frame_buffer": null,
     "font_name": "Roboto-Thin",
     "font_size": 64,
     "color": "#fff",
@@ -14,13 +14,14 @@
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
-    "top_strip": "0.33,0.0,1.0,0.15",
+    "full_screen": "0.00,0.00,1.0,1.0",
+    "top_strip": "0.00,0.0,1.0,0.15",
     "alert_strip": "0.30,0.30,0.7,0.7",
     "fps_strip": "0.0,0.95,0.33,1.00",
     "top_left": "0.0,0.15,0.33,0.33",
-    "top_center": "0.00,0.00,0.33,0.15",
-    "top_center_left": "0.0,0.0,0.15,0.15",
-    "top_center_right": "0.15,0.33,0.66,0.33",
+    "top_center": "0.33,0.15,0.66,0.33",
+    "top_center_left": "0.33,0.15,0.55,0.33",
+    "top_center_right": "0.55,0.15,0.66,0.33",
     "top_right": "0.66,0.15,1.00,0.33",
     "middle_left": "0.0,0.33,0.33,0.66",
     "middle_center": "0.33,0.33,0.66,1.00",
@@ -31,19 +32,6 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
     },
   "modules": [
-    "./configs/rpi/pymirror_controller.json",
-    "./configs/rpi/alert.json",
-    "./configs/gls/cron.json",
-    "./configs/gls/sound.json",
-    "./configs/gls/time.json",
-    "./configs/rpi/date.json",
-    "./configs/gls/day_of_week.json",
-    "./configs/gls/slideshow.json",
-    "./configs/rpi/fortune.json",
-    "./configs/rpi/news.json",
-    "./configs/rpi/weather.json",
-    "./configs/rpi/weather_alert.json",
-    "./configs/rpi/forecast.json",
-    "./configs/rpi/fps.json"
+    "configs/test/text.json"
   ]
 }

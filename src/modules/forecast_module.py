@@ -61,8 +61,8 @@ class ForecastModule(PMCard):
         c.n_rows = len(c.rows)
 
     def _initial_values(self, c: SafeNamespace) -> None:
-        c.w = self.bitmap.gfx.width
-        c.h = self.bitmap.gfx.height
+        c.w = self.bitmap.width
+        c.h = self.bitmap.height
         c.row = 0
         c.x0, c.y0 = 0, 0 # top-left corner of cell
         c.px, c.py = 4, 4 # icon padding

@@ -1,0 +1,40 @@
+{
+    "module": "cli",
+    "moddef": {
+        "name": "calendar1",
+        "position": "calendar_strip1"
+    },
+    "cli": {
+        "cycle_seconds": 3600,
+        "command": "/usr/bin/calendar -f ./configs/mm2/calendar.usholiday -A 365 | sed 's/[(].*[)]//g' | sed 's/.*\\t//g' | sed 's/*//g' | sed 's/  / /g' | sed 's/^ *//g' | sed 's/ *$//g'",
+        "header": "US HOLIDAYS",
+        "body": "{{ stdout }}",
+        "footer": ""
+    },
+    "card": {
+        "header": {
+            "text_color": "#888",
+            "font_size": 32,
+            "valign": "bottom",
+            "halign": "left"
+        },
+        "body": {
+            "text_color": "#fff",
+            "font_size": 32,
+            "valign": "top",
+            "halign": "left",
+            "wrap": null,
+            "clip": true,
+            "use_baseline": true
+        },
+        "footer": {
+            "text": "footer",
+            "text_color": "#fff",
+            "font_size": 32,
+            "valign": "top",
+            "halign": "left",
+            "wrap": null,
+            "height": 0
+        }
+    }
+}

@@ -1,7 +1,10 @@
+import datetime
 import os
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
 from .pmlogger import _debug
+from dataclasses import fields
+from typing import Dict, Any
 
 def snake_to_pascal(snake_str):
     return ''.join(word.capitalize() for word in snake_str.split('_'))
@@ -52,7 +55,6 @@ class _NoneProxy:
 _NONE_PROXY = _NoneProxy()
 
 ## This is a safe namespace class that returns None for any missing attributes.
-
 class SafeNamespace(SimpleNamespace):
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
@@ -120,3 +122,35 @@ def getter(obj, path, default=None):
         else:
             return default
     return current
+
+def from_dict(cls):
+    """Decorator to add from_dict class method to any dataclass"""
+    @classmethod
+    def from_dict(cls, config_dict: Dict[str, Any]):
+        """Create instance from dict, ignoring extra keys"""
+        valid_fields = {f.name for f in fields(cls)}
+        filtered_dict = {k: v for k, v in config_dict.items() if k in valid_fields}
+        return cls(**filtered_dict)
+    
+    cls.from_dict = from_dict
+    return cls
+
+def to_int(s: str, dflt: int = 0) -> int:
+    try:
+        return int(s)
+    except ValueError:
+        return dflt
+
+def has_alpha(text):
+    """Check if string contains any alphabetic characters"""
+    return any(char.isalpha() for char in text)
+
+def non_null(*values: Any) -> Any:
+    """Return the first non-null value from the provided arguments."""
+    for v in values:
+         if v != None:
+              return v
+    return None
+
+if __name__ == "__main__":
+    print(non_null(None, None, 0))

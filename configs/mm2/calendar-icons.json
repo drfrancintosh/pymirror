@@ -8,23 +8,36 @@
     "cli": {
         "cycle_seconds": 3600,
         "command": "/usr/bin/calendar -f ./configs/mm2/calendar.usholiday -A 365 | sed 's/.*/\uf133/g' ",
-        "header": "  ",
+        "header": "US HOLIDAYS",
         "body": "{{ stdout }}",
         "footer": ""
     },
     "card": {
         "header": {
-            "text_color": "#aaa",
-            "font_size": 24,
+            "text_color": "#000",
+            "font_name": "fonts/Font Awesome 6 Free-Regular-400",
+            "font_size": 32,
             "valign": "bottom",
             "halign": "left"
         },
         "body": {
             "text_color": "#888",
+            "font_name": "fonts/Font Awesome 6 Free-Regular-400",
             "font_size": 32,
-            "valign": "bottom",
+            "valign": "top",
             "halign": "left",
-            "wrap": null
+            "wrap": null,
+            "clip": true,
+            "use_baseline": true
+        },
+        "footer": {
+            "text": "footer",
+            "text_color": "#fff",
+            "font_size": 32,
+            "valign": "top",
+            "halign": "left",
+            "wrap": null,
+            "height": 0
         }
     }
 }

@@ -3,7 +3,7 @@ import os
 import time
 import requests
 import json
-from .pmlogger import _debug
+from .pmlogger import _debug, _print, _error
 
 @dataclass
 class PMWebApi:
@@ -55,7 +55,7 @@ class PMWebApi:
             self._save_to_cache(response.text)
             result = response.text
         else:
-            _debug(f"Error fetching data: {response.status_code} - {response.text}")
+            _error(f"Error fetching data: {response.status_code} - {response.text}")
             result = None
         return result
 

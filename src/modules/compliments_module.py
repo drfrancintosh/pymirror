@@ -26,7 +26,7 @@ class ComplimentsModule(PMModule):
 
     def render(self, force: bool = False) -> bool:
         self.bitmap.clear()
-        self.bitmap.text_box(self.gfx, self.text, (0,0,self.gfx.width,self.gfx.height), valign="center", halign="center")
+        self.bitmap.text_box( (0,0,self.bitmap.width,self.bitmap.height), self.text, valign="center", halign="center")
         self.last_text = self.text
         return True
     

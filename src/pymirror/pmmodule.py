@@ -4,9 +4,11 @@ from dataclasses import dataclass
 
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
-from pymirror.utils import SafeNamespace, _height, _width
+from pymirror.utils import SafeNamespace, _height, _width, from_dict, non_null
 from pymirror.pmlogger import _trace, _debug
+from pymirror.pmrect import PMRect
 
+@from_dict
 @dataclass
 class PMModuleDef(ABC):
 	name: str = None
@@ -15,7 +17,7 @@ class PMModuleDef(ABC):
 	bg_color: str = None
 	text_color: str = "#fff"
 	text_bg_color: str = None
-	font_name: str = "DejaVuSans.ttf"
+	font_name: str = "DejaVuSans"
 	font_size: int = 64
 	subscriptions: list[str] = None
 	disabled: bool = False
@@ -27,7 +29,7 @@ class PMModule(ABC):
 		self._config = config
 		# GLS - need to remove this dependency on pm
 		self.pm = pm
-		self._moddef = _moddef = PMModuleDef(**config.moddef.__dict__) if config.moddef else PMModuleDef(name=self.__class__.__name__, position="None")
+		self._moddef = _moddef = PMModuleDef.from_dict(config.moddef.__dict__)
 		self.screen = pm.screen
 		self.name = _moddef.name or self.__class__.__name__
 		self.position = _moddef.position
@@ -37,34 +39,35 @@ class PMModule(ABC):
 		self.timer = PMTimer(0)
 		self.subscriptions = []
 		self._time = 0.0  # time taken for module execution
+		self.bitmap = None
 		rect = self._compute_rect(self.position)
-		self.bitmap = PMBitmap(_width(rect), _height(rect))
-		gfx = self.bitmap.gfx
-		gfx.rect = rect
-		gfx.color = _moddef.color or self.screen.bitmap.gfx.color or gfx.color
-		gfx.bg_color = _moddef.bg_color or self.screen.bitmap.gfx.bg_color or gfx.bg_color
-		gfx.text_color = _moddef.text_color or self.screen.bitmap.gfx.text_color or gfx.text_color
-		gfx.text_bg_color = _moddef.text_bg_color or self.screen.bitmap.gfx.text_bg_color or gfx.text_bg_color
-		font_name = _moddef.font_name or self.screen.bitmap.gfx.font_name or gfx.font_name
-		font_size = _moddef.font_size or self.screen.bitmap.gfx.font_size or gfx.font_size
-		gfx.font.set_font(font_name, font_size)
+		if rect:
+			self.bitmap = PMBitmap(rect.width, rect.height, _moddef.__dict__)
+			self.bitmap.rect = rect
+			# gfx.color = non_null(_moddef.color, self.screen.bitmap.gfx.color, gfx.color)
+			# gfx.bg_color = non_null(_moddef.bg_color, self.screen.bitmap.gfx.bg_color, gfx.bg_color)
+			# gfx.text_color = non_null(_moddef.text_color, self.screen.bitmap.gfx.text_color, gfx.text_color)
+			# gfx.text_bg_color = non_null(_moddef.text_bg_color, self.screen.bitmap.gfx.text_bg_color, gfx.text_bg_color)
+			# font_name = non_null(_moddef.font_name, self.screen.bitmap.gfx.font_name, gfx.font_name)
+			# font_size = non_null(_moddef.font_size, self.screen.bitmap.gfx.font_size, gfx.font_size)
+			# gfx.set_font(font_name, font_size)
 		self.subscribe(_moddef.subscriptions or [])
 
 	def _compute_rect(self, position: str = None) -> tuple:
 		# compute rect based on "position"
-		rect = (0,0,0,0)
-		if not position or position == "None": return rect
+		rect = PMRect(0,0,0,0)
+		if not position or position == "None": return None
 		if "," in position:
 			# position is a string with comma-separated values
 			# e.g. "0.25,0.15,0.75,0.85"
 			dims = [float(x) for x in position.split(",")]
 			if len(dims) != 4:
 				raise ValueError(f"Invalid position format: {position}. Expected 4 comma-separated values.")
-			rect = (
-				int((self.pm.screen.bitmap.gfx.width - 1) * dims[0]),
-				int((self.pm.screen.bitmap.gfx.height - 1) * dims[1]),
-				int((self.pm.screen.bitmap.gfx.width - 1) * dims[2]),
-				int((self.pm.screen.bitmap.gfx.height - 1) * dims[3])
+			rect = PMRect(
+				int((self.pm.screen.bitmap.width - 1) * dims[0]),
+				int((self.pm.screen.bitmap.height - 1) * dims[1]),
+				int((self.pm.screen.bitmap.width - 1) * dims[2]),
+				int((self.pm.screen.bitmap.height - 1) * dims[3])
 			)
 			return rect
 		dim_str = self.pm._config.positions[position]
@@ -76,11 +79,11 @@ class PMModule(ABC):
 			## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
 			## these are in percentages of the screen size
 			## so we need to multiply to get the actual pixel values
-			rect = (
-				int((self.pm.screen.bitmap.gfx.width - 1) * dims[0]),
-				int((self.pm.screen.bitmap.gfx.height - 1) * dims[1]),
-				int((self.pm.screen.bitmap.gfx.width - 1) * dims[2]),
-				int((self.pm.screen.bitmap.gfx.height - 1) * dims[3])
+			rect = PMRect(
+				int((self.pm.screen.bitmap.width - 1) * dims[0]),
+				int((self.pm.screen.bitmap.height - 1) * dims[1]),
+				int((self.pm.screen.bitmap.width - 1) * dims[2]),
+				int((self.pm.screen.bitmap.height - 1) * dims[3])
 			)
 		return rect
 	

@@ -3,8 +3,9 @@ import inspect
 import functools
 import os
 from textwrap import wrap
-global pmlogger, _debug, _info, _warning, _error, _critical, _trace, _enter, _exit
+global pmlogger, _debug, _info, _warning, _error, _critical, _trace, _enter, _exit, _print
 
+_print = print
 
 def trace_method(func):
     """Decorator to trace individual methods"""

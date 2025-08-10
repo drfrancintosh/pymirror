@@ -2,13 +2,12 @@
     "module": "cron",
     "cron": {
         "name": "example_cron",
-        "first_delay": 4000,
-        "delay": 2000,
+        "first_delay": 1,
+        "delay": 10000,
         "repeat": 5,
         "event": {
-            "name": "AlertEvent",
-            "message": "alert is kicked off",
-            "timeout": 500
+            "name": "SoundEvent",
+            "filename": "sounds/sosumi.wav"
         }
     }
 }

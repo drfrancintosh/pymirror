@@ -12,8 +12,9 @@ import copy
 from email.mime import image
 from PIL import Image, ImageDraw, ImageColor
 
-from pymirror.pmlogger import trace, _trace, _debug
-from pymirror.utils import _height, _width
+from pymirror.pmrect import PMRect
+from pymirror.pmlogger import _trace, _debug
+from pymirror.utils import SafeNamespace, non_null
 from .pmgfx import PMGfx
 
 CENTER = 0
@@ -24,32 +25,88 @@ RIGHT = 2
 
 
 class PMBitmap:
-    def __init__(self, width=None, height=None):
-        self.gfx = PMGfx()
-        self.gfx_stack = []
-        if width is None or height is None:
-            ## create a PMBitmap but don't allocate an underlying PIL Image
-            return
-        self.gfx.rect = (0, 0, width - 1, height - 1)
-        self._img = Image.new("RGBA", (width, height), 0)
+    def __init__(
+        self, width: int = None, height: int = None, config: SafeNamespace = {}
+    ):
+        self.gfx = PMGfx.from_dict(config)
+        self._gfx_stack = []
+        self._rect = PMRect(0, 0, non_null(width, 1) - 1, non_null(height, 1) - 1)
+        self._img = Image.new("RGBA", (self._rect.width, self._rect.height), 0)
         self._draw = ImageDraw.Draw(self._img)
 
-    def load(self, photo_path, width=None, height=None, scale=None) -> 'PMBitmap':
+    @property
+    def rect(self) -> PMRect:
+        return self._rect
+
+    @rect.setter
+    def rect(self, value: PMRect) -> None:
+        if isinstance(value, PMRect):
+            self._rect = value
+        elif isinstance(value, tuple) and len(value) == 4:
+            self._rect = PMRect(*value)
+        else:
+            raise TypeError("rect must be an instance of PMRect")
+
+    @property
+    def x0(self):
+        return self.rect[0]
+
+    @property
+    def y0(self):
+        return self.rect[1]
+
+    @property
+    def x1(self):
+        return self.rect[2]
+
+    @property
+    def y1(self):
+        return self.rect[3]
+
+    @property
+    def width(self):
+        return self._rect.width
+
+    @property
+    def height(self):
+        return self._rect.height
+
+    @width.setter
+    def width(self, value: int):
+        self._rect.width = value
+
+    @height.setter
+    def height(self, value: int):
+        self._rect.height = value
+
+    def load(self, photo_path, width=None, height=None, scale=None) -> "PMBitmap":
         _trace("...Loading bitmap from", photo_path)
-        self._img = Image.open(photo_path).convert("RGBA")  # Ensure the image is in RGBA format
+        self._img = Image.open(photo_path).convert(
+            "RGBA"
+        )  # Ensure the image is in RGBA format
         self._draw = ImageDraw.Draw(self._img)
         self.gfx.rect = (0, 0, self._img.width - 1, self._img.height - 1)
-        self.scale(width or self._img.width, height or self._img.height, scale or "stretch")
+        self.scale(
+            width or self._img.width, height or self._img.height, scale or "stretch"
+        )
         return self
 
-    def gfx_push(self) -> PMGfx:
+    def gfx_push(self, gfx: PMGfx = None) -> PMGfx:
         """Push the current graphics state onto the stack."""
-        self.gfx_stack.append(copy.copy(self.gfx))
+        # Save the current graphics state
+        self._gfx_stack.append(self.gfx)
+        # If gfx is provided, use it; otherwise, keep the current state
+        if gfx == None:
+            self.gfx = copy.copy(self.gfx)
+        else:
+            self.gfx = copy.copy(gfx)
+        # Return the current graphics state
+        # you can modify this gfx object and it will not affect the previous state
         return self.gfx
 
     def gfx_pop(self) -> PMGfx:
         """Pop the last graphics state from the stack."""
-        self.gfx = self.gfx_stack.pop()
+        self.gfx = self._gfx_stack.pop()
         return self.gfx
 
     def clear(self) -> None:
@@ -79,7 +136,7 @@ class PMBitmap:
         bbox = (x0 - r, y0 - r, x0 + r, y0 + r)
         self.ellipse(bbox, fill=fill)
 
-    def rect(self, rect: tuple, fill=-1) -> None:
+    def rectangle(self, rect: tuple, fill=-1) -> None:
         if fill == -1:
             # Use the gfx.background color if specified
             self._draw.rectangle(
@@ -109,11 +166,12 @@ class PMBitmap:
         width = 0
         height = 0
         results = []
+        (x_min, baseline, line_width, font_height) = self.gfx.font.getbbox("M")
         for multi_line in lines:
             multi_lines = multi_line.split("\n")
             for line in multi_lines:
                 results.append(line)
-                (x_min, baseline, line_width, font_height) = self.gfx.font.getbbox(line)
+                (x_min, baseline, line_width, _font_height) = self.gfx.font.getbbox(line)
                 width = max(width, line_width)
                 height += font_height
         return results, (width, height)
@@ -124,10 +182,15 @@ class PMBitmap:
         lines: str | list[str],
         valign: str = "center",
         halign: str = "center",
+        clip: bool = False,
+        use_baseline: bool = False
     ) -> None:
+        clip = bool(clip) ## make sure it's zero or one
+        use_baseline = bool(use_baseline) ## move the text down to shift descenders
         ## renders text in the entire bitmap area
         ## if you want a cliprect, create a PMBitmap with the cliprect size
         ## then render it and paste it into the parent PMBitmap
+        rect = PMRect(*rect)  # Ensure rect is a PMRect object
         if lines == None:
             return
         if isinstance(lines, str):
@@ -139,9 +202,11 @@ class PMBitmap:
             self._draw.rectangle(rect, fill=self.gfx._text_bg_color)
         gfx = self.gfx
         font = self.gfx.font
+        (x_min, baseline, width, font_height) = font.getbbox("M")
+        baseline *= (not use_baseline) ## sets baseline to zero if use_baseline is False
         lines, (text_width, text_height) = self.calculate_text_box(lines)
         if valign == CENTER:
-            dy = _height(rect) - text_height + font.baseline
+            dy = rect.height - text_height
             text_y0 = y0 + int(dy / 2)
         elif valign == TOP:
             text_y0 = y0
@@ -155,13 +220,15 @@ class PMBitmap:
         for multi_line in lines:
             multi_lines = multi_line.split("\n")
             for line in multi_lines:
-                (x_min, baseline, width, font_height) = font.getbbox(line)
+                if text_y0 + font_height * clip > y1:
+                    break
+                (_x_min, _baseline, width, _font_height) = font.getbbox(line)
                 if halign == CENTER:
-                    text_x0 = x0 + int((_width(rect) - width) / 2)
+                    text_x0 = x0 + int((rect.width - width) / 2)
                 elif halign == LEFT:
                     text_x0 = x0
                 elif halign == RIGHT:
-                    text_x0 = x0 + int(_width(rect) - width)
+                    text_x0 = x0 + int(rect.width - width)
                 else:
                     _debug(
                         f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead."
@@ -173,10 +240,8 @@ class PMBitmap:
                     font=gfx.font._font,
                 )
                 text_y0 += font_height
-                if text_y0 >= y1:
-                    break
 
-    def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap"=None) -> None:
+    def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None) -> None:
         if x0 == None:
             x0 = src.gfx.x0
         if y0 == None:
@@ -237,4 +302,9 @@ class PMBitmap:
                 # Default to resizing without aspect ratio preservation
                 _debug(f"...Stretching image to {width}x{height}")
                 self._img = self._img.resize((width, height), Image.LANCZOS)
-            self.gfx.rect = (self.gfx.x0, self.gfx.y0, self.gfx.x0 + width, self.gfx.y0 + height)
+            self.rect = (
+                self.x0,
+                self.y0,
+                self.x0 + width,
+                self.y0 + height,
+            )
