@@ -5,7 +5,7 @@
     },
     "alerts": [
         {
-            "cron": "00 * * * *",
+            "cron": "*:00",
             "description": "Play sound at the start of every hour",
             "event": {
                 "event": "SoundEvent",
@@ -14,7 +14,7 @@
             }
         },
         {
-            "cron": "15,30,45 * * * *",
+            "cron": "*:15,30,45",
             "description": "Play sound at 15, 30, and 45 minutes past the hour",
             "event": {
                 "event": "SoundEvent",
@@ -23,7 +23,7 @@
             }
         },
         {
-            "cron": "00 17 * * *",
+            "cron": "17:00:00",
             "description": "Play sound at 5 PM daily",
             "event": {
                 "event": "SoundEvent",

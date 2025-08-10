@@ -140,3 +140,7 @@ def to_int(s: str, dflt: int = 0) -> int:
         return int(s)
     except ValueError:
         return dflt
+
+def has_alpha(text):
+    """Check if string contains any alphabetic characters"""
+    return any(char.isalpha() for char in text)
