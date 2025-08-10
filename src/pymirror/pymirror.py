@@ -139,9 +139,8 @@ class PyMirror:
         sbm = self.screen.bitmap
         mbm = module.bitmap
         sgfx = sbm.gfx_push()
-        mgfx = mbm.gfx
         sgfx.font.set_font("DejaVuSans", 24)
-        sbm.rect(mbm.rect, fill=None)
+        sbm.rectangle(mbm.rect, fill=None)
         _time = module._time or 0.0
         sbm.text(f"{module._moddef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
         sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
