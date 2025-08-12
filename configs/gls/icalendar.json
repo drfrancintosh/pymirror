@@ -1,0 +1,41 @@
+{
+    "module": "ical",
+    "moddef": {
+        "name": "icalendar",
+        "position": "middle_right",
+        "text_color": "#fff",
+        "text_bg_color": "#000",
+        "font_size": 24,
+        "disabled": false,
+        "force_render": true
+    },
+    "ical": {
+        "url": "http://p44-caldav.icloud.com/published/2/MTA4NjQ3MzUyMTA4NjQ3M0nX6EeTxRO59dorTc67bm2DqkYjqbWgyaJWpJk1MbyvwQkMEQn3jxODLRJHx6AvUTrLxZJoy3OitdvvAN0QfKA",
+        "time_format": "%-I:%M %p"
+    },
+    "card": {
+        "header": {
+            "font_name": "Roboto-Regular",
+            "font_size": 32,
+            "text_color": "#000",
+            "text_bg_color": "#088",
+            "height": 72
+        },
+        "body": {
+            "font_name": "Roboto-Regular",
+            "font_size": 40,
+            "text_color": "#0ff",
+            "text_bg_color": "#000",
+            "valign": "top",
+            "halign": "left"
+        },
+        "footer": {
+            "font_name": "Roboto-Regular",
+            "font_size": 32,
+            "text_color": "#000",
+            "text_bg_color": "#088",
+            "valign": "bottom",
+            "height": 72
+        }
+    }
+}

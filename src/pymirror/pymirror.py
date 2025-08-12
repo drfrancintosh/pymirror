@@ -85,6 +85,7 @@ class PyMirror:
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
             clazz_name = snake_to_pascal(module_config.module)
+            _debug(f"Loading module class {clazz_name} from {mod.__name__}")
             clazz = getattr(mod, clazz_name + "Module", None)
 
             ## create an instance of the class (module)
