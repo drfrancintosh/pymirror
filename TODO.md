@@ -22,6 +22,7 @@ cd git/pymirror
 
 ## Backlog
 
+1. Fix headers on Weather Module
 1. Add Alerts to ICal_Module
 8. if alert card is 'timed', show timer percent. bar
 6. Hot Reload of config.json
