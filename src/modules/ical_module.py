@@ -21,7 +21,6 @@ class ICalConfig:
 
 class IcalModule(PMCard):
     def __init__(self, pm, config):
-        print(config)
         super().__init__(pm, config)
         self._ical = ICalConfig(**config.ical.__dict__)
         self.timer.set_timeout(1)  # refresh right away
