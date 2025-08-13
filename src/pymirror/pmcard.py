@@ -11,7 +11,7 @@ class PMCard(PMModule):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._card = self._config.card
-        self._header = PMTextComp(self.bitmap.gfx, self._card.header, width=self.bitmap.width)
+        self._header = PMTextComp(self.bitmap.gfx, self._card.header, width=self.bitmap.width, height=non_null(self._card.header.height, self.bitmap.gfx.font.height, 1))
         self._footer = PMTextComp(self.bitmap.gfx, self._card.footer, y0=self.bitmap.height - non_null(self._card.footer.height, self.bitmap.gfx.font.height, 0), width=self.bitmap.width)
         self._body = PMTextComp(self.bitmap.gfx, self._card.body, y0=self._header.height, height=self.bitmap.height - self._header.height - self._footer.height, width=self.bitmap.width)
 
@@ -27,11 +27,12 @@ class PMCard(PMModule):
         self._footer.clean()
 
     def is_dirty(self) -> bool:
-        return (
+        dirty = (
             self._header.is_dirty()
             or self._body.is_dirty()
             or self._footer.is_dirty()
         )
+        return dirty
 
     def render(self, force: bool = False) -> bool:
         self.bitmap.clear()

@@ -2,14 +2,13 @@
 # https://openicalmap.org/api/one-call-3#current
 
 from dataclasses import dataclass
-import sys
-import requests
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from ics import Calendar
 
 from pymirror.pmcard import PMCard
 from pymirror.pmwebapi import PMWebApi
 from pymirror.utils import strftime_by_example
+from pymirror.pmlogger import _debug, _error
 
 @dataclass
 class ICalConfig:
@@ -33,31 +32,31 @@ class IcalModule(PMCard):
         self.time_format = strftime_by_example(self._ical.time_format)
 
     def _dump_event(self, event):
-        print(event.name)
-        print("...begin:", event.begin)
-        print("...end:", event.end)
-        print("...duration:", event.duration)
-        print("...uid:", event.uid)
-        print("...description:", event.description)
-        print("...created:", event.created)
-        print("...last_modified:", event.last_modified)
-        print("...location:", event.location)
-        print("...url:", event.url)
-        print("...transparent:", event.transparent)
-        print("...alarms:", event.alarms)
-        print("...attendees:", event.attendees)
-        print("...categories:", event.categories)
-        print("...status:", event.status)
-        print("...organizer:", event.organizer)
-        print("...geo:", event.geo)
-        print("...classification:", event.classification)
-        print("...extra:", event.extra)
+        _debug(event.name)
+        _debug("...begin:", event.begin)
+        _debug("...end:", event.end)
+        _debug("...duration:", event.duration)
+        _debug("...uid:", event.uid)
+        _debug("...description:", event.description)
+        _debug("...created:", event.created)
+        _debug("...last_modified:", event.last_modified)
+        _debug("...location:", event.location)
+        _debug("...url:", event.url)
+        _debug("...transparent:", event.transparent)
+        _debug("...alarms:", event.alarms)
+        _debug("...attendees:", event.attendees)
+        _debug("...categories:", event.categories)
+        _debug("...status:", event.status)
+        _debug("...organizer:", event.organizer)
+        _debug("...geo:", event.geo)
+        _debug("...classification:", event.classification)
+        _debug("...extra:", event.extra)
 
     def exec(self) -> bool:
         is_dirty = super().exec()
         if not self.timer.is_timedout(): return is_dirty # early exit if not timed out
 
-        self.timer.set_timeout(self._ical.refresh_minutes * 60 * 1000)
+        # self.timer.set_timeout(self._ical.refresh_minutes * 60 * 1000)
         self.ical_response = self.api.get_text()
         epoch = datetime(1980, 1, 1, tzinfo=timezone.utc)
         now = datetime.now(timezone.utc)

@@ -12,9 +12,9 @@ class PMTextComp(PMComponent):
         self.gfx = PMGfx.from_dict(self._config.__dict__, gfx)
         x0 = non_null(x0, self._config.x0, 0)
         y0 = non_null(y0, self._config.y0, 0)
-        x1 = x0 + non_null(width, self._config.width, 0)
-        y1 = y0 + non_null(height, self._config.height, 0)
-        self.rect = PMRect(x0, y0, x1, y1)
+        self.rect = PMRect(x0, y0, 0, 0)
+        self.rect.width = non_null(width, self._config.width, 1)
+        self.rect.height = non_null(height, self._config.height, 1)
         self.clip = non_null(self._config.clip, False)
         self.use_baseline = non_null(self._config.use_baseline, False)
         self.hscroll = non_null(self._config.hscroll, False)
@@ -43,12 +43,12 @@ class PMTextComp(PMComponent):
 
     def is_dirty(self) -> bool:
         """Check if the text has changed since the last render."""
-        if self._hscroll_timer.is_timedout():
-            self._hoffset += self._dx
-            if self._hoffset < -self.rect.width:
-                self._hoffset = self.rect.width
-            self._hscroll_timer.set_timeout(self._hscroll_delay)
-            return True
+        # if self._hscroll_timer.is_timedout():
+        #     self._hoffset += self._dx
+        #     if self._hoffset < -self.rect.width:
+        #         self._hoffset = self.rect.width
+        #     self._hscroll_timer.set_timeout(self._hscroll_delay)
+        #     return True
         return self.text != self._last_text
 
     def clean(self) -> bool:
