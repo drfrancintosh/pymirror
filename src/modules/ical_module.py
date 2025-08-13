@@ -7,9 +7,9 @@ import requests
 from datetime import date, datetime, timedelta, timezone
 from ics import Calendar
 
-import events
 from pymirror.pmcard import PMCard
 from pymirror.pmwebapi import PMWebApi
+from pymirror.utils import strftime_by_example
 
 @dataclass
 class ICalConfig:
@@ -17,7 +17,10 @@ class ICalConfig:
     cache_file: str = "./caches/ical.json"
     refresh_minutes: int = 60
     max_events: int = 10
-    time_format: str = "%-I:%M %p"
+    number_days: int = 7
+    time_format: str = strftime_by_example("0:00 PM")
+    show_all_day_events: bool = True
+    all_day_format: str = strftime_by_example("Jan-1")
 
 class IcalModule(PMCard):
     def __init__(self, pm, config):
@@ -26,7 +29,29 @@ class IcalModule(PMCard):
         self.timer.set_timeout(1)  # refresh right away
         self.ical_response = None
         self.api = PMWebApi(self._ical.url, self._ical.cache_file, self._ical.refresh_minutes * 60)
+        self.all_day_format = strftime_by_example(self._ical.all_day_format)
+        self.time_format = strftime_by_example(self._ical.time_format)
 
+    def _dump_event(self, event):
+        print(event.name)
+        print("...begin:", event.begin)
+        print("...end:", event.end)
+        print("...duration:", event.duration)
+        print("...uid:", event.uid)
+        print("...description:", event.description)
+        print("...created:", event.created)
+        print("...last_modified:", event.last_modified)
+        print("...location:", event.location)
+        print("...url:", event.url)
+        print("...transparent:", event.transparent)
+        print("...alarms:", event.alarms)
+        print("...attendees:", event.attendees)
+        print("...categories:", event.categories)
+        print("...status:", event.status)
+        print("...organizer:", event.organizer)
+        print("...geo:", event.geo)
+        print("...classification:", event.classification)
+        print("...extra:", event.extra)
 
     def exec(self) -> bool:
         is_dirty = super().exec()
@@ -34,24 +59,34 @@ class IcalModule(PMCard):
 
         self.timer.set_timeout(self._ical.refresh_minutes * 60 * 1000)
         self.ical_response = self.api.get_text()
-        events = Calendar(self.ical_response).timeline.included(datetime.now(timezone.utc), datetime.now(timezone.utc) + timedelta(days=365))
-        event_str = "\n"
+        epoch = datetime(1980, 1, 1, tzinfo=timezone.utc)
+        now = datetime.now(timezone.utc)
+        later = now + timedelta(hours=24 * self._ical.number_days)
+        cal = Calendar(self.ical_response)
+        events = cal.timeline.included(epoch, later)
+
+        event_str = ""
+        all_day_str = ""
         event_cnt = 0
-        now = datetime.now(timezone.utc) + timedelta(hours=24) 
         for event in events:
-            event_cnt += 1
+            if event.name == "AASHR Weekly Mtg":
+                self._dump_event(event)
             if event_cnt > self._ical.max_events:
                 break
-            if event.begin.datetime > now:
-                break
-            if event.all_day:
-                event_str += f"{event.name}\n"
+            if event.begin.datetime < now:
+                continue
+            event_cnt += 1
+            if event.all_day and self._ical.show_all_day_events:
+                all_day_str += f"{event.begin.strftime(self.all_day_format)}: {event.name}\n"
             else:
-                event_str += f"{event.begin.strftime(self._ical.time_format)}: {event.name}\n"
-
+                event_str += f"{event.begin.strftime(self.time_format)}: {event.name}\n"
+        event_str += "\n" + all_day_str
+        if self._ical.number_days > 1:
+            format = strftime_by_example("Monday, Jan 1")
+            header_str = f"iCalendar\n{now.strftime(format)} - {later.strftime(format)}"
         self.update(
-            "iCalendar\n" + now.astimezone().strftime("%A, %b %-d"),
-            event_str,
+            header_str,
+            event_str or "No Events to Show",
             "last updated\n" + now.astimezone().strftime("%Y-%m-%d %H:%M:%S"),
         )
         return True # state changed

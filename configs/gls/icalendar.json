@@ -11,7 +11,8 @@
     },
     "ical": {
         "url": "http://p44-caldav.icloud.com/published/2/MTA4NjQ3MzUyMTA4NjQ3M0nX6EeTxRO59dorTc67bm2DqkYjqbWgyaJWpJk1MbyvwQkMEQn3jxODLRJHx6AvUTrLxZJoy3OitdvvAN0QfKA",
-        "time_format": "%-I:%M %p"
+        "time_format": "Jan 1, 2025 0:00 pm",
+        "number_days": 180
     },
     "card": {
         "header": {
@@ -26,8 +27,9 @@
             "font_size": 40,
             "text_color": "#0ff",
             "text_bg_color": "#000",
-            "valign": "top",
-            "halign": "left"
+            "valign": "center",
+            "halign": "left",
+            "wrap": "none"
         },
         "footer": {
             "font_name": "Roboto-Regular",
