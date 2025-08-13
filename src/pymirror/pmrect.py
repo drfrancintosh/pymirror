@@ -44,12 +44,10 @@ class PMRect:
     @x0.setter
     def x0(self, value: int):
         self._coords[0] = value
-        self._coords[2] = value + self.width
 
     @y0.setter
     def y0(self, value: int):
         self._coords[1] = value
-        self._coords[3] = value + self.height
 
     @x1.setter
     def x1(self, value: int):
