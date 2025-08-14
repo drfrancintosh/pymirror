@@ -7,7 +7,7 @@ from ics import Calendar
 
 from pymirror.pmcard import PMCard
 from pymirror.pmwebapi import PMWebApi
-from pymirror.utils import strftime_by_example
+from pymirror.utils import SafeNamespace, strftime_by_example
 from pymirror.pmlogger import _debug, _error
 
 @dataclass
@@ -52,6 +52,67 @@ class IcalModule(PMCard):
         _debug("...classification:", event.classification)
         _debug("...extra:", event.extra)
 
+    def _parse_rrule(self, rrule: str, now: datetime) -> dict:
+        """Parse the RRULE string into a dictionary."""
+        ## NOTE: Original (raw) values are in UPPERCASE
+        ## NOTE: The parsed values are in lowercase
+        dow = {
+            "SU": 6,
+            "MO": 0,
+            "TU": 1,
+            "WE": 2,
+            "TH": 3,
+            "FR": 4,
+            "SA": 5
+        }
+        rules = {}
+        for part in rrule.split(";"):
+            key, value = part.split("=", 1)
+            key = key.strip().upper()
+            value = value.strip().upper()
+            rules[key] = value
+            if key == "UNTIL":
+                if len(value) == 16:  # YYYYMMDDTHHMMSSZ
+                    rules[key.lower()] = datetime.strptime(value, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
+                elif len(value) == 8:  # YYYYMMDD
+                    rules[key.lower()] = datetime.strptime(value, "%Y%m%d").replace(tzinfo=timezone.utc)
+            elif key in ["BYSECOND", "BYMINUTE", "BYHOUR", "BYMONTHDAY", "BYYEARDAY", "BYWEEKNO", "BYMONTH", "BYSETPOS"]:
+                rules[key.lower()] = [int(s) for s in value.split(",")]
+            elif key in ["BYDAY"]:
+                rules[key.lower()] = [dow.get(s, s) for s in value.split(",")]
+            elif key in ["WKST"]:
+                rules[key.lower()] = dow.get(value, value)
+            else:
+                if value.isdigit():
+                    rules[key.lower()] = int(value)
+        if not rules.get("UNTIL"):
+            ## default to now
+            rules["UNTIL"] = now.strftime("%Y%m%dT%H%M%SZ")
+            rules["until"] = now
+        return SafeNamespace(**rules)
+
+    def _get_rrule(self, event, now: datetime) -> bool:
+        for _line in event.extra:
+            line = str(_line).strip()
+            if "RRULE:" == line[0:6]:
+                return self._parse_rrule(line[6:], now)
+        return None
+
+    def _generate_recurring_dates(self, event, now: datetime) -> list:
+        rrule = self._get_rrule(event, now)
+        if not rrule:
+            return []
+
+        # Parse the RRULE and generate the recurring dates
+        # This is a simplified example and may need to be adjusted for real RRULE parsing
+        dates = []
+        for line in rrule.splitlines():
+            if line.startswith("FREQ=WEEKLY"):
+                # Generate weekly dates
+                for i in range(1, 5):  # Next 4 weeks
+                    dates.append(event.begin + timedelta(weeks=i))
+        return dates
+
     def exec(self) -> bool:
         is_dirty = super().exec()
         if not self.timer.is_timedout(): return is_dirty # early exit if not timed out
@@ -67,19 +128,27 @@ class IcalModule(PMCard):
         event_str = ""
         all_day_str = ""
         event_cnt = 0
+        daily_events = []
+        all_day_events = []
         for event in events:
-            if event.name == "AASHR Weekly Mtg":
-                self._dump_event(event)
+            rrule = self._get_rrule(event, now)
+            if rrule and rrule.until >= now:
+                print(f"Event: {event.name}({event.all_day}) - {event.begin} to {event.end}")
+                print(f"RRULE: {rrule}\n")
+                # new_events = self._generate_recurring_dates(event, now, later)
             if event_cnt > self._ical.max_events:
                 break
             if event.begin.datetime < now:
                 continue
-            event_cnt += 1
             if event.all_day and self._ical.show_all_day_events:
-                all_day_str += f"{event.begin.strftime(self.all_day_format)}: {event.name}\n"
+                all_day_events.append(event)
             else:
-                event_str += f"{event.begin.strftime(self.time_format)}: {event.name}\n"
-        event_str += "\n" + all_day_str
+                daily_events.append(event)
+
+        for event in daily_events:
+            event_str += f"{event.begin.strftime(self.time_format)}: {event.name}\n"
+        for event in all_day_events:
+            all_day_str += f"{event.begin.strftime(self.all_day_format)}: {event.name}\n"
         if self._ical.number_days > 1:
             format = strftime_by_example("Monday, Jan 1")
             header_str = f"iCalendar\n{now.strftime(format)} - {later.strftime(format)}"

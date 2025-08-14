@@ -91,3 +91,41 @@ cd git/pymirror
 29. Add sound - weather alerts for example
 6. WebServer seems to lag - lacking CPU time?
 7. Generic Text Item
+
+## ical Recurring events
+
+RRULE Parameters
+Parameter	Values/Description
+FREQ	SECONDLY, MINUTELY, HOURLY, DAILY, WEEKLY, MONTHLY, YEARLY
+UNTIL	Date/time (e.g., UNTIL=20250131T235959Z) — last possible occurrence
+COUNT	Integer (e.g., COUNT=10) — total number of occurrences
+INTERVAL	Integer (e.g., INTERVAL=2) — every N units of FREQ
+BYSECOND	List of seconds (0–59) (e.g., BYSECOND=0,15,30,45)
+BYMINUTE	List of minutes (0–59) (e.g., BYMINUTE=0,30)
+BYHOUR	List of hours (0–23) (e.g., BYHOUR=9,17)
+BYDAY	List of days (e.g., BYDAY=MO,TU,WE,TH,FR,SA,SU or BYDAY=1MO,-1SU)
+BYMONTHDAY	List of days in month (1–31 or -31–-1) (e.g., BYMONTHDAY=10,15,-1)
+BYYEARDAY	List of days in year (1–366 or -366–-1) (e.g., BYYEARDAY=100,-1)
+BYWEEKNO	List of week numbers (1–53 or -53–-1) (e.g., BYWEEKNO=20,40)
+BYMONTH	List of months (1–12) (e.g., BYMONTH=1,6,12)
+BYSETPOS	List of occurrence positions (e.g., BYSETPOS=1,-1)
+WKST	Week start day (MO, TU, etc.; default is MO)
+
+Negative values in RRULE parameters like BYDAY, BYMONTHDAY, BYYEARDAY, and BYWEEKNO indicate counting backwards from the end of the period (month, year, or week).
+
+Examples:
+BYMONTHDAY=-1
+The last day of the month.
+
+BYMONTHDAY=-2
+The second-to-last day of the month.
+
+BYDAY=-1SU
+The last Sunday of the period (e.g., month).
+
+BYYEARDAY=-1
+The last day of the year (December 31).
+
+BYWEEKNO=-1
+The last week of the year.
+
