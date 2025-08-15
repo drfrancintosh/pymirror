@@ -46,6 +46,7 @@ cd git/pymirror
 
 ## DONE
 
+1. Switch Raspberry PI to PIP rather than APP GET
 1. update gfx object so "set_font(font_name, font_size)" is 'permanent'
     - currently it only sets the gfx.font, but not gfx.font_name, gfx.font_size
     - likewise remove reset_font()

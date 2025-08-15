@@ -9,14 +9,19 @@
 ## Installation
 
 - RPI OS Lite 32-bit
-- `sudo apt update`
-- `sudo apt install git`
-- `git clone https://github.com/drfrancintosh/pymirror.git`
-- `sudo apt install fortune`
-- `sudo apt install libdrm-tests`
-  - `modetest` (will display hardware information on the displays)
-- `sudo apt install calendar`
-- `sudo apt install python3-setuptools`
+  - `sudo apt update`
+  - `sudo apt install git`
+  - `git clone https://github.com/drfrancintosh/pymirror.git`
+  - `sudo apt install fortune`
+  - `sudo apt install libdrm-tests`
+    - `modetest` (will display hardware information on the displays)
+  - `sudo apt install calendar`
+  - `sudo apt install python3-setuptools`
+- Python
+  - `sudo apt-get install python3-venv python3-full`
+  - `python3 -m venv .venv --system-site-packages`
+  - `source .venv/bin/activate`
+  - `pip install ics`
 
 ## Installing Libraries
 
@@ -29,12 +34,12 @@
 - Or reinstall Python with dev headers
   - `brew reinstall python@3.13`
 - Run python setup.py
-  - python3 setup.py build_ext --inplace
+  - `python3 setup.py build_ext --inplace`
   
 ## Fontlist.txt
 
 - One font per line
-- Basically the output of "fc-list"
+- Basically the output of `fc-list`
 - add your own fonts as well
 - Star Trek fonts in the `fonts` folder were appropriated from https://www.st-minutiae.com/resources/fonts/index.html
 - There were no credits there, but if anyone knows who to credit, I'll add the credits here
@@ -52,6 +57,7 @@
 - Thanks to `https://github.com/yavuzceliker/sample-images` for sample images
 
 ## Running
+
 - `cd ./pymirror`
 - `./run.sh`
 
@@ -78,60 +84,80 @@
 
 - caches/ - last calls from the web api in case the api is down and in the case that that PyMirror is calling faster than the rate limit
 - configs/ - .json config files (one per dashboard)
-- events/ - python classes for each type of event that can be published
 - fonts/ - local .ttf files
-- moddefs/ - module definition files (json)
+- frames/ - images for slideshow frames
 - random/ - test code and other fancy biscuits
 - samples/ - web api samples
 - scripts/ - test scripts
+- sounds/ - .wav files the play
 - src/
+  - clib/ - 'c' code that improves Python performance
   - events/ - python definition of PyMirror events
   - modules/ - PyMirror modules
+  - pmgfxlib/ - Python wrapper code to isolate bit-mapped graphics
   - pmsever/ - the flask web server class and other files (html, etc...)
   - pymirror/ - pymirror python source files
+- weather_icons/ - for the forecast module
 
 ## Files
 
 - .env - list of environment variables in KEY=value format (ignored by .gitignore, read into the PyMirror os.environ)
 - .secrets - list of API keys in KEY=value format (ignored by .gitignore, read into the PyMirror os.environ)
-- config.json - PyMirror main config file
 - fontlist.txt - PyMirror list of fonts and where to find them
 - README.md - this file
 - requirements.txt - list of Python packages needed to support PyMirror and the default modules
-- run.sh - script to run PyMirror
+- run.debug - script to run PyMirror locally (writing to .jpeg) and dribble logs to console
+- run.sh - script to run PyMirror (/dev/fb0 and quiet logs)
 - secrets - sample .secrets file
 - TODO.md - wish list of things to add to PyMirror
 
 ## Modules
 
 - Modules are stored in the `./src/modules` folder
-- The name of the module must be the snake-case version of the camel-case name of the module class
-  - example: analog_clock.py -> AnalogClock (class name for the module)
+- The name of the Python file must be the snake-case version of the camel-case name of the module class and end in _module.
+  - example: `analog_clock_module.py` -> `AnalogClockModule` (class name for the module)
 - In the `config.json` you can call up a module multiple times with different instances
+  - but not using the `_module` part of the filename
+  - example: `"module": "analog_clock"`
 
-- alert.py
-  - displays header, body, and footer. Subscribed to AlertEvent which updates the alert
-- analog_clock.py
+- weather_apis/ - folder holding interfaces to weather apis (accuweather, openwathermap)
+- alert_module.py
+  - displays alerts as a card (header, body, and footer). Subscribed to AlertEvent which updates the alert
+- analog_clock_module.py
   - Displays analog clock (round face)
-- cli.py
+- caldav_module.py
+  - displays "CALDAV" calendar api
+- cli_module.py
   - Runs a CLI command on a timer and displays the results
-- clock.py
+- clock_module.py
   - Displays current time as strftime() format, 
-- cron.py
+- complements_module.py
+  - Displays a random compliment
+- cron_module.py
   - no display, but runs on a timer and sends the defined event
-- fonts.py
+- fonts_module.py
   - list of fonts in fontlist.txt
-- fps.py
-  - Frames Per Second display
-- pymirror_controller.py
+- forecast_module.py
+  - accepts a WeatherForecast event and displays the results in a Card
+- fps_module.py
+  - DEBUG: Frames Per Second display
+- ical_module.py
+  - displays ical web api calendar
+- photo_module.py
+  - displays a single photo
+- pymirror_controller_module.py
   - handles and dispatches external events
-- rainbow.py
+- rainbow_module.py
   - test pattern showing all colors in RGB Bands
-- text.py
+- slideshow_module.py
+  - shows images in a cycle
+- sound_module.py
+  - plays sounds in reaction to SoundEvent events
+- text_module.py
   - displays static text
-- weather.py
-  - Displays current temperature, humidity, and effective temperature
-- web_api.py
+- weather_module.py
+  - Displays current temperature, humidity, and effective temperature (accuweather or openweathermap)
+- web_api_module.py
   - sends a web request and displays the formatted payload
 
 ## config.json
@@ -140,7 +166,7 @@
 {
   "debug": false, // when true displays boxes around module 'windows'
   "secrets": ".secrets", // your API keys and other secrets
-  "force_render": false, // forces a render of a module regardless of state changes
+  "force_render": false, // forces a render of all modules regardless of state changes
   "screen": {
     "output_file": null, // optional output file for use in debugging or html display
     "frame_buffer": "/dev/fb0", // frame buffer device (esp. rpi 02w)
@@ -202,13 +228,13 @@
 
 ```
 
-## Module Definition Files (./moddefs)
-- Module Definitions identify the module class and the parametrs to display the module
+## Module Definition Files (./configs/rpi/*.json)
+- Module Definitions identify the module class and the parameters to display the module
 - Not that that a module (like Date) may be instantiated many times.
 - Each with a different ModDef (see date.json, day_of_week.json, time.json, week_of_year.json) 
 ```json
 {
-    "module": "alert", // module name. must reside in src/modules/alert.py
+    "module": "alert", // module name. must be lowercase and reside in src/modules/alert_module.py
     "moddef": { // all modules have a required generic module definition or 'moddef'
         "name": "Alert", // a unique name
         "position": "alert_strip", // a position defined in config.json, the 'positions' section
@@ -248,4 +274,4 @@
         }
     }
 }
-```# pymirror
+```
