@@ -53,27 +53,26 @@ class PMWebApi:
             text = file.read()
         return text
 
-    def _fetch_from_cache(self):
-        if self.timer.is_timedout():
-            # reset the cache so that the web service is polled
-            self.cache_text = None
-        else:
+    def _fetch_fresh_cache(self):
+        text = None
+        if not self.timer.is_timedout():
             # if not timed out, return last cache
-            if not self.cache_text:
+            text = self.cache_text
+            if not text:
                 ## try to get it from the cache_file if the stored cache_text is None
-                self.cache_text = self._fetch_from_file_cache()
-        return self.cache_text
+                text = self._fetch_from_file_cache()
+        return text
 
     def _save_to_cache(self, text):
-        self.cache_text = text
         self.timer.set_timeout(self.poll_secs * 1000)
-        if not self.cache_file:
-            return
-        # Ensure the directory exists
-        # os.makedirs(os.path.dirname(self.cache_file), exist_ok=True)
-        # Write the text to the cache file
-        with open(self.cache_file, 'w') as file:
-            file.write(text)
+        if self.cache_text != text:
+            self.cache_text = text
+            if text and self.cache_file:
+                # Ensure the directory exists
+                # os.makedirs(os.path.dirname(self.cache_file), exist_ok=True)
+                # Write the text to the cache file
+                with open(self.cache_file, 'w') as file:
+                    file.write(text)
 
     async def _fetch(self):
         async with httpx.AsyncClient() as client:
@@ -125,16 +124,11 @@ class PMWebApi:
             }
             return response
 
-    def fetch_text(self, blocking=True):
-        cache = self._fetch_from_cache()
-        if cache:
-            return cache
-
+    def _fetch_from_api(self, blocking=True):
         response = self.fetch(blocking=blocking)
         if response:
             if response.status_code == 200:
-                self._save_to_cache(response.text)
-                return response.text
+                text = response.text
             else:
                 error = {
                     "__error__": "Failed to fetch text",
@@ -143,25 +137,27 @@ class PMWebApi:
                     "headers": response.headers,
                     "reason": response.reason_phrase
                 }
-                error_text = json.dumps(error, indent=2)
-                _error(f"Error fetching text from {self.url}:\n{error_text}")
-                self._save_to_cache(error_text)  # Cache the error response
-                return error_text
-        return None
+                text = json.dumps(error, indent=2)
+                _error(f"Error fetching text from {self.url}:\n{text}")
+        return text
+
+    def fetch_text(self, blocking=True):
+        text = self._fetch_fresh_cache() or self._fetch_from_api(blocking)
+        self._save_to_cache(text)
+        return text
 
     def fetch_json(self, blocking=True):
+        result = {}
         text = self.fetch_text(blocking=blocking)
         if text:
             try:
                 result = json.loads(text)
-                return result
             except Exception as e:
-                response = {
+                result = {
                     "__error__": "Failed to parse JSON",
                     "status_code": 500,
                     "text": str(e),
                     "headers": {},
                     "reason": "PyMirror Exception"
                 }
-                return response
-        return None
+        return result
