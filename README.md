@@ -84,6 +84,12 @@
 
 - caches/ - last calls from the web api in case the api is down and in the case that that PyMirror is calling faster than the rate limit
 - configs/ - .json config files (one per dashboard)
+  - digital_frame/ - a simple frame + slideshow and nothing else
+  - gls/ - my personal pymirror config
+  - macos/ - macos test config
+  - mm2/ - magic mirror look-alike config
+  - rpi/ - "production" delivered configuration
+  - test/ - simple test config
 - fonts/ - local .ttf files
 - frames/ - images for slideshow frames
 - random/ - test code and other fancy biscuits

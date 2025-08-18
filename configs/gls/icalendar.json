@@ -10,7 +10,7 @@
         "force_render": false
     },
     "ical": {
-        "url": "http://p44-caldav.icloud.com/published/2/MTA4NjQ3MzUyMTA4NjQ3M0nX6EeTxRO59dorTc67bm2DqkYjqbWgyaJWpJk1MbyvwQkMEQn3jxODLRJHx6AvUTrLxZJoy3OitdvvAN0QfKA",
+        "url": "$ICALDAV_URL",
         "time_format": "Jan 1, 2025 0:00 pm",
         "number_days": 180
     },
