@@ -9,21 +9,24 @@ import asyncio
 import json
 
 import requests
+
+from pmtimer import PMTimer
 from .pmlogger import _debug, _print, _error
 
 class PMWebApi:
-    def __init__(self, url: str, cache_file: str = None, cache_timeout: int = 3600):
+    def __init__(self, url: str, cache_file: str = None, poll_secs: int = 3600):
         self.url = url
         self.cache_file = cache_file
-        self.cache_timeout = cache_timeout  # Default cache timeout in seconds
-        self.next_timeout = 0
+        self.poll_secs = poll_secs  # Default polling rate in seconds
+        self.timer = PMTimer(1)
+        self.loop = asyncio.get_event_loop()
+        self.task = None
         self.cache_text = None
         self.method = "get"  # Default method
         self.headers = {"Accept": "application/json"}
         self.params = {}
         self.data = None
         self.json = None
-        self.loop = None
         self.task = None
 
     def _get_fresh_cache_filename(self):
@@ -31,43 +34,39 @@ class PMWebApi:
            not self.cache_file
            or not os.path.exists(self.cache_file)
            or os.path.getsize(self.cache_file) == 0
-           or self.cache_timeout <= 0):
+           or self.poll_secs <= 0):
             #if there's no cache file, return None
             return None
-        file_age = os.path.getmtime(self.cache_file)
-        if (file_age + self.cache_timeout) < time.time():
+        file_time = os.path.getmtime(self.cache_file)
+        if (file_time + self.poll_secs) < time.time():
             return None  # Cache is too old, do not use it
         return self.cache_file
 
     def _fetch_from_file_cache(self):
-        # get files stats and check if it is older cache_timeout from current time
         # Read the cached file
         cache_file = self._get_fresh_cache_filename()
         if not cache_file:
+            # if the cache_file doesn't exist or is not out of date
+            # return None so the web service is polled
             return None
         with open(cache_file, 'r') as file:
             text = file.read()
         return text
 
-        pass
-
     def _fetch_from_cache(self):
-        if self.next_timeout > time.time():
-            # if not timed out, return last cache
-            if self.cache_text:
-                ## if we have local cache, return it
-                return self.cache_text
-            else:
-                ## otherwise try to get it from the cache_file
-                return self._fetch_from_file_cache()
-        else:
-            # if timed out, reset cache
+        if self.timer.is_timedout():
+            # reset the cache so that the web service is polled
             self.cache_text = None
-            return None
+        else:
+            # if not timed out, return last cache
+            if not self.cache_text:
+                ## try to get it from the cache_file if the stored cache_text is None
+                self.cache_text = self._fetch_from_file_cache()
+        return self.cache_text
 
     def _save_to_cache(self, text):
         self.cache_text = text
-        self.next_timeout = time.time() + self.cache_timeout
+        self.timer.set_timeout(self.poll_secs * 1000)
         if not self.cache_file:
             return
         # Ensure the directory exists
@@ -94,7 +93,6 @@ class PMWebApi:
             return response
 
     def start(self): 
-        self.loop = asyncio.get_event_loop()
         self.task = self.loop.create_task(self._fetch())
 
     def cancel(self):
@@ -105,12 +103,17 @@ class PMWebApi:
     def fetch(self, blocking=True):
         try:
             if blocking:
+                self.start()
                 self.loop.run_until_complete(self.task)
+                self.task = None
             else:
                 ## give asyncio some time to process
+                if self.task is None:
+                    self.start()
                 self.loop.run_until_complete(asyncio.sleep(0.001))
             if self.task.done():
                 result = self.task.result()
+                self.task = None
                 return result
             return None
         except Exception as e:
@@ -123,7 +126,7 @@ class PMWebApi:
             return response
 
     def fetch_text(self, blocking=True):
-        cache = self._fetch_from_cache(force=False)
+        cache = self._fetch_from_cache()
         if cache:
             return cache
 
