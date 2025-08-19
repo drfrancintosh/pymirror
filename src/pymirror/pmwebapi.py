@@ -65,7 +65,7 @@ class PMWebApi:
         else:
             self.cache_info = SafeNamespace() ## reset the cache_info because we didn't read from the cache
         self.cache_info.text = text
-        _print(f"Using cached data from {self.cache_info.file}, size: {self.cache_info.size} bytes, last modified: {self.cache_info.last_date}")
+        _debug(f"Using cached data from {self.cache_info.file}, size: {self.cache_info.size} bytes, last modified: {self.cache_info.last_date}")
         return text
 
     def _fetch_fresh_cache(self):
@@ -81,9 +81,9 @@ class PMWebApi:
     def _save_to_cache(self, text):
         self.timer.set_timeout(self.poll_secs * 1000)
         if self.cache_info.text != text:
-            _print(f"Cache updated for {self.url}, size: {len(text) if text else 0} bytes")
-            _print(f"Cache text: {self.cache_info.text}")
-            _print(f"Saving to cache: {self.cache_file}")
+            _debug(f"Cache updated for {self.url}, size: {len(text) if text else 0} bytes")
+            _debug(f"Cache text: {self.cache_info.text}")
+            _debug(f"Saving to cache: {self.cache_file}")
             self.cache_info.text = text
             if text and self.cache_file:
                 # Ensure the directory exists
