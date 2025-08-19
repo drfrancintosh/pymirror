@@ -70,7 +70,7 @@ class WebApiModule(PMCard):
 	def exec(self) -> bool:
 		update = super().exec()
 
-		if self.display_timer.is_timedout():
+		if self.response == None or self.display_timer.is_timedout():
 			self.result = self._read_api()
 			self._display_next_item()
 			self.display_timer.set_timeout(self._web_api.cycle_seconds * 1000)
