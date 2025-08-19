@@ -8,3 +8,4 @@ requests
 pygame
 ics
 python-dateutil
+httpx
