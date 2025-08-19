@@ -49,11 +49,11 @@ def trace(cls):
 
     for attr_name in dir(cls):
         attr = getattr(cls, attr_name)
-        
         # Only wrap callable methods, skip special methods and properties
         if (callable(attr) and 
-            not attr_name.startswith('_') and 
-            not isinstance(attr, (property, staticmethod, classmethod))):
+            not attr_name.startswith('__') and 
+            not isinstance(attr, (property, staticmethod, classmethod))
+            ):
             
             # Apply the METHOD trace decorator (not the class decorator)
             traced_method = trace_method(attr)
