@@ -34,8 +34,8 @@
             "font_size": 32,
             "text_color": "#000",
             "text_bg_color": "#088",
-            "valign": "top",
-            "height": 72
+            "valign": "center",
+            "height": 128
         },
         "body": {
             "font_name": "Roboto-Regular",
