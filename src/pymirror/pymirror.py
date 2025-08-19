@@ -85,6 +85,7 @@ class PyMirror:
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
             clazz_name = snake_to_pascal(module_config.module)
+            _debug(f"Loading module class {clazz_name} from {mod.__name__}")
             clazz = getattr(mod, clazz_name + "Module", None)
 
             ## create an instance of the class (module)
@@ -139,12 +140,11 @@ class PyMirror:
         sbm = self.screen.bitmap
         mbm = module.bitmap
         sgfx = sbm.gfx_push()
-        mgfx = mbm.gfx
         sgfx.font.set_font("DejaVuSans", 24)
-        sbm.rect(mgfx.rect, fill=None)
+        sbm.rectangle(mbm.rect, fill=None)
         _time = module._time or 0.0
-        sbm.text(f"{module._moddef.name} ({_time:.2f}s)", mgfx.x0 + sgfx.line_width, mgfx.y0 + sgfx.line_width)
-        sbm.text_box(mgfx.rect, f"{module._moddef.position}", halign="right", valign="top")
+        sbm.text(f"{module._moddef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
+        sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
     def full_render(self):
@@ -152,7 +152,7 @@ class PyMirror:
         for module in self.modules:
             if module.disabled or not module.bitmap: continue
             module.render(force=True)
-            self.screen.bitmap.paste(module.bitmap, module.bitmap.gfx.x0, module.bitmap.gfx.y0, mask=module.bitmap)
+            self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
         if self.debug: self._debug(module)
         self.screen.flush()  # Flush the screen to show all modules at once
 

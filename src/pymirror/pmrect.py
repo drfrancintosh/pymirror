@@ -35,43 +35,39 @@ class PMRect:
 
     @property
     def width(self) -> int:
-        return self.x1 - self.x0
+        return self.x1 - self.x0 + 1
 
     @property
     def height(self) -> int:
-        return self.y1 - self.y0
+        return self.y1 - self.y0 + 1
     
     @x0.setter
     def x0(self, value: int):
         self._coords[0] = value
-        self._coords[2] = value + self.width
 
     @y0.setter
     def y0(self, value: int):
         self._coords[1] = value
-        self._coords[3] = value + self.height
 
     @x1.setter
     def x1(self, value: int):
         self._coords[2] = value
-        self._coords[0] = value - self.width
 
     @y1.setter
     def y1(self, value: int):
         self._coords[3] = value
-        self._coords[1] = value - self.height
 
     @width.setter
     def width(self, value: int):
-        if value < 0:
-            raise ValueError("Width cannot be negative")
-        self._coords[2] = self.x0 + value
+        if value < 1:
+            raise ValueError(f"Width cannot be negative or zero {value}")
+        self._coords[2] = self.x0 + value - 1
 
     @height.setter
     def height(self, value: int):
-        if value < 0:
-            raise ValueError("Height cannot be negative")
-        self._coords[3] = self.y0 + value
+        if value < 1:
+            raise ValueError(f"Height cannot be negative or zero {value}")
+        self._coords[3] = self.y0 + value - 1
 
     def __add__(self, other: 'PMRect') -> 'PMRect':
         return PMRect(
@@ -83,10 +79,12 @@ class PMRect:
 
     def move(self, x0: int, y0: int) -> 'PMRect':
         """Move the rectangle to (x0, y0)."""
+        width = self.width
+        height = self.height
         self[0] = x0
         self[1] = y0
-        self[2] = x0 + self.width
-        self[3] = y0 + self.height
+        self[2] = x0 + width
+        self[3] = y0 + height
         return self
 
     def rmove(self, dx: int, dy: int) -> 'PMRect':
