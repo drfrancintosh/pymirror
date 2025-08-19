@@ -17,7 +17,7 @@ class WebApiModule(PMCard):
 		self.response = None
 		self.items = []
 		self.item_number = 0
-		self.update(None, None, None)  # Initialize with empty strings
+		self.update(None, "(loading...)", None)  # Initialize with empty strings
 
 	def _read_items(self, force: bool = False) -> int:
 		context = {
@@ -45,7 +45,7 @@ class WebApiModule(PMCard):
 	
 	def _read_api(self):
 		self.api.httpx.params = self._web_api.params.__dict__
-		self.response = self.api.fetch_json()
+		self.response = self.api.fetch_json(blocking=False)
 		if not self.response:
 			_error(f"Error fetching data")
 			return False
@@ -61,14 +61,17 @@ class WebApiModule(PMCard):
 		self.footer = self.items[self.item_number].get("footer", "") 
 		if self.api.is_from_cache():
 			self.footer = f"(from cache: {self.api.cache_info.last_date})\n{self.footer}"
+		if self.body in [None, "", "None"]:
+			self.body = self.header
+			self.header = ""
 		self.update(self.header, self.body, self.footer)
 		self.item_number += 1
 	
 	def exec(self) -> bool:
 		update = super().exec()
-		self.result = self._read_api()
 
 		if self.display_timer.is_timedout():
+			self.result = self._read_api()
 			self._display_next_item()
 			self.display_timer.set_timeout(self._web_api.cycle_seconds * 1000)
 			update = True
