@@ -11,19 +11,18 @@
     },
     "web_api": {
         "cache_file": "./caches/news.json",
-        "cache_timeout_secs": 840,
-        "update_mins": 15,
+        "poll_secs": 900,
         "cycle_seconds": 30,
         "url": "https://newsapi.org/v2/top-headlines",
         "params": {
             "apiKey": "$NEWSAPI_KEY",
             "country": "us",
-            "pageSize": 10,
+            "pageSize": 100,
             "category": "business"
         },
         "display": {
             "total": "{{payload.totalResults}}",
-            "max": "10",
+            "max": "100",
             "header": "{{_n_}}: {{payload.articles[_n_].title}}",
             "body": "{{payload.articles[_n_].description}}",
             "footer": "{{payload.articles[_n_].source.name}} @ {{ payload.articles[_n_].publishedAt.split('T')[0] }} -  {{ payload.articles[_n_].publishedAt.split('T')[1].replace('Z', '') }}"

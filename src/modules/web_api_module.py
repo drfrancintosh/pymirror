@@ -12,9 +12,8 @@ class WebApiModule(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._web_api = config.web_api
-		self.api = PMWebApi(self._web_api.url, self._web_api.cache_file, self._web_api.cache_timeout_secs	)
-		self.timer.set_timeout(0.1) # refresh right away
-		self.display_timer = PMTimer(0)
+		self.api = PMWebApi(self._web_api.url, self._web_api.poll_secs, self._web_api.cache_file)
+		self.display_timer = PMTimer(1000)
 		self.response = None
 		self.items = []
 		self.item_number = 0
@@ -45,7 +44,8 @@ class WebApiModule(PMCard):
 		return len(self.items)
 	
 	def _read_api(self):
-		self.response = self.api.get_json(self._web_api.params.__dict__)
+		self.api.httpx.params = self._web_api.params.__dict__
+		self.response = self.api.fetch_json()
 		if not self.response:
 			_error(f"Error fetching data")
 			return False
@@ -58,17 +58,15 @@ class WebApiModule(PMCard):
 			self.item_number = 0
 		self.header = self.items[self.item_number].get("header", "")
 		self.body = self.items[self.item_number].get("body", "")
-		self.footer = self.items[self.item_number].get("footer", "")
+		self.footer = self.items[self.item_number].get("footer", "") 
+		if self.api.is_from_cache():
+			self.footer = f"(from cache: {self.api.cache_info.last_date})\n{self.footer}"
 		self.update(self.header, self.body, self.footer)
 		self.item_number += 1
 	
 	def exec(self) -> bool:
 		update = super().exec()
-		if self.timer.is_timedout():
-			self.result = self._read_api()
-			self.timer.set_timeout(self._web_api.update_mins * 60 * 1000)
-			self.display_timer.set_timeout(0.1)
-			update = True
+		self.result = self._read_api()
 
 		if self.display_timer.is_timedout():
 			self._display_next_item()

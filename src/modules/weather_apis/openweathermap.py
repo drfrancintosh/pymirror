@@ -36,7 +36,7 @@ class OpenWeatherMapApi(PMWebApi):
     """
     def __init__(self, config: SafeNamespace):
         self.config = OpenWeatherMapConfig()
-        super().__init__(self.config.url, self.config.cache_file, self.config.cache_timeout_secs)
+        super().__init__(self.config.url, self.config.cache_timeout_secs, self.config.cache_file)
         self.params = OpenWeatherMapParams(**config.__dict__)
     
     def get_weather_data(self, params = None) -> PMWeatherData:
@@ -46,7 +46,8 @@ class OpenWeatherMapApi(PMWebApi):
         """
         if not params:
             params = self.params.__dict__
-        response = self.get_json(params)
+        self.httpx.params=params
+        response = self.fetch_json()
         if not response: return None
         weather = PMWeatherData.from_dict(response)
         if weather.alerts:

@@ -27,7 +27,7 @@ class IcalModule(PMCard):
         self._ical = ICalConfig(**config.ical.__dict__)
         self.timer.set_timeout(1)  # refresh right away
         self.ical_response = None
-        self.api = PMWebApi(self._ical.url, self._ical.cache_file, self._ical.refresh_minutes * 60)
+        self.api = PMWebApi(self._ical.url, self._ical.refresh_minutes * 60, self._ical.cache_file)
         self.all_day_format = strftime_by_example(self._ical.all_day_format)
         self.time_format = strftime_by_example(self._ical.time_format)
 
@@ -118,7 +118,7 @@ class IcalModule(PMCard):
         if not self.timer.is_timedout(): return is_dirty # early exit if not timed out
 
         # self.timer.set_timeout(self._ical.refresh_minutes * 60 * 1000)
-        self.ical_response = self.api.get_text()
+        self.ical_response = self.api.fetch(blocking=True).text
         epoch = datetime(1980, 1, 1, tzinfo=timezone.utc)
         now = datetime.now(timezone.utc)
         later = now + timedelta(hours=24 * self._ical.number_days)
