@@ -120,6 +120,7 @@ class PMWebApi:
         with open(cache_fname, 'r') as file:
             text = file.read()
         _debug(f"Using cached data from {cache_fname}, size: {len(text)} bytes")
+        self.last_text = text ### GLS - preventing us from writing it back to disk and updating the modification time
         return text
 
     def _fetch_from_api(self, blocking=True):
@@ -172,7 +173,7 @@ class PMWebApi:
         # reset timer
         self.timer.set_timeout(self.poll_secs * 1000)
         _debug(f"Memory Cache updated for {self.url}, size: {len(text) if text else 0} bytes")
-        _debug(f"Memory Cache text: {self.last_text}")
+        _debug(f"Memory Cache text: {len(self.last_text)}")
         self.last_text = text
         if not (text and self.cache_file):
             return None  # No text to save or no cache file specified

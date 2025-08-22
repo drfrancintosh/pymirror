@@ -33,7 +33,7 @@ def trace_method(func):
 
         try:
             result = func(*args, **kwargs)
-            pmlogger._trace_exit("->", result)
+            pmlogger._trace_exit("->", type(result))
             return result
         except Exception as e:
             pmlogger._trace_exit("-> EXCEPTION:", str(e))
