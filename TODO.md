@@ -20,6 +20,10 @@ setterm -cursor off
 cd git/pymirror
 ./run.sh
 
+## Running Module Tets
+
+- `PYTHONPATH=./src python -m pymirror.pmwebapi`
+
 ## Backlog
 
 1. Fix headers on Weather Module
@@ -46,6 +50,7 @@ cd git/pymirror
 
 ## DONE
 
+1. Add "clear memory cache" and "clear file cache" to control panel
 1. Switch Raspberry PI to PIP rather than APP GET
 1. update gfx object so "set_font(font_name, font_size)" is 'permanent'
     - currently it only sets the gfx.font, but not gfx.font_name, gfx.font_size

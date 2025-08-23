@@ -28,4 +28,4 @@ class AlertModule(PMCard):
 	def onEvent(self, event) -> None:
 		self.disabled = False
 		self.update(event.header, event.body, event.footer)
-		self.timer.set_timeout(event.timeout)
+		self.timer.set_timeout(event.timeout, event.timeout)

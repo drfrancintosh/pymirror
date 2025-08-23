@@ -13,7 +13,8 @@ class WebApiModule(PMCard):
 		super().__init__(pm, config)
 		self._web_api = config.web_api
 		self.api = PMWebApi(self._web_api.url, self._web_api.poll_secs, self._web_api.cache_file)
-		self.display_timer = PMTimer(1000)
+		self.display_timer = PMTimer(self._web_api.cycle_seconds * 1000)
+
 		self.response = None
 		self.items = []
 		self.item_number = 0
@@ -60,7 +61,7 @@ class WebApiModule(PMCard):
 		self.body = self.items[self.item_number].get("body", "")
 		self.footer = self.items[self.item_number].get("footer", "") 
 		if self.api.is_from_cache():
-			self.footer = f"(from cache: {self.api.cache_info.last_date})\n{self.footer}"
+			self.footer = f"(from cache: {self.api.last_date})\n{self.footer}"
 		if self.body in [None, "", "None"]:
 			self.body = self.header
 			self.header = ""
@@ -70,10 +71,10 @@ class WebApiModule(PMCard):
 	def exec(self) -> bool:
 		update = super().exec()
 
-		if self.display_timer.is_timedout():
+		if self.response == None or self.display_timer.is_timedout():
 			self.result = self._read_api()
 			self._display_next_item()
-			self.display_timer.set_timeout(self._web_api.cycle_seconds * 1000)
+			self.display_timer.reset()
 			update = True
 
 		return update

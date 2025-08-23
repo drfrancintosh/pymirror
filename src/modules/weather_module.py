@@ -17,7 +17,7 @@ class WeatherModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._weather = WeatherConfig(**config.weather.__dict__)
-        self.timer.set_timeout(1)  # refresh right away
+        self.timer.set_timeout(self._weather.refresh_minutes * 60 * 1000) 
         self.weather_response = None
         if config.openweathermap:
             from .weather_apis.openweathermap import OpenWeatherMapApi
@@ -30,8 +30,17 @@ class WeatherModule(PMCard):
         is_dirty = super().exec()
         if not self.timer.is_timedout(): return is_dirty # early exit if not timed out
 
-        self.timer.set_timeout(self._weather.refresh_minutes * 60 * 1000)
         self.weather_response = self.api.get_weather_data()
+        if not self.weather_response:
+            self.update(
+                self.api.config.name,
+                "(loading...)",
+                "",
+            )
+            self.timer.reset(100)
+            return False
+        else:
+            self.timer.reset()
         weather = self.weather_response.current
         daily = self.weather_response.daily
         alerts = self.weather_response.alerts

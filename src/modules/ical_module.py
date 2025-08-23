@@ -3,6 +3,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+import time
 from ics import Calendar
 
 from pymirror.pmcard import PMCard
@@ -25,7 +26,7 @@ class IcalModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._ical = ICalConfig(**config.ical.__dict__)
-        self.timer.set_timeout(1)  # refresh right away
+        self.timer.set_timeout(self._ical.refresh_minutes * 60 * 1000)
         self.ical_response = None
         self.api = PMWebApi(self._ical.url, self._ical.refresh_minutes * 60, self._ical.cache_file)
         self.all_day_format = strftime_by_example(self._ical.all_day_format)
@@ -116,9 +117,21 @@ class IcalModule(PMCard):
     def exec(self) -> bool:
         is_dirty = super().exec()
         if not self.timer.is_timedout(): return is_dirty # early exit if not timed out
+        self.timer.reset()
 
-        # self.timer.set_timeout(self._ical.refresh_minutes * 60 * 1000)
-        self.ical_response = self.api.fetch(blocking=True).text
+        self.ical_response = self.api.fetch_text(blocking=False)
+        if not self.ical_response:
+            # non-blocking call or error?
+            if self.api.error:
+                _error(f"Failed to fetch iCalendar data from {self.api.url}: {self.api.error}")
+            self.update(
+                "iCalendar",
+                "(loading...)",
+                datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S"),
+            )
+            self.timer.reset(1000)
+            return False
+        print("got data...")
         epoch = datetime(1980, 1, 1, tzinfo=timezone.utc)
         now = datetime.now(timezone.utc)
         later = now + timedelta(hours=24 * self._ical.number_days)
@@ -133,9 +146,10 @@ class IcalModule(PMCard):
         for event in events:
             rrule = self._get_rrule(event, now)
             if rrule and rrule.until >= now:
-                print(f"Event: {event.name}({event.all_day}) - {event.begin} to {event.end}")
-                print(f"RRULE: {rrule}\n")
+                # print(f"Event: {event.name}({event.all_day}) - {event.begin} to {event.end}")
+                # print(f"RRULE: {rrule}\n")
                 # new_events = self._generate_recurring_dates(event, now, later)
+                pass
             if event_cnt > self._ical.max_events:
                 break
             if event.begin.datetime < now:
@@ -157,4 +171,5 @@ class IcalModule(PMCard):
             event_str or "No Events to Show",
             "last updated\n" + now.astimezone().strftime("%Y-%m-%d %H:%M:%S"),
         )
+        print("updated...")
         return True # state changed
