@@ -40,7 +40,7 @@
     "./configs/gls/day_of_week.json",
     "./configs/gls/slideshow.json",
     "./configs/rpi/fortune.json",
-    "./configs/gls/news.json",
+    "./configs/rpi/news.json",
     "./configs/rpi/weather.json",
     "./configs/rpi/weather_alert.json",
     "./configs/rpi/forecast.json",
