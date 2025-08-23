@@ -1,29 +1,31 @@
-import os
-import time
+import sys
 import httpx
 import asyncio
 import json
-
+import time
 import inspect
-from pymirror.pmtimer import PMTimer
+
 from pymirror.pmlogger import _debug, _print, _error, trace
 from pymirror.utils import SafeNamespace
+from pymirror.pmlogger import pmlogger, PMLoggerLevel
+from pymirror.pmcaches import FileCache
 
-@trace
+# pmlogger.set_level(PMLoggerLevel.DEBUG)
+
+# @trace
 class PMWebApi:
     def __init__(self, url: str, poll_secs: int = 3600, cache_file: str = None):
         self.url = url
-        self.cache_file = cache_file
         self.poll_secs = poll_secs
         ##
-        self.last_text = None
-        self.timer = PMTimer(1)
         self.async_loop = asyncio.get_event_loop()
         self.task = None
-        self.cache_info = SafeNamespace()
-        self.async_delay = 0.001
+        self.file_cache = FileCache(text=None, fname=cache_file, timeout_ms=poll_secs * 1000) if cache_file else None
+        self.async_delay = 0.01
         self.httpx = self.set_httpx()
         self.error = None
+        self.from_cache = False
+        self.text = None
 
     def set_httpx(self, method="get", headers={"Accept": "application/json"}, params={}, data=None, json=None, timeout_secs=5):
         httpx = SafeNamespace()
@@ -35,8 +37,12 @@ class PMWebApi:
         httpx.timeout_secs = timeout_secs
         return httpx
 
+    @property
+    def last_date(self):
+        return self.file_cache.file_info.last_date 
+
     def is_from_cache(self):
-        return self.cache_info.file != None
+        return self.from_cache
 
     def start(self): 
         self.task = self.async_loop.create_task(self._async_fetch())
@@ -52,33 +58,52 @@ class PMWebApi:
                 or self._fetch_non_blocking(blocking)
         except Exception as e:
             self.cancel()
-            return self._set_error(
-                status_code=500,
-                text=repr(e),
-                function=inspect.currentframe().f_code.co_name
-            )
+            self.error = e
 
     def fetch_text(self, blocking=True):
-        self.error = None
-        text = self._fetch_cache_from_memory() \
-            or self._fetch_cache_from_disk() \
-            or self._fetch_from_api(blocking) \
-            or None
-        self._save_to_cache(text)
-        return text
+        cached_text = self.file_cache.get()
+        if cached_text != None:
+            _debug(f" | Cached file {self.file_cache.file_info.fname} is valid")
+            self.from_cache = True
+            self.text = cached_text
+        else:
+            _debug(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
+            api_text = self._fetch_from_api(blocking)
+            if api_text != None:
+                _debug(f" |  | API response from {self.url} is non-null")
+                self.text = api_text
+                self.from_cache = False
+                ## update the cache if the text has changed
+                self.file_cache.update(self.text)
+            else:
+                ## api returned nothing - error or non-blocking read
+                _debug(f" |  | API response from {self.url} is null (non-blocking or error)")
+                if self.error:
+                    _error(f"Error fetching API response from {self.url}: {self.error}")
+                    self.text = None
+                    self.from_cache = False
+                else:
+                    if self.text == None:
+                        ## the cache is invalid, try to read from file
+                        _debug(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
+                        self.text = self.file_cache.read()
+                        self.from_cache = True
+                    else:
+                        ## the api returned nothing, keep using the old text
+                        _debug(f" |  |  | the api returned nothing, keep using the old text")
+                        self.from_cache = True
+                        pass
+        return self.text
 
     def fetch_json(self, blocking=True):
         result = None
         try:
+            _debug(f"Fetching json from {self.url}...")
             text = self.fetch_text(blocking=blocking)
             if text:
                 result = json.loads(text)
         except Exception as e:
-            return self._set_error(
-                status_code=500,
-                text=repr(e),
-                function=inspect.currentframe().f_code.co_name
-            )
+            self.error = e
         return result
 
     def _fetch_blocking(self, blocking):
@@ -88,6 +113,7 @@ class PMWebApi:
         self.start()
         self.async_loop.run_until_complete(self.task)
         result = self.task.result()
+        self.error = None ## GLS - resetting error (set because file not found or out of date)
         self.cancel()
         return result
 
@@ -100,31 +126,17 @@ class PMWebApi:
         ## give asyncio some time to process
         self.async_loop.run_until_complete(asyncio.sleep(self.async_delay))
         if not self.task.done():
+            _debug(f"Fetch task NOT completed for {self.url}")
+            self.error = None ## GLS - resetting error (set because file not found or out of date)
             return None
         _debug(f"Fetch task completed for {self.url}")
         result = self.task.result()
         self.cancel()
         return result
 
-    def _fetch_cache_from_memory(self):
-        if self.timer.is_timedout(): 
-            # the memory cache is out of date
-            return None
-        return self.last_text  ## possibly None
-
-    def _fetch_cache_from_disk(self):
-        text = None
-        cache_fname = self._update_file_cache_info()
-        if not cache_fname:
-            return None
-        with open(cache_fname, 'r') as file:
-            text = file.read()
-        _debug(f"Using cached data from {cache_fname}, size: {len(text)} bytes")
-        self.last_text = text ### GLS - preventing us from writing it back to disk and updating the modification time
-        return text
-
     def _fetch_from_api(self, blocking=True):
         text = None
+        self.error = None
         response = self.fetch(blocking=blocking)
         _debug(f"Fetch response from {self.url}: {response}")
         if not response:
@@ -133,57 +145,9 @@ class PMWebApi:
         if response.status_code == 200:
             text = response.text
         else:
-            self._set_error(
-                response.status_code, 
-                response.text,
-                headers=response.headers,
-                reason=response.reason_phrase,
-                function=inspect.currentframe().f_code.co_name
-            )
+            self.error = Exception(f"HTTP {response.status_code}: {response.text}")
         return text
     
-    def _set_error(self, status_code, text, **kwargs):
-        self.error = {
-            "status_code": status_code,
-            "text": text,
-            **kwargs
-        }
-        _error(f"Error fetching text from {self.url}:\n{self.error}\n{self.cache_info}")
-        return None
-
-    def _update_file_cache_info(self):
-        self.cache_info = SafeNamespace()
-        self.cache_info.file = self.cache_file
-        self.cache_info.exists = os.path.exists(self.cache_file)
-        if not self.cache_info.exists:
-            return self._set_error(
-                status_code=500, 
-                text=f"file not found {self.cache_file}", 
-                function=inspect.currentframe().f_code.co_name)
-        self.cache_info.size = os.path.getsize(self.cache_file)
-        self.cache_info.last_modified = os.path.getmtime(self.cache_file)
-        self.cache_info.last_date = time.ctime(self.cache_info.last_modified)
-        if (self.cache_info.last_modified + self.poll_secs) < time.time():
-            return None  # Cache is too old, do not use it
-        return self.cache_file
-
-    def _save_to_cache(self, text):
-        if self.last_text == text:
-            return None  # No change in cache, nothing to save
-        # reset timer
-        self.timer.set_timeout(self.poll_secs * 1000)
-        _debug(f"Memory Cache updated for {self.url}, size: {len(text) if text else 0} bytes")
-        _debug(f"Memory Cache text: {len(self.last_text)}")
-        self.last_text = text
-        if not (text and self.cache_file):
-            return None  # No text to save or no cache file specified
-        _debug(f"Saving to file cache: {self.cache_file}")
-        # Ensure the directory exists
-        # os.makedirs(os.path.dirname(self.cache_file), exist_ok=True)
-        # Write the text to the cache file
-        with open(self.cache_file, 'w') as file:
-            file.write(text)
-
     async def _async_fetch(self):
         async with httpx.AsyncClient(timeout=self.httpx.timeout_secs) as client:
             method = self.httpx.method.upper()
@@ -205,19 +169,25 @@ class PMWebApi:
 def main():
     import dotenv
     dotenv.load_dotenv('.secrets')
-    api = PMWebApi("https://httpbin.org/delay/1", poll_secs=60, cache_file='./caches/tet.json')
-    result = None
-    while result is None:
-        result = api.fetch_json(blocking=False)
-        if api.error:
-            _error(f"Error fetching json from {api.url}:\n{api.error}")
-            break
-    print(result)
-    print(api.cache_info)
-    if api.is_from_cache():
-        print("Response is from cache")
-    else:
-        print("Response is not from cache")
+    api = PMWebApi("https://httpbin.org/delay/1", poll_secs=10, cache_file='./caches/test.json')
 
+    result = None
+    print("initiate the api call...")
+    while result is None:
+        result = api.fetch_json(blocking=True)
+        if api.error:
+            _error(f"first loop: Error fetching json from {api.url}:\n{repr(api.error)}")
+            sys.exit(1)
+        time.sleep(0.1)
+    print(f"Response {len(result or '')} is {'not ' if not api.from_cache else ''}from cache")
+    while api.is_from_cache():
+        result = api.fetch_json(blocking=True)
+        if api.error:
+            _error(f"second loop: Error fetching json from {api.url}:\n{repr(api.error)}")
+            sys.exit(1)
+        print(f"... from cache: {len(result or '')} self.file_cache: {time.ctime(time.time())}, {api.file_cache.file_info.last_date}")
+        time.sleep(1.0)
+    print("result", result)
+    print(f"Response is {'not ' if not api.from_cache else ''}from cache")
 if __name__ == "__main__":
     main()

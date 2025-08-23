@@ -15,7 +15,7 @@ class SlideshowModule(PMModule):
 		self.alt_rect = PMRect(*_str_to_rect(self._slideshow.rect))
 		self.photo_number = 0
 		self.photos = self.load_folder(self._slideshow.folder)
-		self.timer = PMTimer(1)
+		self.timer = PMTimer(self._slideshow.interval_secs * 1000)
 		self.dirty = False
 		self.path = None
 		self.frame_bm = None
@@ -46,7 +46,7 @@ class SlideshowModule(PMModule):
 	
 	def exec(self):
 		if self.timer.is_timedout():
-			self.timer.set_timeout(self._slideshow.interval_secs * 1000)  # Convert seconds to milliseconds
+			self.timer.reset()
 			if self._slideshow.randomize:
 				self.photo_number = randint(0, len(self.photos) - 1)
 			else:

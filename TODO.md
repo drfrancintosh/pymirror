@@ -20,6 +20,10 @@ setterm -cursor off
 cd git/pymirror
 ./run.sh
 
+## Running Module Tets
+
+- `PYTHONPATH=./src python -m pymirror.pmwebapi`
+
 ## Backlog
 
 1. Fix headers on Weather Module

@@ -36,7 +36,7 @@ class PMModule(ABC):
 		self.disabled = _moddef.disabled
 		self.force_render = _moddef.force_render
 		self.force_update = _moddef.force_update
-		self.timer = PMTimer(0)
+		self.timer = PMTimer(0, 0)
 		self.subscriptions = []
 		self._time = 0.0  # time taken for module execution
 		self.bitmap = None

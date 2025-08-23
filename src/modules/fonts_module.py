@@ -10,7 +10,7 @@ class FontsModule(PMModule):
 		self.font_list = self._load_font_list()
 		self.font_item = 0
 		self.max_items = 10
-		self.timer.set_timeout(1)
+		self.timer.set_timeout(self._text.delay_ms)
 
 	def _load_font_list(self):
 		"""Load the list of available fonts from fontlist.txt"""
@@ -41,7 +41,7 @@ class FontsModule(PMModule):
 
 	def exec(self):
 		if self.timer.is_timedout():
-			self.timer.set_timeout(self._text.delay_ms)
+			self.timer.reset()
 			self.font_item += 1
 			return True
 		return False

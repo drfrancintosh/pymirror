@@ -9,7 +9,7 @@ class ComplimentsModule(PMModule):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._compliments = config.compliments
-        self.timer.set_timeout(1)  # refresh right away
+        self.timer.set_timeout(self._compliments.update_interval_secs * 1000)
 
     def _pick_complement(self):
         "Pick a random compliment based on the current time of day"
@@ -32,7 +32,7 @@ class ComplimentsModule(PMModule):
     
     def exec(self) -> bool:
         if self.timer.is_timedout():
-            self.timer.set_timeout(self._compliments.update_interval_secs * 1000)
+            self.timer.reset()
             self._pick_complement()
             return True
         return False
