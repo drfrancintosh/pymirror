@@ -17,25 +17,44 @@
     - `modetest` (will display hardware information on the displays)
   - `sudo apt install calendar`
   - `sudo apt install python3-setuptools`
-- Python
   - `sudo apt-get install python3-venv python3-full`
+- Python Virtual Environment
+  - `cd pymirror`
   - `python3 -m venv .venv --system-site-packages`
   - `source .venv/bin/activate`
+  - Calendar (here? maybe better in the install_libs.sh)
   - `pip install ics`
 
 ## Installing Libraries
 
-- Install with `pip install -r requirements.txt`
-- or `source ./scripts/install-libs.sh` (for RPi OS)
+- NOTE: Need separate Windows/Linux/Macos/RPi install instructions
+- RPi OS:
+  - `source ./scripts/install-libs.sh`
+  - `pip install -r requirements.txt`
 
-### clib
-- If using Homebrew Python
-  - `brew install python@3.13-dev`
-- Or reinstall Python with dev headers
-  - `brew reinstall python@3.13`
-- Run python setup.py
-  - `python3 setup.py build_ext --inplace`
+
+## Create ".secrets" file
+- see the ./secrets file
+- add your API keys to `.secrets`
+  - (Note be confused with the ./secrets sample file)
   
+## Build HDMI screen custom device driver
+- MacOS Homebrew Python
+  - `brew install python@3.13-dev`
+  - Or reinstall Python with dev headers
+  - `brew reinstall python@3.13`
+- RPi
+  - `sudo apt-get install python3.11-dev`
+- Run python setup.py
+  - `cd src/clib`
+  - `python3 setup.py build_ext --inplace`
+
+## Running
+
+- `cd ./pymirror`
+- `./run.sh`
+
+
 ## Fontlist.txt
 
 - One font per line
@@ -56,14 +75,9 @@
 
 - Thanks to `https://github.com/yavuzceliker/sample-images` for sample images
 
-## Running
-
-- `cd ./pymirror`
-- `./run.sh`
-
 ## Web Server
 
-- GET: `http://rp01:8080`
+- GET: `http://rpi01:8080`
     - serves up HTML pages that allow you to control your PyMirror
 - POST: `http://rpi01:8080/command`
     - will allow you to publish an `event` directly to PyMirror

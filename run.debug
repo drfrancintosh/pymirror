@@ -6,6 +6,9 @@ else
     CONFIG="$1"
 fi
 
+mkdir -p ./src/pmserver/static
+mkdir -p ./caches/
+
 PYTHONPATH=src \
     python3 -u -m pymirror.pymirror\
     --config "$CONFIG" \
