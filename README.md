@@ -17,8 +17,8 @@
     - `modetest` (will display hardware information on the displays)
   - `sudo apt install calendar`
   - `sudo apt install python3-setuptools`
-- Python
   - `sudo apt-get install python3-venv python3-full`
+- Python Virtual Environment
   - `cd pymirror`
   - `python3 -m venv .venv --system-site-packages`
   - `source .venv/bin/activate`
@@ -27,10 +27,18 @@
 
 ## Installing Libraries
 
-- Install with `pip install -r requirements.txt`
-- or `source ./scripts/install-libs.sh` (for RPi OS)
+- NOTE: Need separate Windows/Linux/Macos/RPi install instructions
+- RPi OS:
+  - `source ./scripts/install-libs.sh`
+  - `pip install -r requirements.txt`
 
-### clib
+
+## Create ".secrets" file
+- see the ./secrets file
+- add your API keys to `.secrets`
+  - (Note be confused with the ./secrets sample file)
+  
+## Build HDMI screen custom device driver
 - MacOS Homebrew Python
   - `brew install python@3.13-dev`
   - Or reinstall Python with dev headers

@@ -7,6 +7,7 @@ else
 fi
 
 mkdir -p ./src/pmserver/static
+mkdir -p ./caches/
 
 while true; do
 PYTHONPATH=src \
