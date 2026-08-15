@@ -1,9 +1,9 @@
 {
   "debug": false,
-  "secrets": ".secrets",
+  "secrets": "$HOME/.secrets",
   "force_render": false,
   "screen": {
-    "output_file": "./src/pmserver/static/output.jpg",
+    "output_file": "./apps/pymirror/pmserver/static/output.jpg",
     "frame_buffer": null,
     "font_name": "Roboto_Condensed-ExtraLight.ttf",
     "font_size": 64,
@@ -11,6 +11,9 @@
     "bg_color": "#000",
     "text_color": "#fff",
     "text_bg_color": null
+  },
+  "pmdb": {
+    "url": "sqlite:///$HOME/pymirror.db"
   },
   "positions": {
     "top_left":     "0.00,0.00,0.33,0.20",
@@ -31,7 +34,7 @@
     "calendar_strip2": "0.26,0.25,0.33,0.60",
     "slideshow_strip":  "0.35,0.25,0.66,0.60"
     },
-  "modules": [
+  "tiles": [
     "configs/mm2/date.json",
     "configs/mm2/time.json",
     "configs/mm2/seconds.json",

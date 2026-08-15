@@ -1,0 +1,61 @@
+{
+  debug: false,
+  secrets: "$HOME/.secrets",
+  force_render: false,
+  imports: [
+    "./extensions/rtsp",
+    "./extensions/turo",
+  ],
+  screen: {
+    "output_file": "./apps/pymirror/pmserver/static/output.jpg",
+    "frame_buffer": null,
+    "font_name": "Roboto-Thin",
+    "font_size": 64,
+    "color": "#fff",
+    "bg_color": "#000",
+    "text_color": "#fff",
+    "text_bg_color": null,
+    "rotate": 90,
+  },
+  pmdb: {
+    "url": "sqlite:///$HOME/pymirror.db"
+  },
+  positions: {
+    "None": "0.0,0.0,0.0,0.0",
+    "turo_sentra_trips": "0.00,0.15,1.00,0.25",
+    "turo_sentra_next": "0.00,0.31,0.25,1.00",
+    "turo_sentra_table": "0.255,0.31,0.745,0.65",
+    "turo_cx5_trips": "0.00,0.24,1.00,0.305",
+    "turo_cx5_next": "0.75,0.31,1.00,1.0",
+    "turo_cx5_table": "0.255,0.65,0.745,1.00",
+  },
+  tiles: [
+    "./configs/rpi05/plots/turo_earnings.json",
+    "./configs/rpi05/plots/turo_distance.json",
+    // "./configs/rpi05/plots/turo_depreciation.json",
+
+    "./configs/rpi05/sentra/turo_sentra_trips.json",
+    "./configs/rpi05/sentra/turo_sentra_next.json",
+    // "./configs/rpi05/sentra/turo_sentra_table.json",
+
+    "./configs/rpi05/cx5/turo_cx5_trips.json",
+    "./configs/rpi05/cx5/turo_cx5_next.json",
+    // "./configs/rpi05/cx5/turo_cx5_table.json",
+
+    "./configs/rpi05/sentra25/turo_sentra25_trips.json",
+    "./configs/rpi05/sentra25/turo_sentra25_next.json",
+
+
+    "./configs/rpi05/rtsp.json",
+    "./configs/rpi05/rtsp2.json",
+
+    "./configs/rpi05/time.json",
+    "./configs/rpi05/date.json",
+    "./configs/rpi05/day_of_week.json",
+    // "./configs/rpi05/fps.json",
+    // "./configs/rpi05/status.json",
+    // "./configs/rpi05/turo_sentra_table.json",
+    "./configs/rpi05/pymirror_controller.json",
+    "./configs/rpi05/window_manager.json",
+  ]
+}

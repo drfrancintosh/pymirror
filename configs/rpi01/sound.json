@@ -1,0 +1,6 @@
+{
+    "tile": {
+        "class": "sound",
+        "name": "sound_player"
+    }
+}

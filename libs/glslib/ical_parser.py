@@ -1,0 +1,137 @@
+from datetime import datetime, timezone, timedelta
+import json
+from sys import stderr
+from dateutil.relativedelta import relativedelta
+from glslib.logger import _print
+from glslib.gson import json_dumps
+
+class IcalParser:
+    def __init__(self, lines: list[str]):
+        self.lines = lines
+        pass
+
+    def parse(self, start_date: str, end_date: str):
+        self.results = []
+        self._parse_lines(self.lines, 0, start_date, end_date)
+        self.results = sorted(self.results, key=lambda event: event["dtstart$"])
+        return self.results
+
+    def _parse_line(self, lines:list[str], i) -> tuple[int, str]:
+        line = lines[i]
+        i += 1
+        while i < len(lines) and lines[i] and lines[i][0] == ' ':
+            line += lines[i][1:]
+            i += 1
+        return i, line
+
+    def _parse_datetime(self, dtstr):
+        zulu = False
+        if dtstr.endswith("Z"):
+            dtstr = dtstr[:-1]
+            zulu = True
+        if "T" in dtstr:
+            dt = datetime.strptime(dtstr, "%Y%m%dT%H%M%S")
+        else:
+            dt = datetime.strptime(dtstr, "%Y%m%d")
+        if zulu:
+            dt = dt.replace(tzinfo=timezone.utc).astimezone()  # Convert to local time
+        else:
+            # Make all-day events timezone-aware (local time)
+            dt = dt.replace(tzinfo=datetime.now().astimezone().tzinfo)
+        return dt, dt.isoformat()    
+
+    def _parse_keyword(self, event, keyword0, keyword1):
+        return event.get(keyword0, event.get(keyword1, ":")).split(":", 1)[1].strip()
+
+    def _parse_event(self, event):
+        dtend = self._parse_keyword(event, "DTEND:", "DTEND;")
+        dtstart = self._parse_keyword(event, "DTSTART:", "DTSTART;")
+        event["all_day"] = not ("T" in dtend)
+        event["dtend"], event["dtend$"] = self._parse_datetime(dtend)
+        event["dtstart"], event["dtstart$"]= self._parse_datetime(dtstart)
+        event["summary"] = self._parse_keyword(event, "SUMMARY:", "SUMMARY;")
+        event["description"] = self._parse_keyword(event, "DESCRIPTION:", "DESCRIPTION;")
+        event["rrule"] = self._parse_keyword(event, "RRULE:", "RRULE;")
+        event["uid"] = self._parse_keyword(event, "UID:", "UID;")
+        return event
+
+    def _rrule_to_dict(self, rrule):
+        words = rrule.split(";")
+        result = {}
+        for word in words:
+            parts = word.split("=")
+            result[parts[0]] = parts[1]
+        return result
+    
+    def _freq_to_timedelta(self, freq):
+        if freq == "YEARLY": return relativedelta(years=1)
+        if freq == "MONTHLY": return relativedelta(months=1)
+        if freq == "WEEKLY": return timedelta(weeks=1)
+        if freq == "DAILY": return timedelta(days=1)
+    
+    def _parse_recurring_events(self, event, start_dt, end_dt):
+        if not event["rrule"]:
+            return [event]
+        # RRULE:FREQ=DAILY;UNTIL=20210220T215959Z
+        results = []
+        rrule = self._rrule_to_dict(event["rrule"])
+        freq = self._freq_to_timedelta(rrule["FREQ"])
+        count = int(rrule.get("COUNT", "100000"))
+        if "UNTIL" in rrule:
+            until_dt, _ = self._parse_datetime(rrule["UNTIL"])
+        else:
+            until_dt = end_dt
+        while event["dtstart"] < until_dt and count > 0:
+            count -= 1
+            if start_dt <= event["dtstart"] and event["dtend"] <= end_dt:
+                event["dtstart$"] = event["dtstart"].isoformat()
+                event["dtend$"] = event["dtend"].isoformat()
+                results.append(event.copy())
+            event["dtstart"] += freq
+            event["dtend"] += freq
+        return results
+
+    def _parse_lines(self, lines, i, start_date, end_date) -> tuple[int, dict]:
+        event = {}
+        local_tz = datetime.now().astimezone().tzinfo
+        start_dt = datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=local_tz)
+        end_dt = datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=local_tz)
+        while i < len(lines):
+            i, line = self._parse_line(lines, i)
+            if not line: 
+                i += 1
+                continue
+            if line == "BEGIN:VEVENT":
+                event = {}
+            elif line == "END:VEVENT":
+                event = self._parse_event(event)
+                events = self._parse_recurring_events(event, start_dt, end_dt)
+                for event in events:
+                    # _print(start_date, event.get("dtstart", ""), event.get("dtend", ""), end_date, file=stderr)
+                    if start_date <= event.get("dtstart$", "") and event.get("dtend$", "") <= end_date:
+                            # _print(event)
+                            self.results.append(event)
+                event = {}
+            else:
+                tokens = ["RRULE:","DTSTART;","DTEND;","DTSTART:","DTEND:","SUMMARY;","SUMMARY:","DESCRIPTION:","DTSTAMP:"]
+                for token in tokens:
+                    if line.startswith(token):
+                        event[token] = line
+        return 0, 0
+
+
+
+def main():
+    def json_default(obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return str(obj)
+
+    with open("./caches/ical.json", 'r', encoding='utf-8') as file:
+        text = file.read()
+    ical_parser = IcalParser(text.split("\n"))
+    result = ical_parser.parse("2025-08-01", "2025-12-31")
+    _print(json_dumps(result, indent=2, default=json_default), file=stderr)
+
+if __name__ == "__main__":
+    main()

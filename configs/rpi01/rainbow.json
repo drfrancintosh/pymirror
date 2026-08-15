@@ -1,0 +1,7 @@
+{
+  "tile": "rainbow",
+  "tiledef": {
+    "name": "rainbow",
+    "position": "bottom_left"
+  }
+}

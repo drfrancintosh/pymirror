@@ -1,6 +1,6 @@
 {
-    "module": "clock",
-    "moddef": {
+    "tile": {
+        "class": "clock",
         "name": "date",
         "position": "date_strip",
         "font_name": "Roboto-Light",

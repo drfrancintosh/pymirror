@@ -1,0 +1,26 @@
+{
+  "pmdb": {
+    "url": "sqlite:///$HOME/pymirror.db"
+  },
+  "secrets": "$HOME/.secrets",
+  "tasks": [
+    {
+      "class": "time",
+      "name": "time",
+      "cron": "*:*:00"
+    },
+    {
+      "class": "web_api",
+      "name": "news",
+      "cron": "*:15:00",
+      "rate_limit_time": "1h",
+      "url": "https://newsapi.org/v2/top-headlines",
+      "params": {
+        "apiKey": "$NEWSAPI_KEY",
+        "country": "us",
+        "pageSize": 100,
+        "category": "business"
+      }
+    }
+  ]
+}

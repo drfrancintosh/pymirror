@@ -1,6 +1,6 @@
 {
-    "module": "weather",
-    "moddef": {
+    "tile": {
+        "class": "weather",
         "name": "weather",
         "position": "middle_left",
         "text_color": "#c0c000",
@@ -9,7 +9,7 @@
         "font_size": 64
     },
     "weather": {
-        "refresh_minutes": 15,
+        "refresh_time": "15m",
         "degrees": "°F",
         "datetime_format": "%A, %I:%M:%S %p"
     },
@@ -44,5 +44,4 @@
             "height": 72
         }
     }
-
 }

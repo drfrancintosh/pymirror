@@ -1,0 +1,21 @@
+{
+    "tile": {
+        "class": "ical",
+        "name": "icalendar2",
+        "position": "0.00,0.15,0.75,1.00",
+        "text_color": "#fff",
+        "text_bg_color": "#000",
+        "font_size": 24,
+        "disabled": false
+    },
+    "ical": {
+        "calendar_name": "gregs_calendar",
+        "time_format": "1:02 PM",
+        "number_days": 60,
+        "render_mode": "grid",
+        "week_mode": 5,
+        "holiday_files": ["./holiday_files/birthdays.json"],
+        "prev_weeks": 1,
+        "rows": 5
+    }
+}

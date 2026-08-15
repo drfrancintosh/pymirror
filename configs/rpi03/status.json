@@ -1,0 +1,15 @@
+{
+    "tile": {
+        "class": "status",
+        "disabled": false,
+        "name": "status",
+        "position": "0.75,0.97,1.00,1.00",
+        "font_size": 26
+    },
+    "status": {
+        "valign": "bottom",
+        "halign": "right",
+        "interval_time": "1m",
+        "time_format": "7/4 1:02 pm"
+    }
+}

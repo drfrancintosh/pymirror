@@ -1,0 +1,16 @@
+from pm_component import PMComponent
+from pmgfxlib.pmbitmap import PMBitmap
+from munch import DefaultMunch
+
+class PMGroup(PMComponent):
+	def __init__(self, config: DefaultMunch):
+		super().__init__(config)
+		self.children = []
+
+	def add_child(self, child: PMComponent) -> None:
+		self.children.append(child)
+
+	def render(self, bitmap: PMBitmap) -> None:
+		"""Render the group and its children to the bitmap."""
+		for child in self.children:
+			child.render(bitmap)

@@ -1,10 +1,9 @@
 {
-    "module": "alert",
-    "debug": false,
-    "moddef": {
+    "tile": {
+        "class": "alert",
         "name": "Weather Alert",
         "position": "bottom_left",
-        "subscriptions": ["WeatherAlertEvent"]
+        "subscriptions": ["WeatherAlertEvent"],
     },
     "alert": {
         "header": "Weather Alert",

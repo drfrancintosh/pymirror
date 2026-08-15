@@ -1,0 +1,12 @@
+{
+  "tile": {
+    "class": "rtsp",
+    "name": "webcam",
+    "position": "0.5,265,1.0,+350"
+  },
+  "rtsp": {
+    "url": "rtsp://admin:${REO_PASSWORD}@192.168.1.96:554/h264Preview_01_sub",
+    "refresh_time": "1s",
+    "scale": "stretch"
+  }
+}

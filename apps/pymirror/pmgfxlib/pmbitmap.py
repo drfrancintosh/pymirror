@@ -1,0 +1,343 @@
+##
+## This is the PyMirror implementation-independent bitmap class.
+## This implementation uses the Pillow library for image manipulation.
+## It's intended that other bitmap implementations can be created
+## for different graphics libraries.
+## But the interface should remain the same.
+##
+## PMBitmap is the lowest level graphcics class in PyMirror.
+##
+
+from ast import Tuple
+from dataclasses import dataclass
+from PIL import Image, ImageDraw
+from pygame.gfxdraw import line
+
+from pymirror.pmrect import PMRect
+from glslib.logger import _trace, _debug
+from pmutils import non_null
+from .pmgfx import PMGfx
+
+CENTER = 0
+BOTTOM = 1
+TOP = 2
+LEFT = 1
+RIGHT = 2
+
+
+class PMBitmap:
+    def __init__(self, width: int = None, height: int = None, config: dataclass = None):
+        self.gfx = PMGfx().merge(config)
+        self._gfx_stack = []
+        self._rect = PMRect(0, 0, non_null(width, 1) - 1, non_null(height, 1) - 1)
+        self._img = Image.new("RGBA", (self._rect.width, self._rect.height), 0)
+        self._draw = ImageDraw.Draw(self._img)
+
+    @property
+    def rect(self) -> PMRect:
+        return self._rect
+
+    @rect.setter
+    def rect(self, value: PMRect) -> None:
+        if isinstance(value, PMRect):
+            self._rect = value
+        elif isinstance(value, tuple) and len(value) == 4:
+            self._rect = PMRect(*value)
+        else:
+            raise TypeError("rect must be an instance of PMRect")
+
+    @property
+    def x0(self):
+        return self.rect.x0
+
+    @property
+    def y0(self):
+        return self.rect.y0
+
+    @property
+    def x1(self):
+        return self.rect.x1
+
+    @property
+    def y1(self):
+        return self.rect.y1
+
+    @property
+    def width(self):
+        return self._rect.width
+
+    @property
+    def height(self):
+        return self._rect.height
+
+    @width.setter
+    def width(self, value: int):
+        self._rect.width = value
+
+    @height.setter
+    def height(self, value: int):
+        self._rect.height = value
+
+    def from_image(self, img: Image.Image) -> "PMBitmap":
+        self._img = img.convert("RGBA")
+        self._draw = ImageDraw.Draw(self._img)
+        self._rect = PMRect(0, 0, self._img.width - 1, self._img.height - 1)
+        return self
+
+    def load(self, photo_path, width=None, height=None, scale=None) -> "PMBitmap":
+        _trace("...Loading bitmap from", photo_path)
+        self._img = Image.open(photo_path).convert(
+            "RGBA"
+        )  # Ensure the image is in RGBA format
+        self._draw = ImageDraw.Draw(self._img)
+        self.gfx.rect = PMRect(0, 0, self._img.width - 1, self._img.height - 1)
+        self.scale(
+            width or self._img.width, height or self._img.height, scale or "stretch"
+        )
+        return self
+
+    def gfx_push(self, gfx: PMGfx = None) -> PMGfx:
+        """Push the current graphics state onto the stack."""
+        # Save the current graphics state
+        self._gfx_stack.append(self.gfx)
+        # If gfx is provided, use it; otherwise, copy the current state
+        if gfx == None:
+            self.gfx = self.gfx.copy()
+        else:
+            self.gfx = gfx.copy()
+        # Return the current graphics state
+        # you can modify this gfx object and it will not affect the previous state
+        return self.gfx
+
+    def gfx_pop(self) -> PMGfx:
+        """Pop the last graphics state from the stack."""
+        self.gfx = self._gfx_stack.pop()
+        return self.gfx
+
+    def clear(self) -> None:
+        self._draw.rectangle(
+            (0, 0, self._img.width-1, self._img.height-1), fill=self.gfx.bg_color
+        )
+
+    def line(self, rect: tuple, color=None, width=None) -> None:
+        self._draw.line(rect, fill=color or self.gfx.color, width=width or self.gfx.line_width)
+
+    def ellipse(self, rect: tuple, fill=-1) -> None:
+        if fill == -1:
+            # Use the gfx.background color if specified
+            self._draw.ellipse(
+                rect,
+                outline=self.gfx.color,
+                width=self.gfx.line_width,
+                fill=self.gfx.bg_color,
+            )
+        else:
+            # Use the specified fill color
+            self._draw.ellipse(
+                rect, outline=self.gfx.color, width=self.gfx.line_width, fill=fill
+            )
+
+    def circle(self, x0: int, y0: int, r: int, fill=-1) -> None:
+        bbox = (x0 - r, y0 - r, x0 + r, y0 + r)
+        self.ellipse(bbox, fill=fill)
+
+    def rectangle(self, rect: tuple, outline = -1, fill=-1) -> None:
+        x0, y0, x1, y1 = map(int, rect)
+        if outline == -1:
+            outline = self.gfx.color
+        if fill == -1:
+            fill = self.gfx.bg_color
+        self._draw.rectangle((x0, y0, x1, y1), outline=outline or self.gfx.color, width=self.gfx.line_width, fill=fill)
+        return x1, y1
+
+    def text(self, msg: str, x0: int, y0: int, fill=-1, angle=None) -> None:
+        if fill == -1:
+            fill = self.gfx._text_color
+        if angle is not None and angle != 0:
+            self._draw_rotated_text(
+                (x0, y0-self.gfx.font_y_offset),
+                msg,
+                font=self.gfx.font._font,
+                fill=fill,
+                angle=angle or 0,
+            )
+        else:
+            self._draw.text(
+                (x0, y0-self.gfx.font_y_offset),
+                msg,
+                fill=fill,
+                font=self.gfx.font._font,
+            )
+        return self.gfx.font.height
+
+    def calculate_text_box(self, lines: str) -> tuple[str, tuple[int, int]]:
+        """Calculate the size of the text."""
+        width = 0
+        height = 0
+        results = []
+        (x_min, baseline, line_width, font_height) = self.gfx.font.getbbox("M")
+        for multi_line in lines:
+            multi_lines = multi_line.splitlines()
+            for line in multi_lines:
+                results.append(line)
+                (x_min, baseline, line_width, _font_height) = self.gfx.font.getbbox(line)
+                width = max(width, line_width)
+                height += font_height
+        return results, (width, height)
+    
+    def _draw_rotated_text(self, xy, text, angle, **kwargs):
+        """Draw text rotated by creating a temporary image and rotating it."""
+        # Get text bounding box to determine temp image size
+        font = self.gfx.font._font
+        bbox = font.getbbox(text) if font else (0, 0, 100, 20)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+        
+        # Create minimal temporary image for the text
+        temp_img = Image.new('RGBA', (int(text_width) + 4, int(text_height) + 4), (255, 255, 255, 0))
+        temp_draw = ImageDraw.Draw(temp_img)
+        temp_draw.text((0, 0), text, **kwargs)
+        
+        # Rotate the temporary image around its center
+        rotated = temp_img.rotate(-angle, expand=True, fillcolor=(255, 255, 255, 0))
+        
+        # Paste rotated text onto main image at xy
+        xy_int = tuple(map(int, xy))
+        self._img.paste(rotated, xy_int, rotated)
+
+    def text_box(
+        self,
+        rect,
+        lines: str | list[str],
+        valign: str = "center",
+        halign: str = "center",
+        clip: bool = False,
+        use_baseline: bool = None,
+    ) -> tuple[int, int]:
+        clip = bool(clip) ## make sure it's zero or one
+        if use_baseline == None:
+            use_baseline =  self.gfx.font_baseline
+        # use_baseline = bool(use_baseline) ## move the text down to shift descenders
+        ## renders text in the entire bitmap area
+        ## if you want a cliprect, create a PMBitmap with the cliprect size
+        ## then render it and paste it into the parent PMBitmap
+        rect = PMRect(*rect)  # Ensure rect is a PMRect object
+        x0, y0, x1, y1 = rect
+        if lines == None:
+            return (x0, y0)
+        if isinstance(lines, str):
+            lines = [lines]
+        valign = {"center": CENTER, "top": TOP, "bottom": BOTTOM}[valign or "center"]
+        halign = {"center": CENTER, "left": LEFT, "right": RIGHT}[halign or "center"]
+        if self.gfx._text_bg_color:
+            self._draw.rectangle(rect, fill=self.gfx._text_bg_color)
+        gfx = self.gfx
+        font = self.gfx.font
+        (x_min, baseline, width, font_height) = font.getbbox("M")
+        baseline *= (not use_baseline) ## sets baseline to zero if use_baseline is False
+        lines, (text_width, text_height) = self.calculate_text_box(lines)
+        if valign == CENTER:
+            dy = rect.height - text_height
+            text_y0 = y0 + int(dy / 2)
+        elif valign == TOP:
+            text_y0 = y0
+        elif valign == BOTTOM:
+            text_y0 = y1 - text_height
+        else:
+            _debug(
+                f"Invalid valign '{type(valign), valign}' in text_box, using 'center' instead."
+            )
+
+        for line in lines:
+            if text_y0 + font_height * clip > y1:
+                break
+            (_x_min, _baseline, width, _font_height) = font.getbbox(line)
+            if halign == CENTER:
+                text_x0 = x0 + int((rect.width - width) / 2)
+            elif halign == LEFT:
+                text_x0 = x0
+            elif halign == RIGHT:
+                text_x0 = x0 + int(rect.width - width)
+            else:
+                _debug(f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead.")
+            self._draw.text(
+                (text_x0 + 0, text_y0 - baseline + self.gfx.font_y_offset),
+                line,
+                fill=(gfx._text_color),
+                font=gfx.font._font,
+            )
+            text_y0 += font_height + baseline
+        return (x0, text_y0)
+
+    def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None, halign=None, valign=None) -> None:
+        if x0 == None:
+            x0 = src.rect.x0
+        if y0 == None:
+            y0 = src.rect.y0
+        if halign == "center":
+            x0 = x0 + int((self.rect.width - src.rect.width) / 2)
+        elif halign == "right":
+            x0 = x0 + int(self.rect.width - src.rect.width)
+        if valign == "center":
+            y0 = y0 + int((self.rect.height - src.rect.height) / 2)
+        elif valign == "bottom":
+            y0 = y0 + int(self.rect.height - src.rect.height)
+        self._img.paste(src._img, (x0, y0), mask and mask._img)
+
+    def scale_to_fit(self, target_width, target_height):
+        """Scale image to fit within bounds, maintaining aspect ratio"""
+        original_width, original_height = self._img.size
+
+        # Calculate scale factor (use the smaller ratio)
+        scale_x = target_width / original_width
+        scale_y = target_height / original_height
+        scale = min(scale_x, scale_y)  # Smaller ratio ensures it fits
+
+        # Calculate new dimensions
+        new_width = int(original_width * scale)
+        new_height = int(original_height * scale)
+
+        _trace("GLS - CHECK THIS")
+        if new_width < 0:
+            new_width = 1
+        if new_height < 0:
+            new_height = 1
+        self._img = self._img.resize((new_width, new_height), Image.LANCZOS)
+        self._rect = PMRect(0, 0, new_width - 1, new_height - 1)
+
+    def scale_to_fill(self, target_width, target_height):
+        """Scale image to fill entire area, cropping excess"""
+        original_width, original_height = self._img.size
+
+        # Calculate scale factor (use the larger ratio)
+        scale_x = target_width / original_width
+        scale_y = target_height / original_height
+        scale = max(scale_x, scale_y)  # Larger ratio ensures it fills
+
+        # Scale the image
+        new_width = int(original_width * scale)
+        new_height = int(original_height * scale)
+        new_image = self._img.resize((new_width, new_height), Image.LANCZOS)
+
+        # Center crop to target size
+        left = (new_width - target_width) // 2
+        top = (new_height - target_height) // 2
+        right = left + target_width
+        bottom = top + target_height
+
+        self._img = new_image.crop((left, top, right, bottom))
+        self._rect = PMRect(0, 0, target_width - 1, target_height - 1)
+
+    def scale(self, width=None, height=None, scale="fit"):
+        if width is not None and height is not None:
+            if scale == "fit":
+                _debug(f"Scaling image to fit within {width}x{height}")
+                self.scale_to_fit(width, height)
+            elif scale == "fill":
+                _debug(f"Scaling image to fill {width}x{height}")
+                self.scale_to_fill(width, height)
+            elif scale == "stretch":
+                # Default to resizing without aspect ratio preservation
+                _debug(f"...Stretching image to {width}x{height}")
+                self._img = self._img.resize((width, height), Image.LANCZOS)
+                self._rect = PMRect(self.x0, self.y0, self.x0 + width - 1, self.y0 + height - 1)

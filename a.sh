@@ -1,3 +1,3 @@
 #!/bin/bash
 
-PYTHONPATH=./src python -m pymirror.pmwebapi
+PYTHONPATH=./src python -m configs.pmconfig "${@}"

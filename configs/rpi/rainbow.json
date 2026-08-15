@@ -1,6 +1,6 @@
 {
-  "module": "rainbow",
-  "moddef": {
+  "tile": {
+    "class": "rainbow",
     "name": "rainbow",
     "position": "bottom_left"
   }

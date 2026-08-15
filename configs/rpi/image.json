@@ -1,6 +1,6 @@
 {
-    "module": "image",
-    "moddef": {
+    "tile": {
+        "class": "image",
         "name": "test_image",
         "position": "middle_center"
     },

@@ -1,6 +1,6 @@
 {
-    "module": "clock",
-    "moddef": {
+    "tile": {
+        "class": "clock",
         "name": "time",
         "text_color": "#888",
         "text_bg_color": null,

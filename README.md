@@ -10,20 +10,181 @@
 
 - RPI OS Lite 32-bit
   - `sudo apt update`
-  - `sudo apt install git`
+  - `sudo apt instal -y git`
   - `git clone https://github.com/drfrancintosh/pymirror.git`
-  - `sudo apt install fortune`
-  - `sudo apt install libdrm-tests`
+  - `sudo apt install -y fortune`
+  - `sudo apt install -y libdrm-tests`
     - `modetest` (will display hardware information on the displays)
-  - `sudo apt install calendar`
-  - `sudo apt install python3-setuptools`
-  - `sudo apt-get install python3-venv python3-full`
+  - `sudo apt install -y calendar`
+  - `sudo apt install -y python3-setuptools`
+  - `sudo apt-get install -y  python3-venv python3-full`
+  - `curl -LsSf https://astral.sh/uv/install.sh | sh` # install uv
 - Python Virtual Environment
   - `cd pymirror`
-  - `python3 -m venv .venv --system-site-packages`
+  - `./scripts/rpi/install-uv.sh`
   - `source .venv/bin/activate`
   - Calendar (here? maybe better in the install_libs.sh)
   - `pip install ics`
+- Bluetooth
+  - `sudo apt install -y bluetooth bluez pi-bluetooth`
+  - `sudo systemctl enable bluetooth`
+  - `sudo systemctl start bluetooth`
+  - `hciconfig` # check the bluetooth connector
+- perms
+```
+  ssh greg@rpi03.local
+  sudo -E EDITOR=vim visudo
+  sudo visudo
+  greg ALL=(ALL) NOPASSWD: ALL
+```
+  Since your Pi Zero 2 W is headless, connecting a Bluetooth keyboard takes a slightly different approach than on a desktop. Here’s a reliable method for macOS users:
+
+### **2. Put your keyboard in pairing mode**
+
+Follow the keyboard’s instructions to make it discoverable. Usually this involves holding a special “Connect” button until a light flashes.
+
+---
+
+### **3. Use `bluetoothctl` to pair the keyboard**
+
+Run:
+
+```bash
+bluetoothctl
+```
+
+Inside the `bluetoothctl` interactive shell:
+
+```text
+power on
+agent on
+default-agent
+scan on
+```
+
+You should start seeing devices appear:
+
+```text
+[NEW] Device XX:XX:XX:XX:XX:XX MyKeyboard
+```
+
+Once you see your keyboard’s MAC address (e.g., `XX:XX:XX:XX:XX:XX`):
+
+```text
+anker keyboard: 20:73:65:B1:67:67
+pair XX:XX:XX:XX:XX:XX
+trust XX:XX:XX:XX:XX:XX
+connect XX:XX:XX:XX:XX:XX
+```
+
+* `pair` pairs the device
+* `trust` ensures it auto-connects on reboot
+* `connect` immediately connects it
+
+After pairing, type `exit` to leave `bluetoothctl`.
+
+---
+
+### **4. Test the keyboard**
+
+Once paired, your keyboard should work immediately in any console session (SSH or direct).
+
+---
+
+### **5. Optional: Auto-connect on reboot**
+
+Because you used `trust`, the keyboard should reconnect automatically after a reboot. You can double-check by rebooting and running:
+
+```bash
+bluetoothctl info XX:XX:XX:XX:XX:XX
+```
+
+It should show `Connected: yes`.
+
+---
+
+💡 **Tips**
+
+* For headless Pi setups, it’s easier to temporarily connect via USB keyboard to do the initial pairing.
+* Some Bluetooth keyboards require you to press `Enter` after pairing to confirm a PIN; `bluetoothctl` will display it.
+* Keep the Pi close to the keyboard during pairing — the Zero 2 W has only a small built-in Bluetooth antenna.
+
+---
+
+## Mouse/Trackpaad
+
+### **1. Test movement & clicks via `evtest`**
+
+Install `evtest`:
+
+```bash
+sudo apt update
+sudo apt install -y evtest
+```
+
+List all input devices:
+
+```bash
+evtest
+```
+
+You’ll see something like:
+
+```
+/dev/input/event0:    AT Translated Set 2 keyboard
+/dev/input/event1:    Logitech Bluetooth Trackpad
+```
+
+Pick the event number corresponding to your trackpad:
+
+```bash
+sudo evtest /dev/input/event1
+```
+
+Now move your finger or tap the trackpad. You’ll see events printed in the console:
+
+```
+Event: time 1693032761.123456, type 3 (EV_ABS), code 0 (ABS_X), value 123
+Event: time 1693032761.123456, type 3 (EV_ABS), code 1 (ABS_Y), value 456
+Event: time 1.234567, type 1 (EV_KEY), code 272 (BTN_LEFT), value 1
+Event: time 1.234567, type 1 (EV_KEY), code 272 (BTN_LEFT), value 0
+```
+
+* `EV_ABS` = movement (X/Y coordinates)
+* `EV_KEY` = button pressed/released (`BTN_LEFT` = left click)
+
+---
+
+### **2. Optional: Monitor `/dev/input/mice`**
+
+A simpler but lower-level method:
+
+```bash
+sudo cat /dev/input/mice
+```
+
+* Move the trackpad or click: you’ll see a stream of binary characters.
+* Not human-readable, but proves it’s sending input.
+
+---
+
+### **3. Test with SSH + X forwarding (if GUI installed later)**
+
+If you install `xserver-xorg` or a lightweight GUI:
+
+```bash
+sudo apt install -y xserver-xorg xinput
+```
+
+Then you can use `xinput list` to see the trackpad and monitor its behavior graphically.
+
+---
+
+✅ So even headless, `evtest` is the way to **directly confirm movement and clicks**.
+
+If you want, I can give you a **Python snippet that reads the trackpad events in real time**, similar to how you were reading your IR remote, so you can react to gestures programmatically.
+
+Do you want me to do that?
 
 ## Installing Libraries
 
@@ -131,14 +292,14 @@
 - secrets - sample .secrets file
 - TODO.md - wish list of things to add to PyMirror
 
-## Modules
+## Tiles
 
-- Modules are stored in the `./src/modules` folder
+- Tiles are stored in the `./src/modules` folder
 - The name of the Python file must be the snake-case version of the camel-case name of the module class and end in _module.
-  - example: `analog_clock_module.py` -> `AnalogClockModule` (class name for the module)
+  - example: `analog_clock_module.py` -> `AnalogClockTile` (class name for the module)
 - In the `config.json` you can call up a module multiple times with different instances
   - but not using the `_module` part of the filename
-  - example: `"module": "analog_clock"`
+  - example: `"tile": "analog_clock"`
 
 - weather_apis/ - folder holding interfaces to weather apis (accuweather, openwathermap)
 - alert_module.py
@@ -215,24 +376,24 @@
     "bottom_right_center": "0.7,0.66,1.00,0.90",
     "bottom_right": "0.66,0.90,1.00,1.00"
     },
-  "modules": [
-    "moddefs/alert.json", // an alert displayed by way of an AlertEvent
-    "moddefs/pymirror_controller.json", // the controller for external events
-    "moddefs/weather.json", // displays current temperature and weather alerts (OpenWeatherMap API)
-    "moddefs/fortune.json", // runs linux 'fortune' command every 15 secs
-    "moddefs/news.json", // displays news using web_api module
-    "moddefs/date.json", // displays the current date in 7-segment display font
-    "moddefs/time.json", // displays the current time in 7-segment display font
-    "moddefs/week.json", // displays the word "Week:" - static text
-    "moddefs/day_of_week.json", // displays the current day of the week
-    "moddefs/week_of_year.json", // displays the week number (1-52)
-    "moddefs/analog_clock.json", // analog clock
-    "moddefs/weather_alert.json", // an alert box for any weather alerts that are received by the alert module
-    "moddefs/fps.json", // displays the Frames Per Second calculation
+  "tiles": [
+    "tiledefs/alert.json", // an alert displayed by way of an AlertEvent
+    "tiledefs/pymirror_controller.json", // the controller for external events
+    "tiledefs/weather.json", // displays current temperature and weather alerts (OpenWeatherMap API)
+    "tiledefs/fortune.json", // runs linux 'fortune' command every 15 secs
+    "tiledefs/news.json", // displays news using web_api module
+    "tiledefs/date.json", // displays the current date in 7-segment display font
+    "tiledefs/time.json", // displays the current time in 7-segment display font
+    "tiledefs/week.json", // displays the word "Week:" - static text
+    "tiledefs/day_of_week.json", // displays the current day of the week
+    "tiledefs/week_of_year.json", // displays the week number (1-52)
+    "tiledefs/analog_clock.json", // analog clock
+    "tiledefs/weather_alert.json", // an alert box for any weather alerts that are received by the alert module
+    "tiledefs/fps.json", // displays the Frames Per Second calculation
     // NOTE: you may also put full module definitions right here as a json dictionary
     {
-      "module": "fps",
-      "moddef": {
+      "tile": "fps",
+      "tiledef": {
         "disabled": false,
         "name": "fps",
         "position": "fps_strip",
@@ -248,14 +409,14 @@
 
 ```
 
-## Module Definition Files (./configs/rpi/*.json)
-- Module Definitions identify the module class and the parameters to display the module
+## Tile Definition Files (./configs/rpi/*.json)
+- Tile Definitions identify the module class and the parameters to display the module
 - Not that that a module (like Date) may be instantiated many times.
-- Each with a different ModDef (see date.json, day_of_week.json, time.json, week_of_year.json) 
+- Each with a different tiledef (see date.json, day_of_week.json, time.json, week_of_year.json) 
 ```json
 {
-    "module": "alert", // module name. must be lowercase and reside in src/modules/alert_module.py
-    "moddef": { // all modules have a required generic module definition or 'moddef'
+    "tile": "alert", // module name. must be lowercase and reside in src/modules/alert_module.py
+    "tiledef": { // all modules have a required generic module definition or 'tiledef'
         "name": "Alert", // a unique name
         "position": "alert_strip", // a position defined in config.json, the 'positions' section
         "text_color": null, // default text color - overrides config.json if non-null

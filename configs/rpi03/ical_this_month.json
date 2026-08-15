@@ -1,0 +1,48 @@
+{
+    "tile": {
+        "class": "ical",
+        "name": "this_month",
+        "position": "0.75,0.15,1.00,0.67",
+        "text_color": "#fff",
+        "text_bg_color": "#000",
+        "font_size": 24,
+        "disabled": false,
+        "force_render": false
+    },
+    "ical": {
+        "calendar_name": "gregs_calendar",
+        "title": "This Month",
+        "time_format": "%m/%d",
+        "number_days": 30,
+        "show_regular_events": true,
+        "show_all_day_events": false,
+        "show_recurring_events": true
+    },
+    "card": {
+        "header": {
+            "font_name": "Roboto-Bold",
+            "font_size": 32,
+            "text_color": "#fff",
+            "text_bg_color": "gray",
+            "height": 72,
+            "valign": "center",
+        },
+        "body": {
+            "font_name": "Roboto-Regular",
+            "font_size": 36,
+            "text_color": "#0ff",
+            "text_bg_color": "#000",
+            "valign": "top",
+            "halign": "left",
+            "wrap": "none"
+        },
+        "footer": {
+            "font_name": "Roboto-Regular",
+            "font_size": 32,
+            "text_color": "#fff",
+            "text_bg_color": "gray",
+            "valign": "center",
+            "height": 72
+        }
+    }
+}
